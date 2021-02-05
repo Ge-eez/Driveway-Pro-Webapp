@@ -100,9 +100,8 @@ $(document).ready(function(){
         $(thisAlert).removeClass('alert-validate');
     };
     let name = $('.name');
-    let charge = $('.charge');
-    let floor = $('.floor');
-    let slots = $('.slots-per-floor')
+    let phone_number = $('.phone_number');
+    let plate_number = $('.plate_number');
     let forgot = $('.password');
     let getBackLI = $('.get-back');
     let getBackSU = $('.get-back-sign-up');
@@ -112,9 +111,8 @@ $(document).ready(function(){
     let signup = $('.sign-up')
     $(forgot).click(function(){
         $(name).hide()
-        $(charge).hide()
-        $(floor).hide()
-        $(slots).hide()
+        $(phone_number).hide()
+        $(plate_number).hide()
         loggingIn = false;
         $(password).hide();
         $(forgotPassword).hide();
@@ -126,9 +124,8 @@ $(document).ready(function(){
     $(signup).click(function(){
         loggingIn = false;
         $(name).show()
-        $(charge).show()
-        $(floor).show()
-        $(slots).show()
+        $(phone_number).show()
+        $(plate_number).show()
         $(forgotPassword).hide();
         $(signup).hide()
         $(getBackSU).css({"display": "block"});
@@ -137,9 +134,8 @@ $(document).ready(function(){
     $(getBackLI).click(function(){
         loggingIn = true;
         $(name).hide()
-        $(charge).hide()
-        $(floor).hide()
-        $(slots).hide()
+        $(phone_number).hide()
+        $(plate_number).hide()
         $(password).show();
         $(forgotPassword).show();
         $(getBackLI).hide();
@@ -149,9 +145,8 @@ $(document).ready(function(){
     $(getBackSU).click(function(){
         loggingIn = true;
         $(name).hide()
-        $(charge).hide()
-        $(floor).hide()
-        $(slots).hide()
+        $(phone_number).hide()
+        $(plate_number).hide()
         $(password).show();
         $(forgotPassword).show();
         $(signup).show()

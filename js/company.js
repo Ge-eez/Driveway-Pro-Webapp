@@ -1,4 +1,4 @@
-const backend = "https://parking-spot-finder-api.herokuapp.com/auth/login"
+const backend = "https://parking-spot-finder-api.herokuapp.com/auth/loginCompany"
 function makeRequest (method, url, data) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
