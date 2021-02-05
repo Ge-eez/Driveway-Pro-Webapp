@@ -273,7 +273,7 @@ iframe {
   transition: all 0.4s;
 }
 
-.login100-form-btn:hover {
+.login100-form-btn:hover, .btn:hover {
   background: #E76900;
 }
 
@@ -381,4 +381,35 @@ iframe {
 }
 .login100-form.user-form{
   display: none;
+}
+
+/* navbar */
+.navbar{
+  min-height: 5rem;
+}
+.input80 {
+  font-family: Poppins-Medium;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #666666;
+
+  display: block;
+  width: 80%;
+  background: #e6e6e6;
+  height: 50px;
+  border-radius: 25px;
+  padding: 0 30px 0 68px;
+}
+
+/* Home page */
+
+.description{
+  color: white;
+}
+.my-6{
+  margin-top: 6rem;
+  margin-bottom: 4rem;
+}
+.ind-page h3{
+  color: white;
 }
