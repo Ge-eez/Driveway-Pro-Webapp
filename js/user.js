@@ -34,6 +34,7 @@ $(document).ready(function(){
     [ Validate ]*/
     let input = $('.validate-input .input100');
     let loggingIn = true;
+    let signingUp = true;
 
     $('.validate-form').on('submit',function(e){
         e.preventDefault();
@@ -114,6 +115,7 @@ $(document).ready(function(){
         $(phone_number).hide()
         $(plate_number).hide()
         loggingIn = false;
+        signingUp = false;
         $(password).hide();
         $(forgotPassword).hide();
         $(getBackSU).hide()
@@ -123,6 +125,7 @@ $(document).ready(function(){
     });
     $(signup).click(function(){
         loggingIn = false;
+        signingUp = true;
         $(name).show()
         $(phone_number).show()
         $(plate_number).show()
@@ -133,6 +136,7 @@ $(document).ready(function(){
     })
     $(getBackLI).click(function(){
         loggingIn = true;
+        signingUp = false;
         $(name).hide()
         $(phone_number).hide()
         $(plate_number).hide()
@@ -143,7 +147,8 @@ $(document).ready(function(){
         $(loginButton).text("Login");
     })
     $(getBackSU).click(function(){
-        loggingIn = true;
+        loggingIn = false;
+        signingUp = true;
         $(name).hide()
         $(phone_number).hide()
         $(plate_number).hide()

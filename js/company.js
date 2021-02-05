@@ -34,6 +34,7 @@ $(document).ready(function(){
     [ Validate ]*/
     let input = $('.validate-input .input100');
     let loggingIn = true;
+    let signingUp = true;
 
     $('.validate-form').on('submit',function(e){
         e.preventDefault();
@@ -59,11 +60,15 @@ $(document).ready(function(){
         })
 
         }
+        else if(signingUp){
+
+        }
         else{
             if(validate(input[0]) == false){
                 showValidate(input[0]);
                 check=false;
             }
+
         }
         return check;
     });
@@ -116,6 +121,7 @@ $(document).ready(function(){
         $(floor).hide()
         $(slots).hide()
         loggingIn = false;
+        signingUp = false;
         $(password).hide();
         $(forgotPassword).hide();
         $(getBackSU).hide()
@@ -125,6 +131,7 @@ $(document).ready(function(){
     });
     $(signup).click(function(){
         loggingIn = false;
+        signingUp = true;
         $(name).show()
         $(charge).show()
         $(floor).show()
@@ -136,6 +143,7 @@ $(document).ready(function(){
     })
     $(getBackLI).click(function(){
         loggingIn = true;
+        signingUp = false;
         $(name).hide()
         $(charge).hide()
         $(floor).hide()
@@ -147,7 +155,8 @@ $(document).ready(function(){
         $(loginButton).text("Login");
     })
     $(getBackSU).click(function(){
-        loggingIn = true;
+        loggingIn = false;
+        signingUp = true;
         $(name).hide()
         $(charge).hide()
         $(floor).hide()

@@ -374,7 +374,9 @@ iframe {
     opacity: 1;
   }
 }
-.wrap-input100.name, .wrap-input100.phone_number, .wrap-input100.plate_number, .get-back-sign-up{
+.wrap-input100.name, .wrap-input100.charge, .wrap-input100.slots-per-floor, .wrap-input100.floor, .get-back-sign-up
+, .wrap-input100.phone_number, .wrap-input100.plate_number
+{
   display: none;
 }
 .login100-form.user-form{
