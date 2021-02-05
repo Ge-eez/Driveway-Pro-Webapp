@@ -99,23 +99,63 @@ $(document).ready(function(){
 
         $(thisAlert).removeClass('alert-validate');
     };
-    let forgot = $('.txt2');
-    let getBack = $('.get-back');
-    let password = $('.wrap-input100')[1];
+    let name = $('.name');
+    let charge = $('.charge');
+    let floor = $('.floor');
+    let slots = $('.slots-per-floor')
+    let forgot = $('.password');
+    let getBackLI = $('.get-back');
+    let getBackSU = $('.get-back-sign-up');
+    let password = $('.password-box');
     let forgotPassword = $('.forgot-password');
     let loginButton = $('.login100-form-btn')
+    let signup = $('.sign-up')
     $(forgot).click(function(){
+        $(name).hide()
+        $(charge).hide()
+        $(floor).hide()
+        $(slots).hide()
         loggingIn = false;
         $(password).hide();
         $(forgotPassword).hide();
-        $(getBack).css({"visibility": "visible"});
+        $(getBackSU).hide()
+        $(signup).hide()
+        $(getBackLI).css({"display": "block"});
         $(loginButton).text("Verify");
     });
-    $(getBack).click(function(){
+    $(signup).click(function(){
+        loggingIn = false;
+        $(name).show()
+        $(charge).show()
+        $(floor).show()
+        $(slots).show()
+        $(forgotPassword).hide();
+        $(signup).hide()
+        $(getBackSU).css({"display": "block"});
+        $(loginButton).text("Signup");
+    })
+    $(getBackLI).click(function(){
         loggingIn = true;
+        $(name).hide()
+        $(charge).hide()
+        $(floor).hide()
+        $(slots).hide()
         $(password).show();
         $(forgotPassword).show();
-        $(getBack).css({"visibility": "hidden"});
+        $(getBackLI).hide();
+        $(signup).show()
+        $(loginButton).text("Login");
+    })
+    $(getBackSU).click(function(){
+        loggingIn = true;
+        $(name).hide()
+        $(charge).hide()
+        $(floor).hide()
+        $(slots).hide()
+        $(password).show();
+        $(forgotPassword).show();
+        $(signup).show()
+        $(getBackSU).hide();
         $(loginButton).text("Login");
     })
 });

@@ -78,7 +78,7 @@ iframe {
 	border: none !important;
 }
 .get-back{
-  visibility: hidden;
+  display: none;
 }
 
 
@@ -373,4 +373,10 @@ iframe {
     visibility: visible;
     opacity: 1;
   }
+}
+.wrap-input100.name, .wrap-input100.charge, .wrap-input100.slots-per-floor, .wrap-input100.floor, .get-back-sign-up{
+  display: none;
+}
+.login100-form.user-form{
+  display: none;
 }
