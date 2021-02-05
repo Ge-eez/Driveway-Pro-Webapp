@@ -1,4 +1,5 @@
-const backend = "https://parking-spot-finder-api.herokuapp.com/auth/login"
+const BACKEND_LOGIN = "https://parking-spot-finder-api.herokuapp.com/auth/login"
+const BACKEND_SIGNUP = "https://parking-spot-finder-api.herokuapp.com/auth/signup"
 function makeRequest (method, url, data) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
@@ -27,7 +28,6 @@ function makeRequest (method, url, data) {
       }
     });
   }
-
 $(document).ready(function(){
     
     /*==================================================================
@@ -51,14 +51,27 @@ $(document).ready(function(){
                 email: ($("#email")).val(),
                 password: ($("#password")).val()
             }
-              console.log(data)
         
-        $.post(backend, data, function(data, status){
+        $.post(BACKEND_LOGIN, data, function(data, status){
             let results=JSON.stringify(data);
             let res = JSON.parse(results)
             console.log(res)
         })
 
+        }
+        else if(signingUp){
+            let data = {
+                email: ($("#email")).val(),
+                password: ($("#password")).val(),
+                name: ($("#name")).val(),
+                phone_no: ($("#phone_number")).val(),
+                plate_number: ($("#plate_number")).val()
+            }
+            $.post(BACKEND_SIGNUP, data, function(data, status){
+                let results=JSON.stringify(data);
+                let res = JSON.parse(results)
+                console.log(res)
+            })
         }
         else{
             if(validate(input[0]) == false){
@@ -147,8 +160,8 @@ $(document).ready(function(){
         $(loginButton).text("Login");
     })
     $(getBackSU).click(function(){
-        loggingIn = false;
-        signingUp = true;
+        loggingIn = true;
+        signingUp = false;
         $(name).hide()
         $(phone_number).hide()
         $(plate_number).hide()
@@ -159,3 +172,6 @@ $(document).ready(function(){
         $(loginButton).text("Login");
     })
 });
+function clearForm(element){
+    element.val = ""
+}

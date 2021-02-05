@@ -61,7 +61,7 @@ $(document).ready(function(){
 
         }
         else if(signingUp){
-
+            console.log("Registering company...")
         }
         else{
             if(validate(input[0]) == false){
@@ -155,8 +155,8 @@ $(document).ready(function(){
         $(loginButton).text("Login");
     })
     $(getBackSU).click(function(){
-        loggingIn = false;
-        signingUp = true;
+        loggingIn = true;
+        signingUp = false;
         $(name).hide()
         $(charge).hide()
         $(floor).hide()
