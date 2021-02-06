@@ -1,5 +1,26 @@
-let login_btn = document.getElementById("login-btn")
-function pop_it_up(){
+let okay = document.getElementById("okay")
+let radios = document.getElementsByName("textEditor")
+function pop_up_answer(e){
+    let chosen;
+    let link;
+    for (let index = 0; index < radios.length; index++) {
+        if(radios[index].checked) {
+            chosen = radios[index].id
+        }
+        
+    }
+
+    let current_location = location.href
+    // If it's loading locally
+    if((current_location).includes(".html")){
+        chosen += ".html"
+        current_location = current_location.slice(0, -10)
+        link = current_location + chosen
+    }
+    else{
+        link = current_location + "/" + chosen
+    }
+    location.href = link
 
 }
-login_btn.addEventListener('click', pop_it_up)
+okay.addEventListener('click', pop_up_answer)
