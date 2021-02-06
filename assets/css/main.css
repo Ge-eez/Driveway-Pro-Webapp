@@ -410,6 +410,24 @@ iframe {
   margin-top: 6rem;
   margin-bottom: 4rem;
 }
-.ind-page h3{
+.ind-page h3, .ind-page .description p{
   color: white;
+}
+
+.ind-page .description{
+  font-size: 1.5rem;
+  justify-content: center;
+  margin: 2rem;
+}
+#about .jumbotron{
+  width: 60%;
+  margin-left: 20%;
+}
+#login-btn{
+  
+  background: #051C55;
+  color: white;
+}
+#login-btn:hover {
+  background: #E76900;
 }
