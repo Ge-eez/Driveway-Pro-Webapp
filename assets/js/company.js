@@ -1,170 +1,126 @@
 const backend = "https://parking-spot-finder-api.herokuapp.com/auth/loginCompany"
-function makeRequest (method, url, data) {
+function makeRequest(method, url, data) {
     return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open(method, url);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onload = function () {
-        if (this.status >= 200 && this.status < 300) {
-          resolve(xhr.response);
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onload = function () {
+            if (this.status >= 200 && this.status < 300) {
+                resolve(xhr.response);
+            } else {
+                reject({
+                    status: this.status,
+                    statusText: xhr.statusText
+                });
+            }
+        };
+        xhr.onerror = function () {
+            reject({
+                status: this.status,
+                statusText: xhr.statusText
+            });
+        };
+        if (method == "POST" && data) {
+            xhr.send(data);
         } else {
-          reject({
-            status: this.status,
-            statusText: xhr.statusText
-          });
+            xhr.send();
         }
-      };
-      xhr.onerror = function () {
-        reject({
-          status: this.status,
-          statusText: xhr.statusText
-        });
-      };
-      if(method=="POST" && data){
-          xhr.send(data);
-      }else{
-          xhr.send();
-      }
     });
-  }
+}
 
-$(document).ready(function(){
-    
+document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
     [ Validate ]*/
-    let input = $('.validate-input .input100');
+    let input = document.querySelectorAll('.validate-input .input100');
+    let email_input = document.querySelector("#email")
+    let password_input = document.querySelector("#password")
     let loggingIn = true;
     let signingUp = true;
 
-    $('.validate-form').on('submit',function(e){
+    let validate_form = document.querySelector('.validate-form')
+    validate_form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         let check = true;
-        if(loggingIn){
-            for(var i=0; i<input.length; i++) {
-                if(validate(input[i]) == false){
-                    showValidate(input[i]);
-                    check=false;
-                }
+        for (var i = 0; i < input.length; i++) {
+            if (validate(input[i]) == false) {
+                showValidate(input[i]);
+                check = false;
             }
+        }
+        // If a company is logging in
+        if (loggingIn && check) {
+
             let data = {
-                email: ($("#email")).val(),
-                password: ($("#password")).val()
+                email: email_input.value,
+                password: password_input.value
             }
-              console.log(data)
-        
-        $.post(backend, data, function(data, status){
-            let results=JSON.stringify(data);
-            let res = JSON.parse(results)
-            console.log(res)
-        })
+
+            $.post(backend, data, function (data, status) {
+                let results = JSON.stringify(data);
+                let res = JSON.parse(results)
+                console.log(res)
+            })
+
 
         }
-        else if(signingUp){
+
+        // If a company is signing up
+        else if (signingUp && check) {
             console.log("Registering company...")
         }
-        else{
-            if(validate(input[0]) == false){
-                showValidate(input[0]);
-                check=false;
-            }
+        else {
+            console.log("Edit your input")
 
         }
         return check;
     });
 
 
-    $('.validate-form .input100').each(function(){
-        $(this).focus(function(){
-           hideValidate(this);
-        });
-    });
+    let name = document.querySelector('.name');
+    let charge = document.querySelector('.charge');
+    let floor = document.querySelector('.floor');
+    let slots = document.querySelector('.slots-per-floor');
+    let forgot = document.querySelector('.password');
+    let getBackLI = document.querySelector('.get-back');
+    let getBackSU = document.querySelector('.get-back-sign-up');
+    let password = document.querySelector('.password-box');
+    let forgotPassword = document.querySelector('.forgot-password');
+    let loginButton = document.querySelector('.login100-form-btn');
+    let signup = document.querySelector('.sign-up');
 
-    function validate (input) {
-        if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
-                return false;
-            }
-        }
-        else {
-            if($(input).val().trim() == ''){
-                return false;
-            }
-        }
-    }
-
-    function showValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).addClass('alert-validate');
-    }
-
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).removeClass('alert-validate');
-    };
-    let name = $('.name');
-    let charge = $('.charge');
-    let floor = $('.floor');
-    let slots = $('.slots-per-floor')
-    let forgot = $('.password');
-    let getBackLI = $('.get-back');
-    let getBackSU = $('.get-back-sign-up');
-    let password = $('.password-box');
-    let forgotPassword = $('.forgot-password');
-    let loginButton = $('.login100-form-btn')
-    let signup = $('.sign-up')
-    $(forgot).click(function(){
-        $(name).hide()
-        $(charge).hide()
-        $(floor).hide()
-        $(slots).hide()
+    forgot.addEventListener('click', function () {
+        hider(name, charge, floor, slots, password, forgotPassword, getBackSU, signup)
+        shower(getBackLI)
+        loginButton.textContent = ("Verify");
         loggingIn = false;
         signingUp = false;
-        $(password).hide();
-        $(forgotPassword).hide();
-        $(getBackSU).hide()
-        $(signup).hide()
-        $(getBackLI).css({"display": "block"});
-        $(loginButton).text("Verify");
     });
-    $(signup).click(function(){
+
+    signup.addEventListener('click', function () {
+        hider(forgotPassword, signup)
+        shower(name, charge, floor, slots, getBackSU)
+        loginButton.textContent = ("Signup");
         loggingIn = false;
         signingUp = true;
-        $(name).show()
-        $(charge).show()
-        $(floor).show()
-        $(slots).show()
-        $(forgotPassword).hide();
-        $(signup).hide()
-        $(getBackSU).css({"display": "block"});
-        $(loginButton).text("Signup");
-    })
-    $(getBackLI).click(function(){
+        clearForm(...input)
+    });
+    
+    getBackLI.addEventListener('click', function () {
+        hider(name, charge, floor, slots, getBackLI)
+        shower(password, forgotPassword, signup)
+        loginButton.textContent = ("Login");
         loggingIn = true;
         signingUp = false;
-        $(name).hide()
-        $(charge).hide()
-        $(floor).hide()
-        $(slots).hide()
-        $(password).show();
-        $(forgotPassword).show();
-        $(getBackLI).hide();
-        $(signup).show()
-        $(loginButton).text("Login");
-    })
-    $(getBackSU).click(function(){
+        clearForm(...input)
+    });
+
+    getBackSU.addEventListener('click', function () {
+        hider(name, charge, floor, slots, getBackSU)
+        shower(password, forgotPassword, signup)
+        loginButton.textContent = ("Login");
         loggingIn = true;
         signingUp = false;
-        $(name).hide()
-        $(charge).hide()
-        $(floor).hide()
-        $(slots).hide()
-        $(password).show();
-        $(forgotPassword).show();
-        $(signup).show()
-        $(getBackSU).hide();
-        $(loginButton).text("Login");
+        clearForm(...input)
     })
 });

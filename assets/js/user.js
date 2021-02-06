@@ -1,177 +1,111 @@
 const BACKEND_LOGIN = "https://parking-spot-finder-api.herokuapp.com/auth/login"
 const BACKEND_SIGNUP = "https://parking-spot-finder-api.herokuapp.com/auth/signup"
-function makeRequest (method, url, data) {
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open(method, url);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onload = function () {
-        if (this.status >= 200 && this.status < 300) {
-          resolve(xhr.response);
-        } else {
-          reject({
-            status: this.status,
-            statusText: xhr.statusText
-          });
-        }
-      };
-      xhr.onerror = function () {
-        reject({
-          status: this.status,
-          statusText: xhr.statusText
-        });
-      };
-      if(method=="POST" && data){
-          xhr.send(data);
-      }else{
-          xhr.send();
-      }
-    });
-  }
-$(document).ready(function(){
-    
+document.addEventListener("DOMContentLoaded", function () {
+
     /*==================================================================
     [ Validate ]*/
-    let input = $('.validate-input .input100');
-    let loggingIn = true;
-    let signingUp = true;
+    let input = document.querySelectorAll('.validate-input .input100');
+    let email_input = document.querySelector("#email")
+    let password_input = document.querySelector("#password")
+    let name_input = document.querySelector("#name")
+    let phone_input = document.querySelector("#phone_number")
+    let plate_input = document.querySelector('#plate_number')
 
-    $('.validate-form').on('submit',function(e){
+    let validate_form = document.querySelector('.validate-form')
+    validate_form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+        let loggingIn = true;
+        let signingUp = true;
         let check = true;
-        if(loggingIn){
-            for(var i=0; i<input.length; i++) {
-                if(validate(input[i]) == false){
-                    showValidate(input[i]);
-                    check=false;
-                }
+
+        for (var i = 0; i < input.length; i++) {
+            if (validate(input[i]) == false) {
+                showValidate(input[i]);
+                check = false;
             }
+        }
+        // If a user is logging in
+        if (loggingIn && check) {
             let data = {
-                email: ($("#email")).val(),
-                password: ($("#password")).val()
+                email: email_input.value,
+                password: password_input.value
             }
-        
-        $.post(BACKEND_LOGIN, data, function(data, status){
-            let results=JSON.stringify(data);
-            let res = JSON.parse(results)
-            console.log(res)
-        })
+
+            $.post(BACKEND_LOGIN, data, function (data, status) {
+                let results = JSON.stringify(data);
+                let res = JSON.parse(results)
+                console.log(res)
+            })
 
         }
-        else if(signingUp){
+        // If a user is signing up
+        else if (signingUp && check) {
             let data = {
-                email: ($("#email")).val(),
-                password: ($("#password")).val(),
-                name: ($("#name")).val(),
-                phone_no: ($("#phone_number")).val(),
-                plate_number: ($("#plate_number")).val()
+                email: email_input.value,
+                password: password_input.value,
+                name: name_input.value,
+                phone_no: phone_input.value,
+                plate_number: plate_input.value
             }
-            $.post(BACKEND_SIGNUP, data, function(data, status){
-                let results=JSON.stringify(data);
+            $.post(BACKEND_SIGNUP, data, function (data, status) {
+                let results = JSON.stringify(data);
                 let res = JSON.parse(results)
                 console.log(res)
             })
         }
-        else{
-            if(validate(input[0]) == false){
-                showValidate(input[0]);
-                check=false;
-            }
+
+        // If input is wrong
+        else {
+            console.log("Edit your input")
+
         }
         return check;
     });
 
 
-    $('.validate-form .input100').each(function(){
-        $(this).focus(function(){
-           hideValidate(this);
-        });
-    });
+    
+    let name = document.querySelector('.name');
+    let phone_number = document.querySelector('.phone_number');
+    let plate_number = document.querySelector('.plate_number');
+    let forgot = document.querySelector('.password');
+    let getBackLI = document.querySelector('.get-back');
+    let getBackSU = document.querySelector('.get-back-sign-up');
+    let password = document.querySelector('.password-box');
+    let forgotPassword = document.querySelector('.forgot-password');
+    let loginButton = document.querySelector('.login100-form-btn')
+    let signup = document.querySelector('.sign-up')
 
-    function validate (input) {
-        if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
-                return false;
-            }
-        }
-        else {
-            if($(input).val().trim() == ''){
-                return false;
-            }
-        }
-    }
-
-    function showValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).addClass('alert-validate');
-    }
-
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).removeClass('alert-validate');
-    };
-    let name = $('.name');
-    let phone_number = $('.phone_number');
-    let plate_number = $('.plate_number');
-    let forgot = $('.password');
-    let getBackLI = $('.get-back');
-    let getBackSU = $('.get-back-sign-up');
-    let password = $('.password-box');
-    let forgotPassword = $('.forgot-password');
-    let loginButton = $('.login100-form-btn')
-    let signup = $('.sign-up')
-    $(forgot).click(function(){
-        $(name).hide()
-        $(phone_number).hide()
-        $(plate_number).hide()
+    forgot.addEventListener('click', function () {
+        hider(name, phone_number, plate_number, password, forgotPassword, getBackSU, signup)
+        shower(getBackLI)
+        loginButton.textContent = ("Verify");
         loggingIn = false;
         signingUp = false;
-        $(password).hide();
-        $(forgotPassword).hide();
-        $(getBackSU).hide()
-        $(signup).hide()
-        $(getBackLI).css({"display": "block"});
-        $(loginButton).text("Verify");
     });
-    $(signup).click(function(){
+
+    signup.addEventListener('click', function () {
+        hider(forgotPassword, signup)
+        shower(name, phone_number, plate_number, getBackSU)
+        loginButton.textContent = ("Signup");
         loggingIn = false;
         signingUp = true;
-        $(name).show()
-        $(phone_number).show()
-        $(plate_number).show()
-        $(forgotPassword).hide();
-        $(signup).hide()
-        $(getBackSU).css({"display": "block"});
-        $(loginButton).text("Signup");
-    })
-    $(getBackLI).click(function(){
+        clearForm(...input)
+    });
+    
+    getBackLI.addEventListener('click', function () {
+        hider(name, phone_number, plate_number, getBackLI)
+        shower(password, forgotPassword, signup)
+        loginButton.textContent = ("Login");
         loggingIn = true;
         signingUp = false;
-        $(name).hide()
-        $(phone_number).hide()
-        $(plate_number).hide()
-        $(password).show();
-        $(forgotPassword).show();
-        $(getBackLI).hide();
-        $(signup).show()
-        $(loginButton).text("Login");
+        clearForm(...input)
     })
-    $(getBackSU).click(function(){
+    getBackSU.addEventListener('click', function () {
+        hider(name, phone_number, plate_number, getBackSU)
+        shower(password, forgotPassword, signup)
+        loginButton.textContent = ("Login");
         loggingIn = true;
         signingUp = false;
-        $(name).hide()
-        $(phone_number).hide()
-        $(plate_number).hide()
-        $(password).show();
-        $(forgotPassword).show();
-        $(signup).show()
-        $(getBackSU).hide();
-        $(loginButton).text("Login");
+        clearForm(...input)
     })
 });
-function clearForm(element){
-    element.val = ""
-}
