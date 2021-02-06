@@ -55,9 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*==================================================================
     [ Validate ]*/
-    let input = document.querySelectorAll('.validate-input .input100');
-    let email_input = document.querySelector("#email")
-    let password_input = document.querySelector("#password")
     let loggingIn = true;
     let signingUp = true;
 
@@ -85,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let res = JSON.parse(results)
                 console.log(res)
                 if(status == 'success'){
-                    addNewCompany()
+                    loginCompany()
                 }
             })
 
@@ -95,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // If a company is signing up
         else if (signingUp && check) {
             console.log("Registering company...")
+            addNewCompany()
         }
         else {
             console.log("Edit your input")
@@ -155,4 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function addNewCompany(e){
     // Using Index DB
     console.log("Yass")
+}
+function loginCompany(e){
+
 }

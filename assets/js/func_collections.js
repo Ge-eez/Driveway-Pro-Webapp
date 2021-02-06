@@ -1,3 +1,8 @@
+let DB;
+let input = document.querySelectorAll('.validate-input .input100');
+let email_input = document.querySelector("#email")
+let password_input = document.querySelector("#password")
+    
 function makeRequest(method, url, data) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();

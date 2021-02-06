@@ -20,16 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let objectStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
 
-        objectStore.createIndex('users', ['name', 'email'], { unique: false });
+        objectStore.createIndex('users', ['name', 'email'], { unique: true });
 
         console.log('Database ready and fields created!');
     }
 
     /*==================================================================
     [ Validate ]*/
-    let input = document.querySelectorAll('.validate-input .input100');
-    let email_input = document.querySelector("#email")
-    let password_input = document.querySelector("#password")
+    
+    let loggingIn = true;
+    let signingUp = true;
+
     let name_input = document.querySelector("#name")
     let phone_input = document.querySelector("#phone_number")
     let plate_input = document.querySelector('#plate_number')
@@ -37,8 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let validate_form = document.querySelector('.validate-form')
     validate_form.addEventListener('submit', function (e) {
         e.preventDefault();
-        let loggingIn = true;
-        let signingUp = true;
         let check = true;
 
         for (var i = 0; i < input.length; i++) {
@@ -49,6 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         // If a user is logging in
         if (loggingIn && check) {
+            for (var i = 0; i < input.length; i++) {
+                if (validate(input[i]) == false) {
+                    showValidate(input[i]);
+                    check = false;
+                }
+            }
             let data = {
                 email: email_input.value,
                 password: password_input.value
@@ -59,8 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 let res = JSON.parse(results)
                 console.log(res)
                 
-                if(status == 200){
-                    addNewUser()
+                if(status == 'success'){
+                    loginUser(res)
                 }
             })
             
@@ -75,10 +80,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 phone_no: phone_input.value,
                 plate_number: plate_input.value
             }
+            console.log(data)
             $.post(BACKEND_SIGNUP, data, function (data, status) {
                 let results = JSON.stringify(data);
                 let res = JSON.parse(results)
                 console.log(res)
+
+                if(status == "success"){
+                    addNewUser(res)
+                }
             })
         }
 
@@ -142,7 +152,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // DB operations
 
-function addNewUser(e){
-    // Using Index DB
-    console.log("Yass")
+function addNewUser(res){
+    
+    // Insert the object into the database 
+    let transaction = DB.transaction(['users'], 'readwrite');
+    let objectStore = transaction.objectStore('users');
+
+    res.password = password_input.value
+
+    let request = objectStore.add(res);
+    // on success
+    request.onsuccess = () => {
+        clearForm(...input)
+    }
+    transaction.oncomplete = () => {
+        console.log('New user added');
+        // displayTaskList();
+    }
+    transaction.onerror = () => { console.log('There was an error, try again!'); }
+}
+function loginUser(res){
+    
+    // Insert the object into the database 
+    let transaction = DB.transaction(['users'], 'readwrite');
+    let objectStore = transaction.objectStore('users');
+
+    res.password = password_input.value
+
+    let request = objectStore.add(res);
+    // on success
+    request.onsuccess = () => {
+        clearForm(...input)
+    }
+    transaction.oncomplete = () => {
+        console.log('New user added');
+        // displayTaskList();
+    }
+    transaction.onerror = () => { console.log('There was an error, try again!'); }
 }
