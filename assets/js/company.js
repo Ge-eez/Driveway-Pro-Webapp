@@ -30,6 +30,30 @@ function makeRequest(method, url, data) {
 
 document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
+    [ DB ]*/
+
+    let CompanyDB = indexedDB.open("companies", 1);
+    CompanyDB.onsuccess = function (event) {
+        console.log('Database Ready');
+        DB = TasksDB.result;
+        displayTaskList();
+
+    };
+    CompanyDB.onerror = function (event) {
+        console.log('There was an error');
+    };
+    CompanyDB.onupgradeneeded = function (e) {
+        let db = e.target.result;
+
+        let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+
+        objectStore.createIndex('tasknamez', ['date', 'taskname'], { unique: false });
+
+        console.log('Database ready and fields created!');
+    }
+    
+
+    /*==================================================================
     [ Validate ]*/
     let input = document.querySelectorAll('.validate-input .input100');
     let email_input = document.querySelector("#email")

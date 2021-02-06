@@ -15,11 +15,8 @@ function pop_up_answer(e){
     if((current_location).includes(".html")){
         chosen += ".html"
         current_location = current_location.slice(0, -10)
-        link = current_location + chosen
     }
-    else{
-        link = current_location + "/" + chosen
-    }
+    link = current_location + "/" + chosen
     location.href = link
 
 }

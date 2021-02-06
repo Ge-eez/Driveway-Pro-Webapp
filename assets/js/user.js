@@ -3,6 +3,29 @@ const BACKEND_SIGNUP = "https://parking-spot-finder-api.herokuapp.com/auth/signu
 document.addEventListener("DOMContentLoaded", function () {
 
     /*==================================================================
+    [ DB ]*/
+
+    let UserDB = indexedDB.open("users", 1);
+    UserDB.onsuccess = function (event) {
+        console.log('Database Ready');
+        DB = TasksDB.result;
+        displayTaskList();
+
+    };
+    UserDB.onerror = function (event) {
+        console.log('There was an error');
+    };
+    UserDB.onupgradeneeded = function (e) {
+        let db = e.target.result;
+
+        let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+
+        objectStore.createIndex('tasknamez', ['date', 'taskname'], { unique: false });
+
+        console.log('Database ready and fields created!');
+    }
+
+    /*==================================================================
     [ Validate ]*/
     let input = document.querySelectorAll('.validate-input .input100');
     let email_input = document.querySelector("#email")
@@ -35,7 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 let results = JSON.stringify(data);
                 let res = JSON.parse(results)
                 console.log(res)
+                
+                if(status == 200){
+                    addNewUser()
+                }
             })
+            
 
         }
         // If a user is signing up
@@ -63,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    
+
     let name = document.querySelector('.name');
     let phone_number = document.querySelector('.phone_number');
     let plate_number = document.querySelector('.plate_number');
@@ -91,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
         signingUp = true;
         clearForm(...input)
     });
-    
+
     getBackLI.addEventListener('click', function () {
         hider(name, phone_number, plate_number, getBackLI)
         shower(password, forgotPassword, signup)
@@ -108,4 +136,13 @@ document.addEventListener("DOMContentLoaded", function () {
         signingUp = false;
         clearForm(...input)
     })
+
 });
+
+
+// DB operations
+
+function addNewUser(e){
+    // Using Index DB
+    console.log("Yass")
+}
