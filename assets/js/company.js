@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let CompanyDB = indexedDB.open("companies", 1);
     CompanyDB.onsuccess = function (event) {
         console.log('Database Ready');
-        DB = TasksDB.result;
-        displayTaskList();
+        DB = CompanyDB.result;
+        // display
 
     };
     CompanyDB.onerror = function (event) {
@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
     CompanyDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+        let objectStore = db.createObjectStore('companies', { keyPath: 'id', autoIncrement: true });
 
-        objectStore.createIndex('tasknamez', ['date', 'taskname'], { unique: false });
+        objectStore.createIndex('companies', ['name', 'status'], { unique: false });
 
         console.log('Database ready and fields created!');
     }
@@ -84,6 +84,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 let results = JSON.stringify(data);
                 let res = JSON.parse(results)
                 console.log(res)
+                if(status == 'success'){
+                    addNewCompany()
+                }
             })
 
 
@@ -148,3 +151,8 @@ document.addEventListener("DOMContentLoaded", function () {
         clearForm(...input)
     })
 });
+
+function addNewCompany(e){
+    // Using Index DB
+    console.log("Yass")
+}

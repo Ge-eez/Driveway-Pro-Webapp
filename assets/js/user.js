@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let UserDB = indexedDB.open("users", 1);
     UserDB.onsuccess = function (event) {
         console.log('Database Ready');
-        DB = TasksDB.result;
-        displayTaskList();
+        DB = UserDB.result;
+        // display
 
     };
     UserDB.onerror = function (event) {
@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function () {
     UserDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+        let objectStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
 
-        objectStore.createIndex('tasknamez', ['date', 'taskname'], { unique: false });
+        objectStore.createIndex('users', ['name', 'email'], { unique: false });
 
         console.log('Database ready and fields created!');
     }
