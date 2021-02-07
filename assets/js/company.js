@@ -247,14 +247,6 @@ function updateToken(res) {
 }
 function loggedIn(email_id){
     
-    let logged_in_company;
-    if (localStorage.getItem("company") === null) {
-        logged_in_company = []
-    }
-    else {
-        logged_in_company = JSON.parse(localStorage.getItem('company'));
-    }
-    logged_in_company.push(email_id);
-    localStorage.setItem('company', JSON.stringify(logged_in_company));
+    localStorage.setItem('company', JSON.stringify(email_id));
     relocation("company_page")
 }

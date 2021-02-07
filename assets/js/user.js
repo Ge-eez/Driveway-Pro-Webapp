@@ -165,6 +165,7 @@ function addNewUser(res) {
     transaction.oncomplete = () => {
         console.log('New user added');
         // take user to the user landing page
+        loggedIn(res)
     }
     transaction.onerror = () => { console.log('There was an error, try again!'); }
 }
@@ -215,20 +216,14 @@ function updateToken(res) {
       
         updateTitleRequest.onsuccess = () => {
             console.log("logged In")
-            loggedIn(email_id)
+            loggedIn(res)
         };
       };
 }
-function loggedIn(email_id){
+function loggedIn(res){
     
-    let logged_in_user;
-    if (localStorage.getItem("user") === null) {
-        logged_in_user = []
-    }
-    else {
-        logged_in_user = JSON.parse(localStorage.getItem('user'));
-    }
-    logged_in_user.push(email_id);
-    localStorage.setItem('user', JSON.stringify(logged_in_user));
+    let role = res.roles[0]
+    let email_id = res.email
+    localStorage.setItem(`${role}`, JSON.stringify(email_id));
     relocation("user_page")
 }
