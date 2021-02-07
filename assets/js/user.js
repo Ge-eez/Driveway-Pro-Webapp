@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     UserDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('users', { keyPath: 'email', autoIncrement: true });
+        let objectStore = db.createObjectStore('users', { keyPath: 'email'});
 
         objectStore.createIndex('users', ['name', 'email'], { unique: true });
 
@@ -30,10 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let loggingIn = true;
     let signingUp = true;
-
-    let name_input = document.querySelector("#name")
-    let phone_input = document.querySelector("#phone_number")
-    let plate_input = document.querySelector('#plate_number')
 
     let validate_form = document.querySelector('.validate-form')
     validate_form.addEventListener('submit', function (e) {

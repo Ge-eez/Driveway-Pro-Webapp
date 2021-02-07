@@ -5,6 +5,15 @@ let DB;
 let input = document.querySelectorAll('.validate-input .input100');
 let email_input = document.querySelector("#email")
 let password_input = document.querySelector("#password")
+
+let name_input = document.querySelector("#name")
+let phone_input = document.querySelector("#phone_number")
+let plate_input = document.querySelector('#plate_number')
+
+
+let charge_input = document.querySelector("#charge")
+let floor_input = document.querySelector('#floor')
+let slots_input = document.querySelector('#slots-per-floor')
     
 function makeRequest(method, url, data) {
     return new Promise(function (resolve, reject) {

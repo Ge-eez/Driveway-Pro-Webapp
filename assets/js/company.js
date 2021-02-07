@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
     CompanyDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('companies', { keyPath: 'id', autoIncrement: true });
+        let objectStore = db.createObjectStore('companies', { keyPath: 'email'});
 
-        objectStore.createIndex('companies', ['name', 'status'], { unique: false });
+        objectStore.createIndex('companies', ['name', 'email'], { unique: true });
 
         console.log('Database ready and fields created!');
     }
@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     [ Validate ]*/
     let loggingIn = true;
     let signingUp = true;
+
 
     let validate_form = document.querySelector('.validate-form')
     validate_form.addEventListener('submit', function (e) {
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let res = JSON.parse(results)
                 console.log(res)
                 if(status == 'success'){
-                    loginCompany()
+                    lookupCompany(res)
                 }
             })
 
@@ -150,10 +151,95 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
-function addNewCompany(e){
-    // Using Index DB
-    console.log("Yass")
-}
-function loginCompany(e){
 
+// DB operations
+
+function addNewCompany(res, status = "pending") {
+
+    // Insert the object into the database 
+    let transaction = DB.transaction(['companies'], 'readwrite');
+    let objectStore = transaction.objectStore('companies');
+
+    if(!res) {
+        res = {
+        name: name_input.value,
+        email: email_input.value,
+        charge: charge_input.value,
+        slots_per_floor: slots_input.value,
+        floor: floor_input.value,
+        password: password_input.value,
+        opens_at: 1,
+        closes_at: 12,
+        latitude: "to be filled by the admin",
+        longitude: "to be filled by the admin"
+
+        }
+
+    }else{
+        res.password = "Lol we kinda respect privacy ;)"
+    }
+    res.status = status
+
+    
+    let request = objectStore.add(res);
+    // on success
+    request.onsuccess = () => {
+        clearForm(...input)
+    }
+    transaction.oncomplete = () => {
+        console.log('New company added');
+        status == pending ? console.log('waiting for approval') : console.log("Welcome")
+        // take user to the user landing page
+    }
+    transaction.onerror = () => { console.log('There was an error, try again!'); }
+}
+function lookupCompany(res) {
+    // check if the user is in the db
+    // if not add him/her
+    let email_id = res.email;
+    // use a transaction
+    let objectStore = DB.transaction('companies').objectStore('companies').index('companies');
+    
+    objectStore.openCursor().onsuccess = function (e) {
+        // assign the current cursor
+        let cursor = e.target.result;
+        let found = false
+
+        if (cursor) {
+            if(cursor.value.email == email_id){
+                found = true
+            }
+            else{
+                cursor.continue();
+            }
+        }
+        if(!found) addNewCompany(res, "approved")
+        else{
+            // Update token
+            updateToken(res)
+            // Redirect to the landing page
+        }
+    }
+
+}
+function updateToken(res) {
+
+    let email_id = res.email;
+    // use a transaction
+    let objectStore = DB.transaction(['companies'], "readwrite").objectStore('companies');
+    const objectStoreTitleRequest = objectStore.get(email_id);    
+    
+    objectStoreTitleRequest.onsuccess = () => {
+        const data = objectStoreTitleRequest.result;
+      
+        data.token = res.token;
+      
+        const updateTitleRequest = objectStore.put(data);
+      
+        console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
+      
+        updateTitleRequest.onsuccess = () => {
+            console.log("logged In")
+        };
+      };
 }
