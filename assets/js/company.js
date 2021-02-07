@@ -188,8 +188,8 @@ function addNewCompany(res, status = "pending") {
     }
     transaction.oncomplete = () => {
         console.log('New company added');
-        status == pending ? console.log('waiting for approval') : console.log("Welcome")
-        // take user to the user landing page
+        status == "pending" ? console.log('waiting for approval') : relocation("company_page")
+        // take user to the company landing page
     }
     transaction.onerror = () => { console.log('There was an error, try again!'); }
 }
@@ -239,7 +239,8 @@ function updateToken(res) {
         console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
       
         updateTitleRequest.onsuccess = () => {
-            console.log("logged In")
+            console.log("logged In");
+            relocation("company_page")
         };
       };
 }

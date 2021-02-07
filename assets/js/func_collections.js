@@ -14,7 +14,7 @@ let plate_input = document.querySelector('#plate_number')
 let charge_input = document.querySelector("#charge")
 let floor_input = document.querySelector('#floor')
 let slots_input = document.querySelector('#slots-per-floor')
-    
+
 function makeRequest(method, url, data) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -67,19 +67,19 @@ function hideValidate(input) {
 
     thisAlert.classList.remove('alert-validate');
 };
-function hider(...elements){
-    for (let i=0; i<elements.length; i++) {
+function hider(...elements) {
+    for (let i = 0; i < elements.length; i++) {
         elements[i].style.display = 'none'
     };
 }
-function shower(...elements){
-    for (let i=0; i<elements.length; i++) {
+function shower(...elements) {
+    for (let i = 0; i < elements.length; i++) {
         elements[i].style.display = 'block'
     };
 }
 
 function clearForm(...elements) {
-    for (let i=0; i<elements.length; i++) {
+    for (let i = 0; i < elements.length; i++) {
         elements[i].value = ''
     };
 }
@@ -90,3 +90,25 @@ form_input.forEach(element => {
         hideValidate(element);
     });
 });
+
+function relocation(chosen) {
+    
+    let current_location = location.href
+    
+    // If it's loading locally
+    if ((current_location).includes(".html")) {
+        chosen += ".html"
+        current_location = current_location.slice(0, -5)
+    }
+    if (current_location.includes('company_login')){
+        current_location = current_location.slice(0, -13)
+        
+    }else if(current_location.includes('user_login')){
+        current_location = current_location.slice(0, -13)
+    }
+    
+
+    link = current_location + chosen
+    location.href = link
+    console.log(current_location)
+}
