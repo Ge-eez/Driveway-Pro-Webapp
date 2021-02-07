@@ -225,5 +225,5 @@ function loggedIn(res){
     let role = res.roles[0]
     let email_id = res.email
     localStorage.setItem(`${role}`, JSON.stringify(email_id));
-    relocation(`${role} _page`)
+    relocation("user_page")
 }
