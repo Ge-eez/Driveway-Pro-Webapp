@@ -215,6 +215,20 @@ function updateToken(res) {
       
         updateTitleRequest.onsuccess = () => {
             console.log("logged In")
+            loggedIn(email_id)
         };
       };
+}
+function loggedIn(email_id){
+    
+    let logged_in_user;
+    if (localStorage.getItem("user") === null) {
+        logged_in_user = []
+    }
+    else {
+        logged_in_user = JSON.parse(localStorage.getItem('user'));
+    }
+    logged_in_user.push(email_id);
+    localStorage.setItem('user', JSON.stringify(logged_in_user));
+    relocation("user_page")
 }

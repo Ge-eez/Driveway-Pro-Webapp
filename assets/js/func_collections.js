@@ -104,11 +104,14 @@ function relocation(chosen) {
         current_location = current_location.slice(0, -13)
         
     }else if(current_location.includes('user_login')){
-        current_location = current_location.slice(0, -13)
+        current_location = current_location.slice(0, -10)
     }
-    
+    if(current_location.includes('#')){
+        current_location = current_location.slice(0, -1)
+    }
 
     link = current_location + chosen
+    console.log(link)
     location.href = link
     console.log(current_location)
 }

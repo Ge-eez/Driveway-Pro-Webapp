@@ -159,6 +159,7 @@ function addNewCompany(res, status = "pending") {
     // Insert the object into the database 
     let transaction = DB.transaction(['companies'], 'readwrite');
     let objectStore = transaction.objectStore('companies');
+    let email_id;
 
     if(!res) {
         res = {
@@ -171,12 +172,15 @@ function addNewCompany(res, status = "pending") {
         opens_at: 1,
         closes_at: 12,
         latitude: "to be filled by the admin",
-        longitude: "to be filled by the admin"
+        longitude: "to be filled by the admin",
 
         }
+        email_id = res.email
 
     }else{
         res.password = "Lol we kinda respect privacy ;)"
+        email_id = res.email
+        loggedIn(email_id)
     }
     res.status = status
 
@@ -188,7 +192,7 @@ function addNewCompany(res, status = "pending") {
     }
     transaction.oncomplete = () => {
         console.log('New company added');
-        status == "pending" ? console.log('waiting for approval') : relocation("company_page")
+        status == "pending" ? console.log('waiting for approval') : loggedIn(res.email_id)
         // take user to the company landing page
     }
     transaction.onerror = () => { console.log('There was an error, try again!'); }
@@ -208,17 +212,14 @@ function lookupCompany(res) {
         if (cursor) {
             if(cursor.value.email == email_id){
                 found = true
+                updateToken(res)
             }
             else{
                 cursor.continue();
             }
         }
         if(!found) addNewCompany(res, "approved")
-        else{
-            // Update token
-            updateToken(res)
-            // Redirect to the landing page
-        }
+        
     }
 
 }
@@ -239,8 +240,21 @@ function updateToken(res) {
         console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
       
         updateTitleRequest.onsuccess = () => {
+            loggedIn(email_id)
             console.log("logged In");
-            relocation("company_page")
         };
       };
+}
+function loggedIn(email_id){
+    
+    let logged_in_company;
+    if (localStorage.getItem("company") === null) {
+        logged_in_company = []
+    }
+    else {
+        logged_in_company = JSON.parse(localStorage.getItem('company'));
+    }
+    logged_in_company.push(email_id);
+    localStorage.setItem('company', JSON.stringify(logged_in_company));
+    relocation("company_page")
 }

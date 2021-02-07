@@ -16,6 +16,10 @@ function pop_up_answer(e){
         chosen += ".html"
         current_location = current_location.slice(0, -10)
     }
+    // If it's loading from live server
+    else if(current_location.includes("127.0.0.1")){
+        chosen += ".html"
+    }
     link = current_location + chosen
     location.href = link
 
