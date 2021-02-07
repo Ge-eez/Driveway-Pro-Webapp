@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     UserDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+        let objectStore = db.createObjectStore('users', { keyPath: 'email', autoIncrement: true });
 
         objectStore.createIndex('users', ['name', 'email'], { unique: true });
 
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*==================================================================
     [ Validate ]*/
-    
+
     let loggingIn = true;
     let signingUp = true;
 
@@ -62,13 +62,12 @@ document.addEventListener("DOMContentLoaded", function () {
             $.post(BACKEND_LOGIN, data, function (data, status) {
                 let results = JSON.stringify(data);
                 let res = JSON.parse(results)
-                console.log(res)
-                
-                if(status == 'success'){
-                    loginUser(res)
+
+                if (status == 'success') {
+                    lookupUser(res)
                 }
             })
-            
+
 
         }
         // If a user is signing up
@@ -84,9 +83,8 @@ document.addEventListener("DOMContentLoaded", function () {
             $.post(BACKEND_SIGNUP, data, function (data, status) {
                 let results = JSON.stringify(data);
                 let res = JSON.parse(results)
-                console.log(res)
 
-                if(status == "success"){
+                if (status == "success") {
                     addNewUser(res)
                 }
             })
@@ -152,13 +150,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // DB operations
 
-function addNewUser(res){
-    
+function addNewUser(res) {
+
     // Insert the object into the database 
     let transaction = DB.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
 
-    res.password = password_input.value
+    res.password = "Lol we kinda respect privacy ;)"
+    res.status = "First time"
+
+    // res.code = password_input.value;
 
     let request = objectStore.add(res);
     // on success
@@ -167,26 +168,57 @@ function addNewUser(res){
     }
     transaction.oncomplete = () => {
         console.log('New user added');
-        // displayTaskList();
+        // take user to the user landing page
     }
     transaction.onerror = () => { console.log('There was an error, try again!'); }
 }
-function loginUser(res){
+function lookupUser(res) {
+    // check if the user is in the db
+    // if not add him/her
+    let email_id = res.email;
+    // use a transaction
+    let objectStore = DB.transaction('users').objectStore('users').index('users');
     
-    // Insert the object into the database 
-    let transaction = DB.transaction(['users'], 'readwrite');
-    let objectStore = transaction.objectStore('users');
+    objectStore.openCursor().onsuccess = function (e) {
+        // assign the current cursor
+        let cursor = e.target.result;
+        let found = false
 
-    res.password = password_input.value
+        if (cursor) {
+            if(cursor.value.email == email_id){
+                found = true
+            }
+            else{
+                cursor.continue();
+            }
+        }
+        if(!found) addNewUser(res)
+        else{
+            // Update token
+            updateToken(res)
+            // Redirect to the landing page
+        }
+    }
 
-    let request = objectStore.add(res);
-    // on success
-    request.onsuccess = () => {
-        clearForm(...input)
-    }
-    transaction.oncomplete = () => {
-        console.log('New user added');
-        // displayTaskList();
-    }
-    transaction.onerror = () => { console.log('There was an error, try again!'); }
+}
+function updateToken(res) {
+
+    let email_id = res.email;
+    // use a transaction
+    let objectStore = DB.transaction(['users'], "readwrite").objectStore('users');
+    const objectStoreTitleRequest = objectStore.get(email_id);    
+    
+    objectStoreTitleRequest.onsuccess = () => {
+        const data = objectStoreTitleRequest.result;
+      
+        data.token = res.token;
+      
+        const updateTitleRequest = objectStore.put(data);
+      
+        console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
+      
+        updateTitleRequest.onsuccess = () => {
+            console.log("logged In")
+        };
+      };
 }

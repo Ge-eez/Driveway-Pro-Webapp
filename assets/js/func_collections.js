@@ -1,3 +1,6 @@
+if (!window.indexedDB) {
+    console.log("Your browser doesn't support a stable version of IndexedDB. Client side db feature will not be available.");
+}
 let DB;
 let input = document.querySelectorAll('.validate-input .input100');
 let email_input = document.querySelector("#email")
