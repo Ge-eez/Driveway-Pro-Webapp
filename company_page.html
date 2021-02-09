@@ -18,6 +18,8 @@
     <link rel="stylesheet" type="text/css" href="./assets/css/company.css">
 	<!--===============================================================================================-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- ====================================================== -->
+    <script src="https://kit.fontawesome.com/dec944d78f.js" crossorigin="anonymous"></script>
 	<!--===============================================================================================-->
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
 	<!--===============================================================================================-->
@@ -27,21 +29,20 @@
 </head>
 <body>
 
-    <div class="container-fluid ml-0 mr-0">
-        <div class="row ">
-
-            <header id="company-header" class="col-12 col-md-4 col-xl-2 ">
+    <div class=" ">
+        <div class="row no-gutters mb-0">
+            <header id="company-header" class="col-12 col-md-3 col-xl-2">
     
     
                 <div class="row  pl-2 ">
-                    <li class="col-3 col-lg-12 col-xl-12">
+                    <li class="col-3  col-md-12 col-lg-12  col-xl-12">
                         <a href="#profile" class="tab-links" onclick="openLink(event, 'profile')" >Profile</a>
                     </li>
-                    <li class="col-6 col-lg-12 col-xl-12 "> 
+                    <li class="col-6 col-md-12  col-lg-12 col-xl-12 "> 
                         <a href="#parking-officer"  class="tab-links" onclick="openLink(event, 'parking-officer')">Parking Officer</a>
                     </li>
                     
-                    <li class=" col-3 col-lg-12 col-xl-12">
+                    <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
                         <a href="#more"  class="tab-links" onclick="openLink(event, 'more')">More</a>
                     </li>
                     
@@ -49,10 +50,52 @@
                 
             </header>
     
-            <section id="check" class="container col-12 col-md-8 col-xl-10 ">
+            <section id="check" class="col-12  col-md-9  col-xl-10 ">
                 
                 <div class="row tab-content" id="profile" >
-    
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
+
+                        <h2>Company Name</h2>
+                        <h5><i class="fas fa-user-tie"></i>Owner Full Name</h5>
+                        <h5><i class="fas fa-envelope"></i>email@gmail.com</h5>
+                        <h5><i class="fas fa-phone-alt"></i>phone number</h5>
+                        <h5><i class="fas fa-briefcase"></i>Role</h5>
+
+                    </div>
+                    <div class="col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
+
+                        <h1>Update Profile</h1>
+                        <form action="#">
+                            <div class="form-group">
+                                <label for="company">Company</label>
+                                <input type="text" class="form-control" id="company" placeholder="company name">
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <label for="fName">First Name</label>
+                                  <input type="text" class="form-control" id="fName" placeholder="First name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="fName">Last Name</label>
+                                  <input type="password" class="form-control" id="lName" placeholder="Last Name">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label for="inputEamil">E-mail</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="email">
+                              </div>
+                              <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="text" class="form-control" id="phone" placeholder="+251">
+                              </div>
+                              <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" class="form-control" id="role" placeholder="role">
+                              </div>
+                              <button type="submit" class="login100-form-btn">Update</button>
+                        </form>
+
+                    </div>
                     
     
                 </div>
@@ -71,14 +114,8 @@
     
     </div>
     
-    
 
-
-    
-
-
-
-    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white">
+    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white mt-0">
 
         <div class="container text-center text-md-left">
 
