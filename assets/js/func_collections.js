@@ -15,6 +15,8 @@ let charge_input = document.querySelector("#charge")
 let floor_input = document.querySelector('#floor')
 let slots_input = document.querySelector('#slots-per-floor')
 
+let spinner = document.querySelector('.fa-spinner')
+
 function makeRequest(method, url, data) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -92,25 +94,17 @@ form_input.forEach(element => {
 });
 
 function relocation(chosen) {
-    
+
     let current_location = location.href
-    
     // If it's loading locally
     if ((current_location).includes(".html")) {
         chosen += ".html"
-        current_location = current_location.slice(0, -5)
     }
-    if (current_location.includes('company_login')){
-        current_location = current_location.slice(0, -13)
-        
-    }else if(current_location.includes('user_login')){
-        current_location = current_location.slice(0, -10)
-    }
-    if(current_location.includes('#')){
-        current_location = current_location.slice(0, -1)
-    }
+    current_location = (current_location.split('/'))
+    current_location = current_location.splice(current_location.length - 2, 1)
+    console.log(current_location)
 
-    link = current_location + chosen
+    link = (current_location).join('/') + "/" + chosen
     console.log(link)
     location.href = link
     console.log(current_location)

@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     UserDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('users', { keyPath: 'email'});
+        let objectStore = db.createObjectStore('users', { keyPath: 'email' });
 
         objectStore.createIndex('users', ['name', 'email'], { unique: true });
 
@@ -50,6 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     check = false;
                 }
             }
+            spinner.style.display = 'block'
+
             let data = {
                 email: email_input.value,
                 password: password_input.value
@@ -175,25 +177,24 @@ function lookupUser(res) {
     let email_id = res.email;
     // use a transaction
     let objectStore = DB.transaction('users').objectStore('users').index('users');
-    
+
     objectStore.openCursor().onsuccess = function (e) {
         // assign the current cursor
         let cursor = e.target.result;
         let found = false
 
         if (cursor) {
-            if(cursor.value.email == email_id){
+            if (cursor.value.email == email_id) {
                 found = true
+                return updateToken(res)
             }
-            else{
+            else {
                 cursor.continue();
             }
         }
-        if(!found) addNewUser(res)
-        else{
-            // Update token
-            updateToken(res)
-            // Redirect to the landing page
+        // Update token
+        else {
+            return addNewUser(res)
         }
     }
 
@@ -203,33 +204,38 @@ function updateToken(res) {
     let email_id = res.email;
     // use a transaction
     let objectStore = DB.transaction(['users'], "readwrite").objectStore('users');
-    const objectStoreTitleRequest = objectStore.get(email_id);    
-    
+    const objectStoreTitleRequest = objectStore.get(email_id);
+
     objectStoreTitleRequest.onsuccess = () => {
         const data = objectStoreTitleRequest.result;
-      
+
         data.token = res.token;
-      
+
         const updateTitleRequest = objectStore.put(data);
-      
+
         console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
-      
+
         updateTitleRequest.onsuccess = () => {
             console.log("logged In")
             loggedIn(res)
         };
-      };
+    };
 }
-function loggedIn(res){
-    
+function loggedIn(res) {
+    spinner.style.display = 'none'
+
     let role = res.roles[0]
     let email_id = res.email
     localStorage.setItem(`${role}`, JSON.stringify(email_id));
-    switch (role){
+    switch (role) {
         case "user":
             relocation("user_page")
             break
         case "parking_officer":
             relocation("parking_officer")
+            break
+        case "admin":
+            relocation("admin_page")
+            break
     }
 }
