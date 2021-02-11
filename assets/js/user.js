@@ -154,7 +154,7 @@ async function addNewUser(data, role = "user") {
             console.log('New user added');
             // take user to the user landing page
             let userToJson = addUserToJSON(res)
-            userToJson.then(loggedIn(res))
+            // userToJson.then(loggedIn(res))
         }
         transaction.onerror = () => { console.log('There was an error, try again!'); }
     });
@@ -165,22 +165,51 @@ async function addNewUser(data, role = "user") {
 async function addUserToJSON(data) {
     console.log("adding user to JSON")
     return new Promise(function (resolve, reject) {
-        var textFile = null;
-        function makeTextFile(text) {
-            var data = new Blob([text], { type: 'text/plain' });
+        function checker() {
+            let JSON_CONTENT;
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', './assets/js/jsonData/user.json', true);
+            xhr.responseType = 'blob';
+            xhr.onload = function (e) {
+                if (this.status == 200) {
+                    var file = new File([this.response], 'temp');
+                    var fileReader = new FileReader();
+                    fileReader.addEventListener('load', function () {
+                        JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
+                        for (let i = 0; i < JSON_CONTENT.length; i++) {
+                            if ((JSON_CONTENT[i]).includes(data.email)) {
+                                console.log("file found")
+                                alert("User already created globally")
+                                return false
+                            }
 
-            // If we are replacing a previously generated file we need to
-            // manually revoke the object URL to avoid memory leaks.
-            if (textFile !== null) {
-                window.URL.revokeObjectURL(textFile);
+                        }
+                    });
+                    fileReader.readAsText(file);
+                }
             }
-
-            textFile = window.URL.createObjectURL(data);
-
-            resolve(textFile);
+            xhr.send();
+            return true
         }
-        makeTextFile("Hey")
-    });
+        result = checker()
+        if (result) {
+            var textFile = null;
+            function makeTextFile(text) {
+                var data = new Blob([text], { type: 'text/plain' });
+
+                // If we are replacing a previously generated file we need to
+                // manually revoke the object URL to avoid memory leaks.
+                if (textFile !== null) {
+                    window.URL.revokeObjectURL(textFile);
+                }
+
+                textFile = window.URL.createObjectURL(data);
+
+                resolve(textFile);
+            }
+            makeTextFile("Hey")
+        }
+    })
 }
 async function lookupUserInDB(data) {
     console.log("looking for the user in the DB")
@@ -257,31 +286,31 @@ function loggedIn(res) {
             break
     }
 }
-function readJSON(data) { 
+function readJSON(data) {
     let JSON_CONTENT;
-    let xhr = new XMLHttpRequest(); 
-    xhr.open('GET', './assets/js/jsonData/user.json', true); 
-    xhr.responseType = 'blob'; 
-    xhr.onload = function(e) {  
-      if (this.status == 200) { 
-          var file = new File([this.response], 'temp'); 
-          var fileReader = new FileReader(); 
-          fileReader.addEventListener('load', function(){ 
-               JSON_CONTENT = ((fileReader.result).slice(1,-2)).split('},')
-               for (let i = 0; i < JSON_CONTENT.length; i++) {
-                   if((JSON_CONTENT[i]).includes(data.email)){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', './assets/js/jsonData/user.json', true);
+    xhr.responseType = 'blob';
+    xhr.onload = function (e) {
+        if (this.status == 200) {
+            var file = new File([this.response], 'temp');
+            var fileReader = new FileReader();
+            fileReader.addEventListener('load', function () {
+                JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
+                for (let i = 0; i < JSON_CONTENT.length; i++) {
+                    if ((JSON_CONTENT[i]).includes(data.email)) {
                         console.log("file found")
-                        let closeBracket = (i+1 == JSON_CONTENT.length) ? "": "}"
+                        let closeBracket = (i + 1 == JSON_CONTENT.length) ? "" : "}"
                         let toBeAdded = JSON.parse(JSON_CONTENT[i] + closeBracket)
-                        if(match(toBeAdded.password, data.password)){
+                        if (match(toBeAdded.password, data.password)) {
                             addNewUser(toBeAdded)
                         }
-                   }
-                   
-               }
-          }); 
-          fileReader.readAsText(file); 
-      }  
-    } 
-    xhr.send(); 
+                    }
+
+                }
+            });
+            fileReader.readAsText(file);
+        }
+    }
+    xhr.send();
 } 
