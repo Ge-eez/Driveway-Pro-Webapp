@@ -1,0 +1,21 @@
+[
+    {
+        "company": "",
+        "email": "new@new.com",
+        "name": "NewUser",
+        "password": "eilrigrkmgr",
+        "phone_no": "+2519444",
+        "plate_number": "84545",
+        "role": "user"
+    },
+    {
+        "company": "",
+        "email": "new@8.com",
+        "name": "NewUser",
+        "password": "eilrigrkmgr",
+        "phone_no": "+2519444",
+        "plate_number": "84545",
+        "role": "user"
+    }
+
+]

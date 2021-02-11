@@ -68,9 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 phone_no: phone_input.value,
                 plate_number: plate_input.value
             }
-            signupUser(data)
-            
-            
+            return signupUser(data)
+
+
         }
 
         // If input is wrong
@@ -130,79 +130,119 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function match(a,b){
+function match(a, b) {
     return a == b
 }
 
 // DB operations
 
-function addNewUser(res) {
+async function addNewUser(data, role = "user") {
 
     // Insert the object into the database 
     let transaction = DB.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
 
-    res.password = "Lol we kinda respect privacy ;)"
-    res.status = "First time"
+    let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no)
 
-    // res.code = password_input.value;
+    return new Promise(function (resolve, reject) {
+        let request = objectStore.add(res);
+        request.onsuccess = function () {
+            clearForm(...input)
+            resolve(request.result);
+        }
+        transaction.oncomplete = () => {
+            console.log('New user added');
+            // take user to the user landing page
+            let userToJson = addUserToJSON(res)
+            userToJson.then(loggedIn(res))
+        }
+        transaction.onerror = () => { console.log('There was an error, try again!'); }
+    });
 
-    let request = objectStore.add(res);
-    // on success
-    request.onsuccess = () => {
-        clearForm(...input)
-    }
-    transaction.oncomplete = () => {
-        console.log('New user added');
-        // take user to the user landing page
-        loggedIn(res)
-    }
-    transaction.onerror = () => { console.log('There was an error, try again!'); }
+
+
+}
+async function addUserToJSON(data) {
+    console.log("adding user to JSON")
+    return new Promise(function (resolve, reject) {
+        var textFile = null;
+        function makeTextFile(text) {
+            var data = new Blob([text], { type: 'text/plain' });
+
+            // If we are replacing a previously generated file we need to
+            // manually revoke the object URL to avoid memory leaks.
+            if (textFile !== null) {
+                window.URL.revokeObjectURL(textFile);
+            }
+
+            textFile = window.URL.createObjectURL(data);
+
+            resolve(textFile);
+        }
+        makeTextFile("Hey")
+    });
 }
 async function lookupUserInDB(data) {
     console.log("looking for the user in the DB")
     let email_id = data.email;
-    let result = {};
     let objectStore = DB.transaction('users').objectStore('users');
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         let request = objectStore.get(email_id);
-        request.onsuccess = function(){
+        request.onsuccess = function () {
             resolve(request.result);
         }
     });
 }
-function lookupUserInJSON(res) {
-    // check if the user is in the db
-    // if not add him/her
-    let email_id = res.email;
-    // use a transaction
-    let objectStore = DB.transaction('users').objectStore('users').index('users');
-    
-    objectStore.openCursor().onsuccess = function (e) {
-        // assign the current cursor
-        let cursor = e.target.result;
-        
-        if (cursor) {
-            if (cursor.value.email == email_id) {
-                found = true
-                return updateToken(res)
+async function lookupUserInJSON(data) {
+    console.log("looking for the user in the JSON")
+    return new Promise(function (resolve, reject) {
+        resolve(readJSON(data))
+    });
+
+}
+
+
+function invalidLogin() {
+    alert("TRY AGAIN WRONG CREDENTIALS")
+}
+async function loginUser(data) {
+    let myPromiseDB = lookupUserInDB(data)
+    try {
+        myPromiseDB.then(function (result) {
+            console.log("Finished looking up in the db")
+            if (result) {
+                if (match(data.password, result.password)) {
+                    // login user
+                    console.log("Login")
+                    loggedIn(result)
+                }
+                else {
+                    // invalid login
+                    invalidLogin()
+                }
             }
             else {
-                cursor.continue();
+                // Not in the DB
+                console.log("User not found in the db")
+                throw "err"
             }
-        }
-        // Update token
-        else {
-            return addNewUser(res)
-        }
+        }).catch(err => {
+            lookupUserInJSON(data)
+        });
+    }
+    catch (err) {
+        console.log(`Caught by try/catch ${error}`);
     }
 
+}
+async function signupUser(data) {
+    await addNewUser(data)
 }
 
 function loggedIn(res) {
     spinner.style.display = 'none'
 
-    let role = res.roles
+    let role = res.role
     let email_id = res.email
     localStorage.setItem(`${role}`, JSON.stringify(email_id));
     switch (role) {
@@ -217,29 +257,31 @@ function loggedIn(res) {
             break
     }
 }
-async function loginUser(data){
-    let myPromise  = lookupUserInDB(data)
-    myPromise.then(function(result){
-        console.log("Finished looking up in the db")
-        if(result){
-            if(match(data.password, result.password)){
-                // login user
-            }
-            else{
-                // invalid login
-            }
-        }
-        else{
-            // Not in the DB
-            console.log("User not found in the db")
-            throw "err"
-        }
-    })
-    myPromise.catch((error) => function(){
-        console.log("catched :)")
-    })
-
-}
-function signupUser(data){
-    addNewUser(data)
-}
+function readJSON(data) { 
+    let JSON_CONTENT;
+    let xhr = new XMLHttpRequest(); 
+    xhr.open('GET', './assets/js/jsonData/user.json', true); 
+    xhr.responseType = 'blob'; 
+    xhr.onload = function(e) {  
+      if (this.status == 200) { 
+          var file = new File([this.response], 'temp'); 
+          var fileReader = new FileReader(); 
+          fileReader.addEventListener('load', function(){ 
+               JSON_CONTENT = ((fileReader.result).slice(1,-2)).split('},')
+               for (let i = 0; i < JSON_CONTENT.length; i++) {
+                   if((JSON_CONTENT[i]).includes(data.email)){
+                        console.log("file found")
+                        let closeBracket = (i+1 == JSON_CONTENT.length) ? "": "}"
+                        let toBeAdded = JSON.parse(JSON_CONTENT[i] + closeBracket)
+                        if(match(toBeAdded.password, data.password)){
+                            addNewUser(toBeAdded)
+                        }
+                   }
+                   
+               }
+          }); 
+          fileReader.readAsText(file); 
+      }  
+    } 
+    xhr.send(); 
+} 
