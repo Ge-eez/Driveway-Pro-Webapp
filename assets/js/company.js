@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 email: email_input.value,
                 password: password_input.value
             }
+            spinner.style.display = 'block'
 
             $.post(backend, data, function (data, status) {
                 let results = JSON.stringify(data);
@@ -246,6 +247,8 @@ function updateToken(res) {
       };
 }
 function loggedIn(email_id){
+    spinner.style.display = 'none'
+
     
     localStorage.setItem('company', JSON.stringify(email_id));
     relocation("company_page")
