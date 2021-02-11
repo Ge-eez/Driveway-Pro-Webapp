@@ -101,7 +101,7 @@ function relocation(chosen) {
         chosen += ".html"
     }
     current_location = (current_location.split('/'))
-    current_location = current_location.splice(current_location.length - 2, 1)
+    current_location = current_location.pop()
     console.log(current_location)
 
     link = (current_location).join('/') + "/" + chosen

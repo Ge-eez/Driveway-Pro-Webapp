@@ -177,7 +177,7 @@ function lookupUser(res) {
     let email_id = res.email;
     // use a transaction
     let objectStore = DB.transaction('users').objectStore('users').index('users');
-
+    
     objectStore.openCursor().onsuccess = function (e) {
         // assign the current cursor
         let cursor = e.target.result;
