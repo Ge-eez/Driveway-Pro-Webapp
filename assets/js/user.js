@@ -1,5 +1,3 @@
-const BACKEND_LOGIN = "https://parking-spot-finder-api.herokuapp.com/auth/login"
-const BACKEND_SIGNUP = "https://parking-spot-finder-api.herokuapp.com/auth/signup"
 document.addEventListener("DOMContentLoaded", function () {
 
     /*==================================================================
@@ -57,14 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 password: password_input.value
             }
 
-            $.post(BACKEND_LOGIN, data, function (data, status) {
-                let results = JSON.stringify(data);
-                let res = JSON.parse(results)
-
-                if (status == 'success') {
-                    lookupUser(res)
-                }
-            })
+            return loginUser(data)
 
 
         }
@@ -77,15 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 phone_no: phone_input.value,
                 plate_number: plate_input.value
             }
-            console.log(data)
-            $.post(BACKEND_SIGNUP, data, function (data, status) {
-                let results = JSON.stringify(data);
-                let res = JSON.parse(results)
-
-                if (status == "success") {
-                    addNewUser(res)
-                }
-            })
+            signupUser(data)
+            
+            
         }
 
         // If input is wrong
@@ -145,6 +130,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+function match(a,b){
+    return a == b
+}
 
 // DB operations
 
@@ -171,7 +159,19 @@ function addNewUser(res) {
     }
     transaction.onerror = () => { console.log('There was an error, try again!'); }
 }
-function lookupUser(res) {
+async function lookupUserInDB(data) {
+    console.log("looking for the user in the DB")
+    let email_id = data.email;
+    let result = {};
+    let objectStore = DB.transaction('users').objectStore('users');
+    return new Promise(function(resolve, reject){
+        let request = objectStore.get(email_id);
+        request.onsuccess = function(){
+            resolve(request.result);
+        }
+    });
+}
+function lookupUserInJSON(res) {
     // check if the user is in the db
     // if not add him/her
     let email_id = res.email;
@@ -181,8 +181,7 @@ function lookupUser(res) {
     objectStore.openCursor().onsuccess = function (e) {
         // assign the current cursor
         let cursor = e.target.result;
-        let found = false
-
+        
         if (cursor) {
             if (cursor.value.email == email_id) {
                 found = true
@@ -199,32 +198,11 @@ function lookupUser(res) {
     }
 
 }
-function updateToken(res) {
 
-    let email_id = res.email;
-    // use a transaction
-    let objectStore = DB.transaction(['users'], "readwrite").objectStore('users');
-    const objectStoreTitleRequest = objectStore.get(email_id);
-
-    objectStoreTitleRequest.onsuccess = () => {
-        const data = objectStoreTitleRequest.result;
-
-        data.token = res.token;
-
-        const updateTitleRequest = objectStore.put(data);
-
-        console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
-
-        updateTitleRequest.onsuccess = () => {
-            console.log("logged In")
-            loggedIn(res)
-        };
-    };
-}
 function loggedIn(res) {
     spinner.style.display = 'none'
 
-    let role = res.roles[0]
+    let role = res.roles
     let email_id = res.email
     localStorage.setItem(`${role}`, JSON.stringify(email_id));
     switch (role) {
@@ -238,4 +216,30 @@ function loggedIn(res) {
             relocation("admin_page")
             break
     }
+}
+async function loginUser(data){
+    let myPromise  = lookupUserInDB(data)
+    myPromise.then(function(result){
+        console.log("Finished looking up in the db")
+        if(result){
+            if(match(data.password, result.password)){
+                // login user
+            }
+            else{
+                // invalid login
+            }
+        }
+        else{
+            // Not in the DB
+            console.log("User not found in the db")
+            throw "err"
+        }
+    })
+    myPromise.catch((error) => function(){
+        console.log("catched :)")
+    })
+
+}
+function signupUser(data){
+    addNewUser(data)
 }
