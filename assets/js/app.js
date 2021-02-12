@@ -10,15 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Database is ready`);
         DB = nearby.result;
 
-        console.log(DB);
-        // displayTaskList();
-        
+        console.log(DB);        
     }
 
     nearby.onerror = function() {
         console.log(`An error occured`);
     }
     
+    // let companiesData = JSON.parse(company);
+    // alert(companiesData[0].name);
+    // alert(companiesData[0].email);
+    // alert(companiesData[1].name);
+    // alert(companiesData[1].email);
 
     const companydata = [
         { active: true, charge: 10, closes_at: 12, floor: 1, name: "Eliana", opens_at: 1, rank_per_floor: 4, slots_per_floor: 6, latitude: 9.07, longitude: 38.77 },
@@ -53,74 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-
-
-
     parkBtn.addEventListener("click", park);
     function park(e) {
-        console.log('Hello there');
-        
-        // parkBtn.style.display = 'none';
-        // return new Promise(() => {
-        // var transaction = db.transaction(["nearby"]);
-        // var objectStore = transaction.objectStore("nearby");
-        // var request = objectStore.get( () => {
-        //     if(cursor) {
-        //         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
-        //         // where R is earth’s radius (mean radius = 6,371km);
-        //         // note that angles need to be in radians to pass to trig functions!
-        //         var R = 6371; // km
-        //         var dLat = (cursor.value.latitude - position.coords.latitude).toRad();
-        //         var dLon = (cursor.value.longitude - position.coords.longitude).toRad();
-        //         var lat1 = position.coords.latitude.toRad();
-        //         var lat2 = 9.07.toRad();
-
-        //         var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        //                 Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-        //         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-        //         var d = R * c;
-
-        //         if (d <= 3) {
-        //             return cursor.value.name
-
-        //         }
-
-        //     }
-            
-        // }             
-        // );
-        // request.onerror = function(e) {
-        // // Handle errors!
-        // };
-        // while(nearbylists.firstChild) { nearbylists.removeChild(nearbylists.firstChild) }
-
-        // let objectStore = db.transaction("nearby").objectStore("nearby");
-        // request.onsuccess = function(e) {
-        //     // Do something with the request.result!
-        //     let cursor = e.target.result;
-            
-        //     if (cursor) {
-        //         const li = document.createElement('li');
-        //         li.className = 'nearby_place';
-        //         // li.appendChild(document.createTextNode(taskInput.value)); 
-                    
-                
-        //         nearbylists.appendChild(li);      
-            
-        //         li.setAttribute('data-task-id', cursor.value.id);
-        //         // Create text node and append it
-        //         li.appendChild(document.createTextNode(cursor.value.name));
-
-        //         cursor.continue();
-        //     }
-        
-        //     console.log("Name for SSN 444-44-4444 is " + request.result.name);
-        // };
-        // });       
-
-    
-        // li.appendChild(document.createTextNode(taskInput.value)); 
-
+        console.log('Nearby parking places displayed successfully');
         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
         // where R is earth’s radius (mean radius = 6,371km);
         // note that angles need to be in radians to pass to trig functions!
@@ -138,22 +76,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     const li = document.createElement('li');
                     li.className = 'nearby_collections';
 
-                    var lat = position.coords.latitude;
-                    var lng = position.coords.longitude;
+                    let lat = position.coords.latitude;
+                    let lng = position.coords.longitude;
                     console.log(cursor.value.latitude);
-                    var R = 6371; // km
-                    var dLat = (cursor.value.latitude - lat).toRad();
-                    var dLon = (cursor.value.longitude - lng).toRad();
-                    var lat1 = position.coords.latitude.toRad();
-                    var lat2 = 9.07.toRad();
+                    let R = 6371; // km
+                    let dLat = (cursor.value.latitude - lat).toRad();
+                    let dLon = (cursor.value.longitude - lng).toRad();
+                    let lat1 = position.coords.latitude.toRad();
+                    let lat2 = 9.07.toRad();
 
-                    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                             Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-                    var d = R * c;
-                    console.log(d);
+                    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                    let distance = R * c;
+                    console.log(distance);
 
-                    if (d <= 3 && (cursor.value.active === true)) {
+                    // Identify nearby parking place within a distance of 5 km
+                    if (distance <= 5 && (cursor.value.active === true)) {
                         nearbylists.appendChild(li);   
 
                         // li.style.display ='block';
@@ -162,9 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // li.style.backgroundColor = '#E76900';
                         li.style.listStyle = 'none';
                         li.style.fontSize = '3rem';
-
-                
-                        // li.setAttribute('data-task-id', cursor.value.id);
+            
                         // Create text node and append it
                         li.appendChild(document.createTextNode(cursor.value.name));
                         

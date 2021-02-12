@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Tkish",
+        "email": "contact@tk.com",
+        "password": "Testingit1",
+        "charge": 8,
+        "slots": 20,
+        "active_slots": 20,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 38.791473,
+        "longitude": 8.988429
+
+    },
+    {
+        "name": "Eliana",
+        "email": "contact@eliana.com",
+        "password": "Testingit1",
+        "charge": 7.6,
+        "slots": 15,
+        "active_slots": 15,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 38.7488983,
+        "longitude": 9.0304823
+
+    }
+
+
+]
