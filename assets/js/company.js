@@ -1,33 +1,3 @@
-const backend = "https://parking-spot-finder-api.herokuapp.com/auth/loginCompany"
-function makeRequest(method, url, data) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onload = function () {
-            if (this.status >= 200 && this.status < 300) {
-                resolve(xhr.response);
-            } else {
-                reject({
-                    status: this.status,
-                    statusText: xhr.statusText
-                });
-            }
-        };
-        xhr.onerror = function () {
-            reject({
-                status: this.status,
-                statusText: xhr.statusText
-            });
-        };
-        if (method == "POST" && data) {
-            xhr.send(data);
-        } else {
-            xhr.send();
-        }
-    });
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
     [ DB ]*/
@@ -45,13 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
     CompanyDB.onupgradeneeded = function (e) {
         let db = e.target.result;
 
-        let objectStore = db.createObjectStore('companies', { keyPath: 'email'});
+        let objectStore = db.createObjectStore('companies', { keyPath: 'email' });
 
         objectStore.createIndex('companies', ['name', 'email'], { unique: true });
 
         console.log('Database ready and fields created!');
     }
-    
+
 
     /*==================================================================
     [ Validate ]*/
@@ -59,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let signingUp = true;
 
 
-    let validate_form = document.querySelector('.validate-form')
     validate_form.addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -79,22 +48,26 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             spinner.style.display = 'block'
 
-            $.post(backend, data, function (data, status) {
-                let results = JSON.stringify(data);
-                let res = JSON.parse(results)
-                console.log(res)
-                if(status == 'success'){
-                    lookupCompany(res)
-                }
-            })
-
+            return loginCompany(data)
 
         }
 
         // If a company is signing up
         else if (signingUp && check) {
-            console.log("Registering company...")
-            addNewCompany()
+            let companylocation  = location_input.split(",")
+            let data = {
+                charge: charge_input.value,
+                slots: slots_input.value,
+                active_slots: slots_input.value,
+                email: email_input.value,
+                password: password_input.value,
+                name: name_input.value,
+                opens_at: "8AM",
+                closes_at: "8PM",
+                latitude: companylocation[0],
+                longitude: companylocation[1],
+            }
+            return signupCompany(data)
         }
         else {
             console.log("Edit your input")
@@ -106,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let name = document.querySelector('.name');
     let charge = document.querySelector('.charge');
-    let floor = document.querySelector('.floor');
+    let location = document.querySelector('.location');
     let slots = document.querySelector('.slots-per-floor');
     let forgot = document.querySelector('.password');
     let getBackLI = document.querySelector('.get-back');
@@ -117,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let signup = document.querySelector('.sign-up');
 
     forgot.addEventListener('click', function () {
-        hider(name, charge, floor, slots, password, forgotPassword, getBackSU, signup)
+        hider(name, charge, location, slots, password, forgotPassword, getBackSU, signup)
         shower(getBackLI)
         loginButton.textContent = ("Verify");
         loggingIn = false;
@@ -126,15 +99,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     signup.addEventListener('click', function () {
         hider(forgotPassword, signup)
-        shower(name, charge, floor, slots, getBackSU)
+        shower(name, charge, location, slots, getBackSU)
         loginButton.textContent = ("Signup");
         loggingIn = false;
         signingUp = true;
         clearForm(...input)
     });
-    
+
     getBackLI.addEventListener('click', function () {
-        hider(name, charge, floor, slots, getBackLI)
+        hider(name, charge, location, slots, getBackLI)
         shower(password, forgotPassword, signup)
         loginButton.textContent = ("Login");
         loggingIn = true;
@@ -143,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     getBackSU.addEventListener('click', function () {
-        hider(name, charge, floor, slots, getBackSU)
+        hider(name, charge, location, slots, getBackSU)
         shower(password, forgotPassword, signup)
         loginButton.textContent = ("Login");
         loggingIn = true;
@@ -155,101 +128,179 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // DB operations
 
-function addNewCompany(res, status = "pending") {
+async function addNewCompany(data) {
 
     // Insert the object into the database 
     let transaction = DB.transaction(['companies'], 'readwrite');
     let objectStore = transaction.objectStore('companies');
-    let email_id;
 
-    if(!res) {
-        res = {
-        name: name_input.value,
-        email: email_input.value,
-        charge: charge_input.value,
-        slots_per_floor: slots_input.value,
-        floor: floor_input.value,
-        password: password_input.value,
-        opens_at: 1,
-        closes_at: 12,
-        latitude: "to be filled by the admin",
-        longitude: "to be filled by the admin",
-
+    let res = CompanyModel(data.name, data.email, data.password, data.opens_at,
+        data.closes_at,
+        data.charge,
+        data.slots,
+        data.longitude,
+        data.latitude
+    )
+    return new Promise(function (resolve, reject) {
+        let request = objectStore.add(res);
+        request.onsuccess = function () {
+            clearForm(...input)
+            resolve(request.result);
         }
-        email_id = res.email
-
-    }else{
-        res.password = "Lol we kinda respect privacy ;)"
-        email_id = res.email
-        loggedIn(email_id)
-    }
-    res.status = status
-
-    
-    let request = objectStore.add(res);
-    // on success
-    request.onsuccess = () => {
-        clearForm(...input)
-    }
-    transaction.oncomplete = () => {
-        console.log('New company added');
-        status == "pending" ? console.log('waiting for approval') : loggedIn(res.email_id)
-        // take user to the company landing page
-    }
-    transaction.onerror = () => { console.log('There was an error, try again!'); }
-}
-function lookupCompany(res) {
-    // check if the user is in the db
-    // if not add him/her
-    let email_id = res.email;
-    // use a transaction
-    let objectStore = DB.transaction('companies').objectStore('companies').index('companies');
-    
-    objectStore.openCursor().onsuccess = function (e) {
-        // assign the current cursor
-        let cursor = e.target.result;
-        let found = false
-
-        if (cursor) {
-            if(cursor.value.email == email_id){
-                found = true
-                updateToken(res)
-            }
-            else{
-                cursor.continue();
-            }
+        transaction.oncomplete = () => {
+            console.log('New company added');
+            // take company to the company landing page
+            let companyToJson = addCompanyToJSON(res)
+            companyToJson.then(loggedIn(res))
         }
-        if(!found) addNewCompany(res, "approved")
-        
+        transaction.onerror = () => { console.log('There was an error, try again!'); }
+    });
+
+
+
+}
+async function addCompanyToJSON(data) {
+    console.log("adding company to JSON")
+    return new Promise(function (resolve, reject) {
+        function checker() {
+            let JSON_CONTENT;
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', './assets/js/jsonData/company.json', true);
+            xhr.responseType = 'blob';
+            xhr.onload = function (e) {
+                if (this.status == 200) {
+                    var file = new File([this.response], 'temp');
+                    var fileReader = new FileReader();
+                    fileReader.addEventListener('load', function () {
+                        JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
+                        for (let i = 0; i < JSON_CONTENT.length; i++) {
+                            if ((JSON_CONTENT[i]).includes(data.email)) {
+                                console.log("file found")
+                                alert("Company already created globally")
+                                return false
+                            }
+
+                        }
+                    });
+                    fileReader.readAsText(file);
+                }
+            }
+            xhr.send();
+            return true
+        }
+
+        // result = checker()
+        // if (result) {
+        //     console.log("File not found so we're creating one....")
+
+        //     // var textFile = null;
+        //     // function makeTextFile(text) {
+        //     //     var data = new Blob([text], { type: 'text/plain' });
+
+        //     //     // If we are replacing a previously generated file we need to
+        //     //     // manually revoke the object URL to avoid memory leaks.
+        //     //     if (textFile !== null) {
+        //     //         window.URL.revokeObjectURL(textFile);
+        //     //     }
+
+        //     //     textFile = window.URL.createObjectURL(data);
+
+        //     //     resolve(textFile);
+        //     // }
+        //     // makeTextFile("Hey")
+        // }
+    })
+}
+async function lookupCompanyInDB(data) {
+    console.log("looking for the company in the DB")
+    let email_id = data.email;
+    let objectStore = DB.transaction('companies').objectStore('companies');
+    return new Promise(function (resolve, reject) {
+        let request = objectStore.get(email_id);
+        request.onsuccess = function () {
+            resolve(request.result);
+        }
+    });
+}
+async function lookupCompanyInJSON(data) {
+    console.log("looking for the company in the JSON")
+    return new Promise(function (resolve, reject) {
+        resolve(readJSON(data))
+    });
+
+}
+
+
+function invalidLogin() {
+    alert("TRY AGAIN WRONG CREDENTIALS")
+}
+async function loginCompany(data) {
+    let myPromiseDB = lookupCompanyInDB(data)
+    try {
+        myPromiseDB.then(function (result) {
+            console.log("Finished looking up in the db")
+            if (result) {
+                if (match(data.password, result.password)) {
+                    // login company
+                    console.log("Login")
+                    loggedIn(result)
+                }
+                else {
+                    // invalid login
+                    invalidLogin()
+                }
+            }
+            else {
+                // Not in the DB
+                console.log("Company not found in the db")
+                throw "err"
+            }
+        }).catch(err => {
+            lookupCompanyInJSON(data)
+        });
+    }
+    catch (err) {
+        console.log(`Caught by try/catch ${error}`);
     }
 
 }
-function updateToken(res) {
-
-    let email_id = res.email;
-    // use a transaction
-    let objectStore = DB.transaction(['companies'], "readwrite").objectStore('companies');
-    const objectStoreTitleRequest = objectStore.get(email_id);    
-    
-    objectStoreTitleRequest.onsuccess = () => {
-        const data = objectStoreTitleRequest.result;
-      
-        data.token = res.token;
-      
-        const updateTitleRequest = objectStore.put(data);
-      
-        console.log("The transaction that originated this request is " + updateTitleRequest.transaction);
-      
-        updateTitleRequest.onsuccess = () => {
-            loggedIn(email_id)
-            console.log("logged In");
-        };
-      };
+async function signupCompany(data) {
+    await addNewCompany(data)
 }
-function loggedIn(email_id){
+
+function loggedIn(res) {
     spinner.style.display = 'none'
-
-    
-    localStorage.setItem('company', JSON.stringify(email_id));
+    localStorage.setItem('company', JSON.stringify(res.email));
     relocation("company_page")
 }
+function readJSON(data) {
+    let JSON_CONTENT;
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', './assets/js/jsonData/company.json', true);
+    xhr.responseType = 'blob';
+    xhr.onload = function (e) {
+        if (this.status == 200) {
+            var file = new File([this.response], 'temp');
+            var fileReader = new FileReader();
+            fileReader.addEventListener('load', function () {
+                JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
+                for (let i = 0; i < JSON_CONTENT.length; i++) {
+                    if ((JSON_CONTENT[i]).includes(data.email)) {
+                        console.log("file found")
+                        let closeBracket = (i + 1 == JSON_CONTENT.length) ? "" : "}"
+                        let toBeAdded = JSON.parse(JSON_CONTENT[i] + closeBracket)
+                        if (match(toBeAdded.password, data.password)) {
+                            addNewCompany(toBeAdded)
+                        }
+                        else{
+                            invalidLogin()
+                        }
+                    }
+
+                }
+            });
+            fileReader.readAsText(file);
+        }
+    }
+    xhr.send();
+} 

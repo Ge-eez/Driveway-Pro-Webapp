@@ -12,11 +12,13 @@ let plate_input = document.querySelector('#plate_number')
 
 
 let charge_input = document.querySelector("#charge")
-let floor_input = document.querySelector('#floor')
+let location_input = document.querySelector('#location')
 let slots_input = document.querySelector('#slots-per-floor')
 
 let spinner = document.querySelector('.fa-spinner')
 
+let validate_form = document.querySelector('.validate-form')
+    
 function makeRequest(method, url, data) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -108,4 +110,7 @@ function relocation(chosen) {
     console.log(link)
     location.href = link
     console.log(current_location)
+}
+function match(a, b) {
+    return a == b
 }
