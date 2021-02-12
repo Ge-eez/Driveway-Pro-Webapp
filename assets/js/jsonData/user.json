@@ -1,21 +1,30 @@
 [
     {
         "company": "",
-        "email": "new@new.com",
+        "email": "super@admin.com",
+        "name": "admin",
+        "password": "superuser",
+        "phone_no": "+2519444",
+        "plate_number": "",
+        "role": "admin"
+    },
+    {
+        "company": "",  
+        "email": "user@new.com",
         "name": "NewUser",
-        "password": "eilrigrkmgr",
+        "password": "Testingit1",
         "phone_no": "+2519444",
         "plate_number": "84545",
         "role": "user"
     },
     {
-        "company": "",
-        "email": "new@8.com",
-        "name": "NewUser",
-        "password": "eilrigrkmgr",
+        "company": "Tkish",
+        "email": "abebe@tkish.com",
+        "name": "Abebe",
+        "password": "Testingit1",
         "phone_no": "+2519444",
-        "plate_number": "84545",
-        "role": "user"
+        "plate_number": "",
+        "role": "parking_officer"
     }
 
 ]

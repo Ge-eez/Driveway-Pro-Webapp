@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let loggingIn = true;
     let signingUp = true;
 
-    let validate_form = document.querySelector('.validate-form')
     validate_form.addEventListener('submit', function (e) {
         e.preventDefault();
         let check = true;
@@ -130,17 +129,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function match(a, b) {
-    return a == b
-}
 
 // DB operations
 
-async function addNewUser(data, role = "user") {
+async function addNewUser(data) {
 
     // Insert the object into the database 
     let transaction = DB.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
+    let role;
+    if(!data.role) role = "user"
+    else role = data.role
 
     let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no)
 
@@ -154,7 +153,7 @@ async function addNewUser(data, role = "user") {
             console.log('New user added');
             // take user to the user landing page
             let userToJson = addUserToJSON(res)
-            // userToJson.then(loggedIn(res))
+            userToJson.then(loggedIn(res))
         }
         transaction.onerror = () => { console.log('There was an error, try again!'); }
     });
@@ -193,21 +192,23 @@ async function addUserToJSON(data) {
         }
         result = checker()
         if (result) {
-            var textFile = null;
-            function makeTextFile(text) {
-                var data = new Blob([text], { type: 'text/plain' });
+            console.log("File not found so we're creating one....")
 
-                // If we are replacing a previously generated file we need to
-                // manually revoke the object URL to avoid memory leaks.
-                if (textFile !== null) {
-                    window.URL.revokeObjectURL(textFile);
-                }
+            // var textFile = null;
+            // function makeTextFile(text) {
+            //     var data = new Blob([text], { type: 'text/plain' });
 
-                textFile = window.URL.createObjectURL(data);
+            //     // If we are replacing a previously generated file we need to
+            //     // manually revoke the object URL to avoid memory leaks.
+            //     if (textFile !== null) {
+            //         window.URL.revokeObjectURL(textFile);
+            //     }
 
-                resolve(textFile);
-            }
-            makeTextFile("Hey")
+            //     textFile = window.URL.createObjectURL(data);
+
+            //     resolve(textFile);
+            // }
+            // makeTextFile("Hey")
         }
     })
 }
@@ -304,6 +305,10 @@ function readJSON(data) {
                         let toBeAdded = JSON.parse(JSON_CONTENT[i] + closeBracket)
                         if (match(toBeAdded.password, data.password)) {
                             addNewUser(toBeAdded)
+                        }
+                        
+                        else{
+                            invalidLogin()
                         }
                     }
 
