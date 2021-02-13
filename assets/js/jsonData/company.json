@@ -8,8 +8,8 @@
         "active_slots": 20,
         "opens_at": "8AM",
         "closes_at": "8PM",
-        "latitude": 38.791473,
-        "longitude": 8.988429
+        "latitude": 8.988429,
+        "longitude": 38.791473
 
     },
     {
@@ -21,8 +21,177 @@
         "active_slots": 15,
         "opens_at": "8AM",
         "closes_at": "8PM",
-        "latitude": 38.7488983,
-        "longitude": 9.0304823
+        "latitude": 9.0304823,
+        "longitude": 38.7488983
+
+    },
+    {
+        "name": "Fikir",
+        "email": "contact@fikir.com",
+        "password": "Testingit1",
+        "charge": 9.9,
+        "slots": 17,
+        "active_slots": 17,
+        "opens_at": "7AM",
+        "closes_at": "9PM",
+        "latitude": 9.0404823,
+        "longitude": 38.7688983
+
+    },
+    {
+        "name": "Tena Kebede",
+        "email": "contact@tena.com",
+        "password": "Testingit1",
+        "charge": 11.4,
+        "slots": 13,
+        "active_slots": 13,
+        "opens_at": "8AM",
+        "closes_at": "10PM",
+        "latitude": 9.0504823,
+        "longitude": 38.7388983
+
+    },
+    {
+        "name": "Getu commercial",
+        "email": "contact@getu.com",
+        "password": "Testingit1",
+        "charge": 9.1,
+        "slots": 19,
+        "active_slots": 19,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 9.0104823,
+        "longitude": 38.7588983
+
+    },
+    {
+        "name": "Nani",
+        "email": "contact@nani.com",
+        "password": "Testingit1",
+        "charge": 14.5,
+        "slots": 10,
+        "active_slots": 10,
+        "opens_at": "9AM",
+        "closes_at": "6PM",
+        "latitude": 9.0104823,
+        "longitude": 38.7688983
+
+    },
+    {
+        "name": "Heritage",
+        "email": "contact@heritage.com",
+        "password": "Testingit1",
+        "charge": 8.2,
+        "slots": 15,
+        "active_slots": 15,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 9.0404823,
+        "longitude": 38.7988983
+
+    },
+    {
+        "name": "Sofia",
+        "email": "contact@sofia.com",
+        "password": "Testingit1",
+        "charge": 7.4,
+        "slots": 18,
+        "active_slots": 18,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 9.0904823,
+        "longitude": 38.8488983
+
+    },
+    {
+        "name": "Tinsae",
+        "email": "contact@tinsae.com",
+        "password": "Testingit1",
+        "charge": 9.3,
+        "slots": 16,
+        "active_slots": 16,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 9.1304823,
+        "longitude": 38.7588983
+
+    },
+    {
+        "name": "Edna",
+        "email": "contact@edna.com",
+        "password": "Testingit1",
+        "charge": 10.0,
+        "slots": 16,
+        "active_slots": 16,
+        "opens_at": "8AM",
+        "closes_at": "8PM",
+        "latitude": 9.7204823,
+        "longitude": 38.9588983
+
+    },
+    {
+        "name": "Dasset",
+        "email": "contact@dasset.com",
+        "password": "Testingit1",
+        "charge": 7.6,
+        "slots": 22,
+        "active_slots": 22,
+        "opens_at": "9AM",
+        "closes_at": "10PM",
+        "latitude": 9.2104823,
+        "longitude": 38.7888983
+
+    },
+    {
+        "name": "Dabi",
+        "email": "contact@dabi.com",
+        "password": "Testingit1",
+        "charge": 12.6,
+        "slots": 19,
+        "active_slots": 19,
+        "opens_at": "9AM",
+        "closes_at": "9PM",
+        "latitude": 9.8104823,
+        "longitude": 38.9888983
+
+    },
+    {
+        "name": "Alem",
+        "email": "contact@alem.com",
+        "password": "Testingit1",
+        "charge": 10.0,
+        "slots": 20,
+        "active_slots": 20,
+        "opens_at": "7AM",
+        "closes_at": "7PM",
+        "latitude": 9.2404823,
+        "longitude": 38.7988983
+
+    },
+    {
+        "name": "Zewditu",
+        "email": "contact@zewditu.com",
+        "password": "Testingit1",
+        "charge": 15.0,
+        "slots": 12,
+        "active_slots": 12,
+        "opens_at": "7AM",
+        "closes_at": "8PM",
+        "latitude": 9.1004823,
+        "longitude": 38.7188983
+
+    },
+    {
+        "name": "Bati",
+        "email": "contact@bati.com",
+        "password": "Testingit1",
+        "charge": 8.2,
+        "slots": 25,
+        "active_slots": 25,
+        "opens_at": "7AM",
+        "closes_at": "9PM",
+        "latitude": 9.0104823,
+        "longitude": 38.8388983
 
     }
 
