@@ -71,10 +71,68 @@ li .active {
 /* parking officer section */
 #parking-officer{
     display: none;
-    height: 600px;
-    background-color: rgb(88, 221, 111);
+    height: 800px;
 }
 
+#parking-officer h2{
+    background-color: #0a1b46;
+    color: white;
+    padding: 3% 0% 3% 5%;
+    margin: 0%;
+}
+#parking-officer #option{
+    margin: 0;
+    background-color: #061335;
+    padding: 1% 0% 1% 0%;
+    margin-bottom: 2%;
+    
+}
+#parking-officer #add-btn{
+    background-color: #cc088b;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+#parking-officer #header{
+    padding-bottom: 1%;
+    border-bottom: 2px solid;
+    text-align: center;
+}
+#parking-officer .list-inline{
+    border-bottom: 1px solid;
+    padding-bottom: 1%;
+    text-align: center;
+}
+#pop-up{
+    position: fixed;
+    width: 25%;
+    display: none;
+    right:8%;
+    top: 15%;
+    padding: 0% 1% 1% 1%;
+    border: 1px solid none;
+    border-radius: 5%;
+    z-index: 9;
+    background-color: rgb(204, 198, 198);
+}
+#pop-up .far{
+    position: relative;
+    left: 94%;
+    top: -1%;
+    margin-top: 3px;
+}
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+}
+.addScroll{
+    overflow-y:auto;
+    height: 550px;
+  }
+#parking-officer ul>li>input{
+    width: 20px;
+    height: 20px;
+}
 #more{
 display: none;
 height: 600px;
