@@ -1,93 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Parking Officer</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
+    <title>parking Officer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="./assets/images/icons/icon.png" />
- 
-	<!--===============================================================================================-->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <!-- =========================================================================================== -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/Parking_officer.css">
-	<!--===============================================================================================-->
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<!--===============================================================================================-->
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
-	<!--===============================================================================================-->
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
-	<!--===============================================================================================-->
-	
+    <!--===============================================================================================-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- ====================================================== -->
+    <script src="https://kit.fontawesome.com/dec944d78f.js" crossorigin="anonymous"></script>
+    <!--===============================================================================================-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
+    <!--===============================================================================================-->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
+    <!--===============================================================================================-->
+
 </head>
+
 <body>
 
-    <div class="container-fluid ml-0 mr-0">
-        <div class="row ">
+    <div class=" ">
+        <div class="row no-gutters mb-0">
+            <header id="company-header" class="col-12 col-md-3 col-xl-2">
 
-            <header id="company-header" class="col-12 col-md-4 col-xl-2 ">
-    
-    
+
                 <div class="row  pl-2 ">
-                    <li class="col-3 col-lg-12 col-xl-12">
-                        <a href="#park" class="tab-links" onclick="openLink(event, 'park')" >Park</a>
-                    </li>
-                    <li class="col-6 col-lg-12 col-xl-12 "> 
-                        <a href="#parking-officer"  class="tab-links" onclick="openLink(event, 'parking-officer')">Acitve Tickets</a>
-                    </li>
-                    
-                    <li class=" col-3 col-lg-12 col-xl-12">
-                        <a href="#Exit-user"  class="tab-links" onclick="openLink(event, 'Exit-user')">Exit User</a>
+
+                    <li class="col-6 col-md-12  col-lg-12 col-xl-12 ">
+                        <a href="#park" class="tab-links" onclick="openLink(event, 'park')">Park</a>
                     </li>
 
-                    <li class="col-6 col-lg-12 col-xl-12 "> 
-                        <a href="#Clear-Stack"  class="tab-links" onclick="openLink(event, 'Clear-Stack')">Clear Stack</a>
+                    <li class="col-3  col-md-12 col-lg-12  col-xl-12">
+                        <a href="#Active_tickets" class="tab-links" id="activeTicketsTab" onclick="openLink(event, 'Active_tickets')">Active
+                            Tickets</a>
                     </li>
-                    
+
+                    <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
+                        <a href="#Exit" class="tab-links" onclick="openLink(event, 'Exit')">Exit</a>
+                    </li>
+
+                    <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
+                        <a href="#stack" class="tab-links" onclick="openLink(event, 'stack')">Clear Stack</a>
+                    </li>
                 </div>
-                
+
             </header>
-    
-            <section id="check" class="container col-12 col-md-8 col-xl-10 ">
-                
-                <div class="row tab-content" id="park" >
-    
-                    
-    
+
+            <section id="check" class="col-12  col-md-9  col-xl-10 ">
+
+                <div class="row tab-content" id="park">
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
+
+                        <h2>Eliana Mall</h2>
+                        <h5><i class="fas fa-ticket-alt"></i></i>Park a new user</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+
+
+                    </div>
+                    <div class="shadow-lg col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
+
+                        <h1>Welcome!</h1>
+                        <br>
+                        <span>Plate number :<input type="text" class="form-control shadow-sm" id="plateInput"
+                                aria-label="Default" aria-describedby="inputGroup-sizing-default"
+                                style="margin-left: 25%; width: 50%;"></span>
+                        <br>
+                        <span>Start Time : <div>2:54AM</div></span>
+                        <br>
+                        <span>End Time : <div>-- : -- </div></span>
+                        <div class="div" style="margin-top: 5%; margin-left: 45%;"><button type="button" id="parkbtn"
+                                class="btn btn-primary" data-toggle="modal">
+                                Park
+                            </button></div>
+                        <div class="modal fade" id="parkModal" tabindex="-1" role="dialog"
+                            aria-labelledby="parkModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="parkModalLongTitle" style="padding-left: 35%;">User
+                                            Parked!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="prkModal">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-    
-                <div class="row tab-content" id="parking-officer"> 
-                    
-                   
-                </div >
 
-                <div class="row tab-content" id="Clear-Stack"> 
-                    
-                   
-                </div >
+                <div class="row tab-content" id="Active_tickets">
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-                <div class="row tab-content " id="Exit-user">
-                   
+                        <h2>Eliana Mall</h2>
+                        <h5><i class="fas fa-ticket-alt"></i></i>Active Tickets</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+
+
+                    </div>
+                    <div class="shadow-lg col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
+
+                        <h1>Active Tickets!</h1>
+                        <br>
+                        <ul class="list-group overflow-auto" style="height: 500px;">
+                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
+                                id="tickets">
+                                Plate number:<span>A25252</span> 
+
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    id="ticketDetails">
+                                    Details
+                                </button>
+                            </li>
+
+
+                            <div class="modal fade" id="activeTicketsModal" tabindex="-1" role="dialog"
+                                aria-labelledby="activeTicketsModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="activeTicketsModalLongTitle">Ticket Details</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="try">
+                                            
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
+                                id="tickets">
+                                <span>Plate number:</span> B25252
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                    Details
+                                </button>
+                            </li>
+                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
+                                id="tickets">
+                                <span>Plate number:</span> A25252
+                                <span class="badge bg-primary rounded-pill">A</span>
+                            </li>
+
+                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
+                                id="tickets">
+                                <span>Plate number:</span> B25252
+                                <span class="badge bg-primary rounded-pill">A</span>
+                            </li>
+
+                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
+                                id="tickets">
+                                <span>Plate number:</span> B25252
+                                <span class="badge bg-primary rounded-pill">A</span>
+                            </li>
+
+                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
+                                id="tickets">
+                                <span>Plate number:</span> B25252
+                                <span class="badge bg-primary rounded-pill">A</span>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row tab-content " id="Exit">
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
+
+                        <h2>Eliana Mall</h2>
+                        <h5><i class="fas fa-ticket-alt"></i></i>Exit a user</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+
+
+                    </div>
+                    <div class="shadow-lg col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
+
+                        <h1>Exit user!</h1>
+                        <br>
+                        <span>Plate number :<input type="text" class="form-control shadow-sm" aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default"
+                                style="margin-left: 25%; width: 50%;"></span>
+                        <br>
+
+                        <div class="div" style="margin-top: 5%; margin-left: 45%;"><button type="button"
+                                class="btn btn-primary" data-toggle="modal" data-target="#example">
+                                Check out
+                            </button></div>
+                        <div class="modal fade" id="example" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Thank you for choosing us!
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            Plate Number: A25252
+                                        </div>
+                                        <div class="row">
+                                            start Time: 2:53AM
+                                        </div>
+                                        <div class="row">
+                                            end Time: 5:24AM
+                                        </div>
+                                        <div class="row">
+                                            Parked Spot: 4
+                                        </div>
+                                        <div class="row">
+                                            price: 40.00
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row tab-content " id="stack">
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
+
+                        <h2>Eliana Mall</h2>
+                        <h5><i class="fas fa-ticket-alt"></i></i>Clear stack</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+
+
+                    </div>
+                    <div class="shadow-lg col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
+
+                        <h1>clear Stack!</h1>
+                        <br>
+
+
+                        <div class="div" style="margin-top: 5%; margin-left: 45%;"><button type="button"
+                                class="btn btn-primary" data-toggle="modal" data-target="#stackModal">
+                                Clear
+                            </button></div>
+                        <div class="modal fade" id="stackModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Thank you for choosing us!
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            All Spots cleared!
+                                        </div>
+                                        <div class="row">
+                                            Closed Time: 2:53AM
+                                        </div>
+                                        <div class="row">
+                                            total cars parked today: 52
+                                        </div>
+                                        <div class="row">
+                                            daily income: 2600
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
         </div>
-    
+
     </div>
-    
-    
 
 
-    
-
-
-
-    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white">
+    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white mt-0">
 
         <div class="container text-center text-md-left">
 
@@ -98,7 +314,7 @@
                     <p>Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet,
                         consectetur
                         adipisicing elit.</p>
-                </div>                
+                </div>
 
                 <hr class="w-100 clearfix d-md-none">
 
@@ -129,7 +345,7 @@
                     <!-- Social buttons -->
                     <div class="text-right">
                         <ul class="list-unstyled list-inline">
-                            <li class="list-inline-item">
+                            <li class="list-inline-item ">
                                 <a class="btn-floating btn-sm rgba-white-slight mx-1">
                                     <i class="fab fa-facebook-f"></i>
                                 </a>
@@ -165,19 +381,20 @@
     </footer>
 
 
-    
 
-   
-   
-    	<!--===============================================================================================-->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
 
-	<!--===============================================================================================-->
-	<script src="./assets/js/company_page.js"></script>
+
+    <!--===============================================================================================-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
+
+    <!--===============================================================================================-->
+    <script src="./assets/js/Parking_officer.js"></script>
 </body>
+
 </html>
