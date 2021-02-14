@@ -43,7 +43,7 @@
                     </li>
                     
                     <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
-                        <a href="#more"  class="tab-links" onclick="openLink(event, 'more')">More</a>
+                        <a href="#users"  class="tab-links" onclick="openLink(event, 'users')">Users</a>
                     </li>
                     
                 </div>
@@ -83,9 +83,9 @@
                     
                     <h2>Companies</h2>
                     
-                    <div id="pop-up">
+                    <div id="company-pop-up">
                         <a class=" " href="#">
-                            <i id="cancel" class="far fa-times-circle fa-2x" ></i>
+                            <i id="company-cancel" class="far fa-times-circle fa-2x" ></i>
                         </a>
                         
 
@@ -128,7 +128,7 @@
                     
                     
                     <div id="option" class="d-flex flex-row-reverse pr-2">
-                        <button id="add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
+                        <button id="company-add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
                     </div>  
 
                     <ul id="header" class="list-inline row no-gutters">
@@ -160,9 +160,87 @@
                     </div>
                 </div >
 
-                <div class="row tab-content " id="more">
-                   
-                </div>
+                <div class="" id="users"> 
+                    
+                    <h2>Users</h2>
+                    
+                    <div id="user-pop-up">
+                        <a class=" " href="#">
+                            <i id="user-cancel" class="far fa-times-circle fa-2x" ></i>
+                        </a>
+                        
+
+                        <form action="#" class="form-container">
+                            <div class="form-group">
+                                <label for="user-name">Name</label>
+                                <input type="text" class="form-control" id="user-name" placeholder="Name">
+                              </div>
+
+                            <div class="form-group">
+                                <label for="user-email">E-mail</label>
+                                <input type="email" class="form-control" id="user-email" placeholder="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="user-role">Role</label>
+                                <input type="text" class="form-control" id="user-role" placeholder="Role">
+                            </div>
+                            
+                              
+                              <div class="form-group">
+                                <label for="user-company">Company</label>
+                                <input type="text" class="form-control" id="user-company" placeholder="Company Email">
+                              </div>
+                              <div class="form-group">
+                                <label for="user-number">Phone Number</label>
+                                <input type="text" class="form-control" id="user-number" placeholder="Phone Number">
+                              </div>
+
+                              <div class="form-group">
+                                <label for="user-plate">Plate Number</label>
+                                <input type="text" class="form-control" id="user-plate" placeholder="plate number">
+                              </div>
+                              <div class="form-group">
+                                <label for="user-password">Password</label>
+                                <input type="password" class="form-control" id="user-password" placeholder="Password">
+                              </div>
+                            <button type="submit" class="login100-form-btn">Add</button>
+                        </form>
+                    </div>
+                    
+                    
+                    <div id="option" class="d-flex flex-row-reverse pr-2">
+                        <button id="user-add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
+                    </div>  
+
+                    <ul id="header" class="list-inline row no-gutters">
+                        <li class="col-1 ml-0 pl-5 ">
+                            <input class="input-group" type="checkbox" value="" id="selectAll" />
+                        </li>
+                        <li class="col-2 ">
+                            <i class="far fa-user mr-3"></i>Name
+                        </li>
+                        <li class="col-3">
+                            <i class="fas fa-envelope mr-3"></i>Email
+                        </li>
+                        <li class="col-2 ">
+                            <i class="fas fa-phone mr-3 "></i>Phone Number
+                        </li>
+                        <li class="col-2 ">
+                            <i class="fas fa-layer-group"> </i> </i>Role
+                        </li>
+                        
+                        <li class="col-2">
+                            <i class="fas fa-pen mr-3"></i></i>Action
+                        </li>
+                        
+                    </ul>
+                        
+                    <div class="user-list addScroll">
+                        <!-- list added from javascript -->
+                        
+                    </div>
+                </div >
+
             </section>
 
         </div>

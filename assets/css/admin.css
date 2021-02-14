@@ -68,41 +68,40 @@ li .active {
 }
 
 /* parking officer section */
-#companies{
+#companies, #users{
     display: none;
     height: 800px;
 }
 
-#companies h2{
+#companies h2, #users h2{
     background-color: #0a1b46;
     color: white;
     padding: 3% 0% 3% 5%;
     margin: 0%;
 }
-#companies #option{
+#companies #option, #users #option{
     margin: 0;
     background-color: #061335;
     padding: 1% 0% 1% 0%;
     margin-bottom: 2%;
     
 }
-#companies #add-btn{
-    background-color: #cc088b;
+#companies #add-btn, #users #add-btn{
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
 }
-#companies #header{
+#companies #header, #users #header{
     padding-bottom: 1%;
     border-bottom: 2px solid;
     text-align: center;
 }
-#companies .list-inline{
+#companies .list-inline, #users .list-inline{
     border-bottom: 1px solid;
     padding-bottom: 1%;
     text-align: center;
 }
-#pop-up{
+#user-pop-up, #company-pop-up{
     position: absolute;
     width: 25%;
     display: none;
@@ -114,7 +113,7 @@ li .active {
     z-index: 9;
     background-color: rgb(204, 198, 198);
 }
-#pop-up .far{
+#user-pop-up .far, #company-pop-up .far{
     position: relative;
     left: 94%;
     top: -1%;
@@ -128,14 +127,9 @@ li .active {
     overflow-y:auto;
     height: 550px;
   }
-#companies ul>li>input{
+#companies ul>li>input, #users  ul>li>input{
     width: 20px;
     height: 20px;
-}
-#more{
-display: none;
-height: 600px;
-background-color: rgb(131, 54, 138);
 }
 
 /* Responsive */
@@ -252,7 +246,7 @@ background-color: rgb(131, 54, 138);
         height: 400px;
       
     }
-    #more{
+    #users{
       
         height: 400px;
        

@@ -1,7 +1,11 @@
 const companyList = document.querySelector(".company-list");
-const addBtn = document.getElementById("add-btn");
-const cancelIcon = document.getElementById("cancel");
-const form = document.getElementById("pop-up");
+const userList = document.querySelector(".user-list");
+const companyAddBtn = document.getElementById("company-add-btn");
+const userAddBtn = document.getElementById("user-add-btn");
+const companyCancelIcon = document.getElementById("company-cancel");
+const userCancelIcon = document.getElementById("user-cancel");
+const companyForm = document.getElementById("company-pop-up");
+const userForm = document.getElementById("user-pop-up");
 const keyEmail = localStorage.getItem('admin');
 const email = "super@admin.com";
 const formUpdate = document.getElementById("update-profile");
@@ -16,11 +20,20 @@ const slotsInput = document.getElementById("slots");
 const companyName = document.getElementById("company-name");
 const companyEmail = document.getElementById("company-email");
 
+const userName = document.getElementById('user-name');
+const userEmail = document.getElementById('user-email');
+const userPhone = document.getElementById('user-number');
+const userPlate = document.getElementById('user-plate');
+const userPassword = document.getElementById('user-password');
+const userRole = document.getElementById('user-role');
+const userCompany = document.getElementById('user-company');
+
+
 //company profil data text
 const companyText = document.getElementById("companyText");
 const emailText = document.getElementById("emailText");
 
-const userName = document.getElementById('name')
+const adminName = document.getElementById('name')
 const phoneNumber = document.getElementById('phone')
 
 let DBforUser;
@@ -30,6 +43,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     userDB.onsuccess = function(){
         DBforUser = userDB.result;
         displayProfile();
+        display_users()
     }    
     userDB.onupgradeneeded = function(e){
         
@@ -64,7 +78,8 @@ function openLink(e, id){
 }
 // profile part
  
-form.addEventListener('submit', add_company)
+companyForm.addEventListener('submit', add_company)
+userForm.addEventListener('submit', add_user)
 var i = 0;
 function add_company(e){
     e.preventDefault(); 
@@ -96,8 +111,39 @@ function add_company(e){
         display_companies();
     }
 
-    form.style.display = "none";
+    companyForm.style.display = "none";
     document.getElementById("add-btn").removeAttribute("disabled");
+   
+}
+function add_user(e){
+    e.preventDefault(); 
+    
+    let poDB = DBforUser.transaction("users",'readwrite')
+    let objStore = poDB.objectStore('users');
+    
+    let poInputs = {
+        name: userName.value,
+        email: companyEmail.value,
+        password: userPassword.value,
+        company: userCompany.value,
+        plate_number: userPlate.value,
+        role: userRole.value,
+        phone_no: userPhone.value
+    }
+
+    let result = objStore.add(poInputs);
+    result.onsuccess = ()=>{
+        console.log("user added successfully")
+    }
+    result.onerror = (e)=>{console.log(e)}
+    poDB.oncomplete = ()=>{
+        console.log("new user added");
+        companyList.innerHTML = "";
+        display_companies();
+    }
+
+    companyForm.style.display = "none";
+    document.getElementById("user-add-btn").removeAttribute("disabled");
    
 }
 function display_companies(){
@@ -120,6 +166,32 @@ function display_companies(){
                 </li>
             </ul>`;
             companyList.innerHTML += listItem;
+            cursor.continue();
+        }
+    }
+
+}
+
+function display_users(){
+    
+    let store = DBforUser.transaction(['users'], 'readwrite').objectStore('users');
+    store.openCursor().onsuccess = function(e){
+        let cursor = e.target.result;
+        if(cursor){
+            let listItem = `
+            <ul class="list-inline row list-item">
+                <li class="col-1 ml-0 pl-5 ">
+                    <input class="input-group" type="checkbox" value="" id="selectAll" />
+                </li>
+                <li class="col-2">${cursor.value.name}</li>
+                <li class="col-2 ">${cursor.value.email}</li>
+                <li class="col-3">${cursor.value.phone_no}</li>
+                <li class="col-2">${cursor.value.role}</li>
+                <li class="col-2 ">
+                    <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="#"><i class="fa fa-edit"></i> </a>
+                </li>
+            </ul>`;
+            userList.innerHTML += listItem;
             cursor.continue();
         }
     }
@@ -160,7 +232,7 @@ function updateProfile(){
             plate_number: "",
             role: "admin",
             email: keyEmail.slice(1,keyEmail.length-1),
-            name: userName.value,
+            name: adminName.value,
             phone_no: phoneNumber.value,
             
         }
@@ -174,13 +246,23 @@ function updateProfile(){
 
 // parking officer part
 
-addBtn.addEventListener('click',function(btn){
+companyAddBtn.addEventListener('click',function(btn){
     
-    form.style.display = "block";
+    companyForm.style.display = "block";
     btn.currentTarget.disabled = "true"
 
 });
-cancelIcon.addEventListener('click',function(){
-    form.style.display = "none";
-    document.getElementById("add-btn").removeAttribute("disabled");
+companyCancelIcon.addEventListener('click',function(){
+    companyForm.style.display = "none";
+    document.getElementById("company-add-btn").removeAttribute("disabled");
+});
+userAddBtn.addEventListener('click',function(btn){
+    
+    userForm.style.display = "block";
+    btn.currentTarget.disabled = "true"
+
+});
+userCancelIcon.addEventListener('click',function(){
+    userForm.style.display = "none";
+    document.getElementById("user-add-btn").removeAttribute("disabled");
 });
