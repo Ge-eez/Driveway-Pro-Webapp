@@ -28,14 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     parkBtn.addEventListener("click", park);
     function park(e) {
         let objectStoreUser = db.transaction("users").objectStore("users");
-            
+        let userPlate = 0; 
         objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
         objectStoreUser.openCursor().onsuccess = function(e) {
             let cursor = e.target.result;
-            console.log(cursor.value.plate_number);
 
-            const userPlateNo = document.createElement('li');
-            userPlateNo.className = 'user_plate_number';
+            userPlate = cursor.value.plate_number;
         }
         console.log('Nearby parking places displayed successfully');
         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
@@ -70,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     parkHere.innerHTML = '<a class="parkHere">Park Here</a>';
 
 
-                    const parkContent = document.createElement('li');
+                    const parkContent = document.createElement('div');
                     parkContent.className = 'park_content';
                     
 
@@ -120,19 +118,27 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.log()
                             
                             if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {
-                                // console.log(e.target.parentElement.parentElement);
-                                // document.open();
-                                // document.write("<h1>Hello World</h1>");
+                                const promptMessage = document.createElement('a');
+                                promptMessage.className = 'details';
+                                promptMessage.innerHTML = '<p>more details</p>';
+                                modal.style.display = "block";
 
-                                
-                                let companyName = (e.target.parentElement.parentElement.firstChild.getAttribute('data-name'));
-                                // nearbylists.style.display = 'none';                                
 
-                                nearbylists.innerHTML = '';
+                                span.onclick = function() {
+                                    modal.style.display = "none";
+                                    modal_content.innerHTML = '';
+                                }
+                
+                                window.onclick = function(event) {
+                                    if (event.target == modal) {
+                                        modal.style.display = "none";
+                                        modal_content.innerHTML = '';
+                                    }
+                                }
 
-                                nearbylists.appendChild(parkContent);
-
-                                parkContent.appendChild(document.createTextNode(companyName));
+                                const exit = document.createElement('div');
+                                exit.className = 'exit';
+                                exit.innerHTML = '<a class="parkHere">Exit</a>'; 
 
                                 function addZero(i) {
                                     if (i < 10) { i = "0" + i } // add zero in front of numbers < 10
@@ -151,13 +157,42 @@ document.addEventListener('DOMContentLoaded', () => {
                                 m = addZero(m);
                                 s = addZero(s);
                                 // Assign to the UI [p]
-                                timerDemo.innerHTML = `${h} : ${addZero(m)} : ${addZero(s)} ${am_pm }`;
+                                timerDemo.innerHTML = `Your starting time: ${h} : ${addZero(m)} : ${addZero(s)} ${am_pm }`;
 
                                 let startHour = h;
                                 let startMin = m;
                                 let startSec = s;
+                                
+                                let companyName = (e.target.parentElement.parentElement.firstChild.getAttribute('data-name'));
+                                let companyClosesAt = (e.target.parentElement.parentElement.firstChild.getAttribute('data-closes_at'));
+                                let companyCharge = (e.target.parentElement.parentElement.firstChild.getAttribute('data-charge'));
 
+                                let arrayOfBreaks = [];
+                                for (let index = 0; index < 5; index++) {
+                                    const br = document.createElement('p');
+                                    br.className = 'detailsBreak';
+                                    br.innerHTML = '<br>';
+                                    arrayOfBreaks.push(br);                    
+                                }
+
+                                nearbylists.innerHTML = '';
+
+                                nearbylists.appendChild(parkContent);
+                                parkContent.style.display = 'flex';
+                                parkContent.style.flexDirection = 'column';
+                                parkContent.style.textAlign = 'left';
+
+                                parkContent.appendChild(document.createTextNode(companyName));
+                                parkContent.appendChild(arrayOfBreaks[0]);
+                                parkContent.appendChild(document.createTextNode(`Your plate Number: ${userPlate}`));
+                                parkContent.appendChild(arrayOfBreaks[1]);                                    
+                                parkContent.appendChild(document.createTextNode(companyCharge));
+                                parkContent.appendChild(arrayOfBreaks[2]);
+                                parkContent.appendChild(document.createTextNode(companyClosesAt)); 
+                                parkContent.appendChild(arrayOfBreaks[3]); 
                                 parkContent.appendChild(timerDemo);
+                                parkContent.appendChild(arrayOfBreaks[4]);
+                                parkContent.appendChild(exit);
 
                                 
                                 // document.close();
@@ -188,9 +223,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     arrayOfBreaks.push(br);                    
                 }
 
-                const parkHere = document.createElement('div');
-                parkHere.className = 'parkHereContainer';
-                parkHere.innerHTML = '<a class="parkHere">Park Here</a>';               
+                // const parkHere = document.createElement('div');
+                // parkHere.className = 'parkHereContainer';
+                // parkHere.innerHTML = '<a class="parkHere">Park Here</a>';               
 
 
                 let dataName = (e.target.parentElement.parentElement.getAttribute('data-name'));
@@ -205,8 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal_content.appendChild(document.createTextNode(dataClosesAt));
                 modal_content.appendChild(arrayOfBreaks[2]);
                 modal_content.appendChild(document.createTextNode(dataActiveSlots));
-                modal_content.appendChild(arrayOfBreaks[3]);
-                modal_content.appendChild(parkHere);
+                // modal_content.appendChild(arrayOfBreaks[3]);
+                // modal_content.appendChild(parkHere);
 
 
                 // modal_content.style.display = "block";
