@@ -11,7 +11,9 @@ h1,h2{
    
   }
   
-  
+#tickets{
+    margin-bottom: 8px;
+}  
 #company-header li{
     box-sizing: border-box;
     font-size: 24px;
@@ -33,14 +35,14 @@ li .active {
 }
   
   
-/* profile section */
-#profile{
+/* Active_tickets section */
+#Active_tickets{
     height: auto;
     margin: 0;
     padding: 0;
     margin-bottom: 5%;
 }
-#profile>div:nth-child(1){
+#Active_tickets>div:nth-child(1){
     border: 1px solid;
     border-bottom-right-radius: 30%;
     height: 300px;
@@ -49,30 +51,53 @@ li .active {
     color: #fff;
     background-color:#E76900;
 }
-#profile>div:nth-child(1)>h5{
+#Active_tickets>div:nth-child(1)>h5{
     text-align: left;
     margin: 5% 0% 5% 4%;
 }
-#profile>div:nth-child(1)>h5>i{
+#Active_tickets>div:nth-child(1)>h5>i{
     margin-right: 8%;
 }
-#profile>div:nth-child(2){
+#Active_tickets>div:nth-child(2){
     border: 1px solid;
     border-radius: 5%;
     margin-left: 2%;
     padding: 5% 1%;
     text-align: center;
 }
-#profile>div:nth-child(2)>form{
-    text-align: left;
-    margin: 2% 3% 3% 1%  ;
-}
 
-/* parking officer section */
-#parking-officer{
+
+/* park section */
+#park{
     display: none;
-    height: 600px;
-    background-color: rgb(88, 221, 111);
+    height: auto;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5%;
+    
+}
+#park>div:nth-child(1){
+    border: 1px solid;
+    border-bottom-right-radius: 30%;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+    background-color:#E76900;
+}
+#park>div:nth-child(1)>h5{
+    text-align: left;
+    margin: 5% 0% 5% 4%;
+}
+#park>div:nth-child(1)>h5>i{
+    margin-right: 8%;
+}
+#park>div:nth-child(2){
+    border: 1px solid;
+    border-radius: 5%;
+    margin-left: 2%;
+    padding: 5% 1%;
+    text-align: center;
 }
 
 #more{
@@ -87,20 +112,32 @@ background-color: rgb(131, 54, 138);
     h1,h2{
         font-size: 1.2rem;
     }
-    #profile>div:nth-child(1){
+    #Active_tickets>div:nth-child(1){
         height: 300px;
     }
-    #profile>div:nth-child(1)>h5{
+    #Active_tickets>div:nth-child(1)>h5{
         margin: 3% 0% 5% 1%;
         font-size: 1rem;
     }
-    #profile>div:nth-child(1)>h5>i{
+    #Active_tickets>div:nth-child(1)>h5>i{
         margin-right: 2%;
     }
-    #profile>div:nth-child(2){
+    #Active_tickets>div:nth-child(2){
         margin-right: 0%;
     }
-  
+    #park>div:nth-child(1){
+        height: 300px;
+    }
+    #park>div:nth-child(1)>h5{
+        margin: 3% 0% 5% 1%;
+        font-size: 1rem;
+    }
+    #park>div:nth-child(1)>h5>i{
+        margin-right: 2%;
+    }
+    #park>div:nth-child(2){
+        margin-right: 0%;
+    }
 }
 @media(max-width:768){
     #company-header{
@@ -111,28 +148,48 @@ background-color: rgb(131, 54, 138);
         font-size: 1.2rem;
     }
     
-    #profile>div:nth-child(1){
+    #Active_tickets>div:nth-child(1){
      
         height: 300px;
  
     }
-    #profile>div:nth-child(1)>h5{
+    #Active_tickets>div:nth-child(1)>h5{
         text-align: justify;
         margin:0% 0% 2% 1%;
         font-size: 1rem;
      
     }
-    #profile>div:nth-child(1)>h5>i{
+    #Active_tickets>div:nth-child(1)>h5>i{
         margin-right: 2%;
     }
-    #profile>div:nth-child(2){
+    #Active_tickets>div:nth-child(2){
     
         border-radius: 5%;
        
         margin-right: 0%;
        
     }
+    #park>div:nth-child(1){
+     
+        height: 300px;
+ 
+    }
+    #park>div:nth-child(1)>h5{
+        text-align: justify;
+        margin:0% 0% 2% 1%;
+        font-size: 1rem;
+     
+    }
+    #park>div:nth-child(1)>h5>i{
+        margin-right: 2%;
+    }
+    #park>div:nth-child(2){
     
+        border-radius: 5%;
+       
+        margin-right: 0%;
+       
+    }
 }
 @media (max-width: 576px){
     h1,h2{
@@ -156,40 +213,40 @@ background-color: rgb(131, 54, 138);
         background-color: rgb(57, 125, 228);
     }
 
-    /* profile section responsive */
-    #profile{
+    /* Active_tickets section responsive */
+    #Active_tickets{
 
         height: auto;
         margin-bottom: 5%;
     }
-    #profile>div:nth-child(1){
+    #Active_tickets>div:nth-child(1){
    
         height: 200px;
      
     }
-    #profile>div:nth-child(1)>h5{
+    #Active_tickets>div:nth-child(1)>h5{
         text-align: justify;
         margin:0% 0% 2% 1%;
         font-size: 1rem;
         /* font-size: 1rem; */
     }
-    #profile>div:nth-child(1)>h5>i{
+    #Active_tickets>div:nth-child(1)>h5>i{
         margin-right: 5%;
     }
-    #profile>div:nth-child(2){
+    #Active_tickets>div:nth-child(2){
         border: 1px solid;
         border-radius: 5%;
         margin-left: 5%;
         padding: 5% 1%;
         text-align: center;
     }
-    #profile>div:nth-child(2)>form{
+    #Active_tickets>div:nth-child(2)>form{
         text-align: left;
         margin: 0 ;
     }
 
 
-    #parking-officer{
+    #park{
  
         
         height: 400px;
