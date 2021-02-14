@@ -454,13 +454,16 @@ iframe {
   width: 60%;
   margin-left: 20%;
 }
-#login-btn{
+#login-btn-user{
   
   background: #051C55;
   color: white;
 }
-#login-btn:hover {
-  background: #E76900;
+#login-btn-user:hover {
+  background: #162D66;
+}
+.fa.fa-sign-in-alt{
+  color: #E76900;
 }
 
 /* Modal */
