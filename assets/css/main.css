@@ -10,9 +10,9 @@ body, html {
 }
 
 /*---------------------------------------------*/
-a {
+ a {
 	font-family: 'Poppins', sans-serif;;
-	font-size: 14px;
+	font-size: 1.2em;
 	line-height: 1.7;
 	color: #666666;
 	margin: 0px;
@@ -33,9 +33,9 @@ h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
 }
 
-p {
+.ind-page p {
 	font-family: Poppins-Regular;
-	font-size: 14px;
+	font-size: 2rem;
 	line-height: 1.7;
 	color: #666666;
 	margin: 0px;
@@ -402,21 +402,26 @@ iframe {
 }
 
 /* Home page */
-
-.description{
-  color: white;
+.navbar-dark{
+  background: linear-gradient(-135deg, var(--first-color), var(--second-color));
 }
 .my-6{
   margin-top: 6rem;
   margin-bottom: 4rem;
 }
-.ind-page h3, .ind-page .description p{
-  color: white;
+.ind-page{
+    width: 100%;  
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+  
 }
-
 .ind-page .description{
-  font-size: 1.5rem;
-  justify-content: center;
+  text-align: right;
+  justify-content: right;
   margin: 2rem;
 }
 #about .jumbotron{
