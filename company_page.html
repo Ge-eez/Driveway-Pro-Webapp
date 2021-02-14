@@ -55,42 +55,39 @@
                 <div class="row tab-content" id="profile" >
                     <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-                        <h2>Company Name</h2>
-                        <h5><i class="fas fa-user-tie"></i>Owner Full Name</h5>
-                        <h5><i class="fas fa-envelope"></i>email@gmail.com</h5>
-                        <h5><i class="fas fa-phone-alt"></i>phone number</h5>
-                        <h5><i class="fas fa-briefcase"></i>Role</h5>
+                        <h2 id="companyText"></h2>
+                        <h5 id="emailText"><i class="fas fa-envelope"></i></h5>
+                        <h5 id="locationText"><i class="fas fa-map-marker-alt"></i></h5>
+                        <h5 id="chargeText"><i class="fas fa-dollar-sign"></i></h5>
+                        <h5 id="slotsText"><i class="fas fa-chart-area"></i></h5>
 
                     </div>
                     <div class="col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
 
                         <h1>Update Profile</h1>
-                        <form action="#">
+                        <form action="#" id="update-profile">
                             <div class="form-group">
                                 <label for="company">Company</label>
                                 <input type="text" class="form-control" id="company" placeholder="company name">
                               </div>
                               <div class="form-row">
                                 <div class="form-group col-md-6">
-                                  <label for="fName">First Name</label>
-                                  <input type="text" class="form-control" id="fName" placeholder="First name">
+                                  <label for="fName">Latitude</label>
+                                  <input type="text" class="form-control" id="latitude" placeholder="latitude">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="fName">Last Name</label>
-                                  <input type="password" class="form-control" id="lName" placeholder="Last Name">
+                                    <label for="fName">Longtiude</label>
+                                  <input type="text" class="form-control" id="longtiude" placeholder="longtiude">
                                 </div>
                               </div>
+                              
                               <div class="form-group">
-                                <label for="inputEamil">E-mail</label>
-                                <input type="email" class="form-control" id="inputEmail" placeholder="email">
+                                <label for="phone">Charge</label>
+                                <input type="text" class="form-control" id="charge" placeholder="charge">
                               </div>
                               <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="text" class="form-control" id="phone" placeholder="+251">
-                              </div>
-                              <div class="form-group">
-                                <label for="role">Role</label>
-                                <input type="text" class="form-control" id="role" placeholder="role">
+                                <label for="role">Slots</label>
+                                <input type="text" class="form-control" id="slots" placeholder="slots">
                               </div>
                               <button type="submit" class="login100-form-btn">Update</button>
                         </form>
@@ -100,9 +97,76 @@
     
                 </div>
     
-                <div class="row tab-content" id="parking-officer"> 
+                <div class="" id="parking-officer"> 
                     
-                   
+                    <h2>Parking Officer</h2>
+                    
+                    <div id="pop-up">
+                        <a class=" " href="#">
+                            <i id="cancel" class="far fa-times-circle fa-2x" ></i>
+                        </a>
+                        
+                        
+                        <form action="#" class="form-container">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="fName">First Name</label>
+                                    <input type="text" class="form-control" id="officer-fName" placeholder="First name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="fName">Last Name</label>
+                                    <input type="text" class="form-control" id="officer-lName" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="text" class="form-control" id="officer-phone" placeholder="+251">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEamil">E-mail</label>
+                                <input type="email" class="form-control" id="officer-Email" placeholder="email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="role">Sex</label>
+                                <input type="text" class="form-control" id="officer-sex" placeholder="sex">
+                            </div>
+                            <button type="submit" class="login100-form-btn">Add</button>
+                        </form>
+                    </div>
+                    
+                    
+                    <div id="option" class="d-flex flex-row-reverse pr-2">
+                        <button id="add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
+                    </div>  
+
+                    <ul id="header" class="list-inline row no-gutters">
+                        <li class="col-1 ml-0 pl-5 ">
+                            <input class="input-group" type="checkbox" value="" id="selectAll" />
+                        </li>
+                        <li class="col-2 ">
+                            <i class="far fa-user mr-3"></i>Name
+                        </li>
+                        <li class="col-2 ">
+                            <i class="fas fa-phone-alt mr-3 "></i>Phone Number
+                        </li>
+                        <li class="col-3">
+                            <i class="fas fa-envelope mr-3"></i>Company Email
+                        </li>
+                        <li class="col-2 ">
+                            <i class="fas fa-male"> </i> <i class="fas fa-female mr-3"></i>Sex
+                        </li>
+                        
+                        <li class="col-2">
+                            <i class="fas fa-pen mr-3"></i></i>Action
+                        </li>
+                        
+                    </ul>
+                        
+                    <div class="officers-list addScroll">
+                        <!-- list added from javascript -->
+                        
+                    </div>
                 </div >
 
                 <div class="row tab-content " id="more">
@@ -197,14 +261,20 @@
 
    
    
-    	<!--===============================================================================================-->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--===============================================================================================-->
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
 
+    
 	<!--===============================================================================================-->
 	<script src="./assets/js/company_page.js"></script>
 </body>

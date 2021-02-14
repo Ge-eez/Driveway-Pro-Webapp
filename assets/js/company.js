@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // If a company is signing up
         else if (signingUp && check) {
-            let companylocation  = location_input.split(",")
+            let companylocation  = location_input.value.split(",")
             let data = {
                 charge: charge_input.value,
                 slots: slots_input.value,
