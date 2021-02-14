@@ -6,9 +6,11 @@ const map = document.querySelector('#myMap');
 const modal = document.getElementById("myModal");
 const span = document.getElementsByClassName("close")[0];
 const modal_content = document.querySelector(".content");
+const page_wrapper = document.querySelector(".page-wrapper");
 
 
 let DB;
+let db;
 document.addEventListener('DOMContentLoaded', () => {
     let CompanyDB = indexedDB.open("companies", 1);
     CompanyDB.onsuccess = function () {
@@ -16,17 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
         DB = CompanyDB.result;
     };
 
+    let UserDB = indexedDB.open("users", 1);
+    UserDB.onsuccess = function () {
+        console.log('Database Ready');
+        db = UserDB.result;
+
+    };
+
     parkBtn.addEventListener("click", park);
     function park(e) {
+        let objectStoreUser = db.transaction("users").objectStore("users");
+            
+        objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
+        objectStoreUser.openCursor().onsuccess = function(e) {
+            let cursor = e.target.result;
+            console.log(cursor.value.plate_number);
+
+            const userPlateNo = document.createElement('li');
+            userPlateNo.className = 'user_plate_number';
+        }
         console.log('Nearby parking places displayed successfully');
         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
         // where R is earth’s radius (mean radius = 6,371km);
         // note that angles need to be in radians to pass to trig functions!
         navigator.geolocation.getCurrentPosition(locationHandler);
-        // DB.transaction("users").objectStore("users").get(localStorage.getItem("user")).onsuccess = function(event) {
-        //     console.log(event.target.result.name);
-        // }
-
+        
         function locationHandler(position){
             while(nearbylists.firstChild) { nearbylists.removeChild(nearbylists.firstChild) }
 
@@ -36,12 +52,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 let cursor = e.target.result;
                 
                 if (cursor) {
+                    const written_content = document.createElement('div');
+                    written_content.className = 'written_content';
+
+                    const timerDemo = document.createElement('p');
+                    timerDemo.className = 'timer_demo';
+
                     const li = document.createElement('li');
                     li.className = 'nearby_collections';
 
                     const link = document.createElement('a');
                     link.className = 'details';
                     link.innerHTML = '<p>more details</p>';
+
+                    const parkHere = document.createElement('div');
+                    parkHere.className = 'parkHereContainer';
+                    parkHere.innerHTML = '<a class="parkHere">Park Here</a>';
+
+
+                    const parkContent = document.createElement('li');
+                    parkContent.className = 'park_content';
+                    
 
                     let lat = position.coords.latitude;
                     let lng = position.coords.longitude;
@@ -61,24 +92,80 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Identify nearby parking place within a distance of 5 km
                     if (distance <= 5 && (cursor.value.active_slots > 0)) {
                         // Create text node and append it
-                        li.setAttribute('data-id', cursor.value.email);
+                        li.setAttribute('data-name', `Name of Company: ${cursor.value.name}`);
+                        li.setAttribute('data-closes_at', `Parking place closes at: ${cursor.value.closes_at}`);
+                        li.setAttribute('data-charge', `Charges ${cursor.value.charge} Birr per hour`);
+                        li.setAttribute('data-active_slots', `Current parking slots available: ${cursor.value.active_slots}`);
                         li.appendChild(document.createTextNode(cursor.value.name));
                         li.appendChild(document.createTextNode(cursor.value.email));
 
-                        nearbylists.appendChild(li);   
+                        written_content.appendChild(li);       
                         li.appendChild(link);
+                        nearbylists.appendChild(written_content);   
+                        written_content.appendChild(parkHere);
 
                         nearbylists.style.height = '100vh';
-                        nearbylists.style.padding = '0';                        
+                        nearbylists.style.padding = '0'; 
 
                         map.style.display = 'none';
                         parkBtn.style.display = 'none';
                         getdir.style.padding = '0';            
                        
-                        console.log(cursor.value.name);
+                        // console.log(cursor.value.name);
+                        console.log(written_content.getAttribute('data-name'));
+
+                        parkHere.addEventListener('click', parkHereTimer) 
+                        function parkHereTimer(e) {
+                            console.log('clicked');
+                            console.log()
+                            
+                            if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {
+                                // console.log(e.target.parentElement.parentElement);
+                                // document.open();
+                                // document.write("<h1>Hello World</h1>");
+
+                                
+                                let companyName = (e.target.parentElement.parentElement.firstChild.getAttribute('data-name'));
+                                // nearbylists.style.display = 'none';                                
+
+                                nearbylists.innerHTML = '';
+
+                                nearbylists.appendChild(parkContent);
+
+                                parkContent.appendChild(document.createTextNode(companyName));
+
+                                function addZero(i) {
+                                    if (i < 10) { i = "0" + i } // add zero in front of numbers < 10
+                                    return i;
+                                }
+
+                                var today = new Date();
+                                var h = today.getHours();
+                                var m = today.getMinutes();
+                                var s = today.getSeconds();
+                                //get the AM / PM value 
+                                let am_pm = h > 12 ? 'PM' : 'AM';
+                                // Convert the hour to 12 format 
+                                h = h % 12 || 12;
+                                // add zero 
+                                m = addZero(m);
+                                s = addZero(s);
+                                // Assign to the UI [p]
+                                timerDemo.innerHTML = `${h} : ${addZero(m)} : ${addZero(s)} ${am_pm }`;
+
+                                let startHour = h;
+                                let startMin = m;
+                                let startSec = s;
+
+                                parkContent.appendChild(timerDemo);
+
+                                
+                                // document.close();
+                            }
+                        }
 
                     }
-                    cursor.continue();                  
+                    cursor.continue();                
                     
             
                 }
@@ -93,24 +180,38 @@ document.addEventListener('DOMContentLoaded', () => {
     function details(e) {
         if (e.target.parentElement.classList.contains('details')) {
                 // get the task id
-                let taskID = (e.target.parentElement.parentElement.getAttribute('data-id'));
-                
-                modal_content.appendChild(document.createTextNode(taskID));
+                let arrayOfBreaks = [];
+                for (let index = 0; index < 4; index++) {
+                    const br = document.createElement('p');
+                    br.className = 'detailsBreak';
+                    br.innerHTML = '<br>';
+                    arrayOfBreaks.push(br);                    
+                }
 
-                // const detail = document.createElement('li');
-                // detail.className = 'details_info';
-                // detail.appendChild(document.createTextNode(taskID));
-                // detail.appendChild(document.createTextNode(taskID));
-                // modal_content.appendChild(detail);
-                          
-                modal_content.style.display = "block";
+                const parkHere = document.createElement('div');
+                parkHere.className = 'parkHereContainer';
+                parkHere.innerHTML = '<a class="parkHere">Park Here</a>';               
+
+
+                let dataName = (e.target.parentElement.parentElement.getAttribute('data-name'));
+                let dataCharge = (e.target.parentElement.parentElement.getAttribute('data-charge'));
+                let dataClosesAt = (e.target.parentElement.parentElement.getAttribute('data-closes_at'));
+                let dataActiveSlots = (e.target.parentElement.parentElement.getAttribute('data-active_slots'));
+
+                modal_content.appendChild(document.createTextNode(dataName));
+                modal_content.appendChild(arrayOfBreaks[0]);
+                modal_content.appendChild(document.createTextNode(dataCharge));
+                modal_content.appendChild(arrayOfBreaks[1]);
+                modal_content.appendChild(document.createTextNode(dataClosesAt));
+                modal_content.appendChild(arrayOfBreaks[2]);
+                modal_content.appendChild(document.createTextNode(dataActiveSlots));
+                modal_content.appendChild(arrayOfBreaks[3]);
+                modal_content.appendChild(parkHere);
+
+
+                // modal_content.style.display = "block";
                 modal.style.display = "block";
-                // const closeBtn = document.createElement('a');
-                // closeBtn.className = 'close';
-                // closeBtn.innerHTML = '<span class="close">&times;</span>';               
-                
-                
-                console.log(taskID);
+
 
                 span.onclick = function() {
                     modal.style.display = "none";
@@ -119,13 +220,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 window.onclick = function(event) {
                     if (event.target == modal) {
-                      modal.style.display = "none";
-                      modal_content.innerHTML = '';
+                        modal.style.display = "none";
+                        modal_content.innerHTML = '';
                     }
                 }
+                    
         }
 
     }
+
+    // nearbylists.addEventListener('click', parkHereTimer);
+
+    // function parkHereTimer(e) {
+        // console.log(e.target.parentElement.classList);
+        // if (e.target.parentElement.parentElement.classList.contains('details')) {
+        //     let nameData = (e.target.parentElement.parentElement.getAttribute('data-name'));
+        //     console.log(nameData);
+                // get the task id
+                // let arrayOfBreaks = [];
+                // for (let index = 0; index < 4; index++) {
+                //     const br = document.createElement('p');
+                //     br.className = 'details';
+                //     br.innerHTML = '<br>';
+                //     arrayOfBreaks.push(br);
+                    
+                // }
+
+                // const parkHere = document.createElement('div');
+                // parkHere.className = 'parkHereContainer';
+                // parkHere.innerHTML = '<a class="parkHere">Park Here</a>';               
+
+
+                // let dataName = (e.target.parentElement.parentElement.getAttribute('data-name'));
+                // let dataCharge = (e.target.parentElement.parentElement.getAttribute('data-charge'));
+                // let dataClosesAt = (e.target.parentElement.parentElement.getAttribute('data-closes_at'));
+                // let dataActiveSlots = (e.target.parentElement.parentElement.getAttribute('data-active_slots'));
+                // modal_content.appendChild(document.createTextNode(dataName));
+                // modal_content.appendChild(arrayOfBreaks[0]);
+                // modal_content.appendChild(document.createTextNode(dataCharge));
+                // modal_content.appendChild(arrayOfBreaks[1]);
+                // modal_content.appendChild(document.createTextNode(dataClosesAt));
+                // modal_content.appendChild(arrayOfBreaks[2]);
+                // modal_content.appendChild(document.createTextNode(dataActiveSlots));
+                // modal_content.appendChild(arrayOfBreaks[3]);
+                // modal_content.appendChild(parkHere);
+
+
+                // // modal_content.style.display = "block";
+                // modal.style.display = "block";
+
+
+                // span.onclick = function() {
+                //     modal.style.display = "none";
+                //     modal_content.innerHTML = '';
+                // }
+
+                // window.onclick = function(event) {
+                //     if (event.target == modal) {
+                //         modal.style.display = "none";
+                //         modal_content.innerHTML = '';
+                //     }
+                // }
+                    
+        // }
+
+    // }
+
 
 
 
