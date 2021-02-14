@@ -42,10 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
             who.innerText = data.who
             what.innerText = data.what
             services.innerText = data.services
-            elsh.innerText = data.Elshadai
-            ed.innerText = data.Eden
-            tedy.innerText = data.Tewodros
-            minte.innerText = data.Mintesnot
+            elsh.href = data.Elshadai
+            ed.href = data.Eden
+            tedy.href = data.Tewodros
+            minte.href = data.Mintesnot
         }
     }
     xhr.send();
