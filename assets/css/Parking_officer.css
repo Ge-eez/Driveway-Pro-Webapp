@@ -105,7 +105,7 @@ li .active {
     height: auto;
     margin: 0;
     padding: 0;
-    margin-bottom: 5%;
+    margin-bottom: 20%;
 
 }
 #Exit>div:nth-child(1){
@@ -137,7 +137,7 @@ li .active {
     height: auto;
     margin: 0;
     padding: 0;
-    margin-bottom: 5%;
+    margin-bottom: 25%;
 
 }
 #stack>div:nth-child(1){
