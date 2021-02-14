@@ -1,7 +1,7 @@
 //declare UI variables 
 const plateInput = document.querySelector("#plateInput")
 const parkBtn = document.querySelector("#parkbtn")
-
+const modals = document.querySelector(".modal-body")
 
 let DB;
 
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         DB = TicketDB.result;
 
     }
+    
     const ticketData = [
         {active:"true" ,plate_Number:"B50286", StartTime:"4:50", endTime:"5:40", price:25},
         {active:"true" ,plate_Number:"B50286", StartTime:"4:50", endTime:"5:40", price:25},
@@ -44,12 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
     function parkUser(){
-        
+        if (plateInput.value === "") {
+            
+            plateInput.style.borderColor = "red";
+      
+            return;
+        }
+        alterModal();
+        plateInput.style.borderColor = "";
         newTicket ={
             active:"true" , plate_Number : plateInput.value , StartTime:currentTime() , endTime:"--:--" , price:"$$.$$"
         }
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
         
+        
+
         objectStore.transaction.oncomplete = function(e) {
             // Store values in the newly created objectStore.
             var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
@@ -58,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
               objectStore.add(company);
             }); */ 
             plateInput.value = "";
+            $('#parkModal').modal('show');
         };
 
     
@@ -69,6 +80,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+
+function alterModal(){
+    const ticketDetails = document.createElement("li")
+    ticketDetails.appendChild(document.createTextNode("plate number :" + " " + plateInput.value))
+    ticketDetails.appendChild(document.createElement("br"))
+    ticketDetails.appendChild(document.createTextNode("Starting Time :" + " " + currentTime() )) 
+    ticketDetails.appendChild(document.createElement("br"))
+    ticketDetails.appendChild(document.createTextNode("ending Time :" + " " + "--:--" )) 
+    ticketDetails.appendChild(document.createElement("br"))
+    ticketDetails.appendChild(document.createTextNode("Spot : " + " " + "5" )) 
+    ticketDetails.appendChild(document.createElement("br"))
+    ticketDetails.appendChild(document.createTextNode("Price : " + " " + "$$.$$" )) 
+    ticketDetails.appendChild(document.createElement("br"))
+
+    modals.appendChild(ticketDetails)
+    
+
+    
+    
+}
+
 function currentTime(){
     let today = new Date();
     let minute;
