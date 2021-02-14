@@ -58,7 +58,7 @@ function openLink(e, id){
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     e.currentTarget.className += " active";
-    if(id =="profile"){
+    if(id === "profile"){
         document.getElementById(id).style.display = "flex";
         return;
     }
