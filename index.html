@@ -53,8 +53,7 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         <div class="validate-input">
-                            <input class="input100" type="button" id="login-btn" value="Login" data-toggle="modal"
-                                data-target="#myModal" id="Modal_button">
+                            <input class="input100" type="button" id="login-btn-user" value="Login">
 
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
@@ -81,7 +80,12 @@
                                 <br>
                                 <a href="https://github.com/ElshadaiK/Driveway-Pro-MobileApp"><i
                                         class="fab fa-github big-icon"></i></a>for the mobile app.
-
+                                <br>Are you a service provider? 
+                                <div class="validate-input">
+                                    <a id="login-btn-company" >
+                                        <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
+                                    </a>
+                                </div>
 
                             </p>
 
@@ -247,52 +251,6 @@
             </div>
 
         </main>
-        <!-- Modal data -->
-        <div class="container d-flex">
-            <div class="modal fade" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header"> <button type="button" class="close"
-                                data-dismiss="modal">&times;</button>
-                        </div> <!-- Modal body -->
-                        <div class="modal-body mb-0 pb-0 mt-0">
-                            <div class="container ">
-                                <!-- custom radio button -->
-                                <div class="holder">
-                                    <div class="row mb-1">
-                                        <div class="col">
-                                            <h2>Are you a</h2>
-                                        </div>
-                                    </div>
-                                    <form action="#" class="customRadio m-0 p-0">
-                                        <div class="row mb-0">
-                                            <div class="row justify-content-start">
-                                                <div class="col-12">
-                                                    <div class="row"> <input type="radio" name="textEditor"
-                                                            id="company_login" class="radios" checked> <label
-                                                            for="company_login">Service Provider</label>
-                                                    </div>
-                                                    <div class="row"> <input type="radio" name="textEditor"
-                                                            id="user_login" class="radios">
-                                                        <label for="user_login">User</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div> <!-- Modal footer -->
-                        <div class="modal-footer pt-0 mt-0 pb-5 pr-6 m-1 ">
-                            <div class="col-2 justify-content-start m-0 p-0">
-                                <button type="button" class="btn btn-success" id="okay" data-dismiss="modal">OK</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
         <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white">
