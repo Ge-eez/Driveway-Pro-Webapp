@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
     [ DB ]*/
 
-    let CompanyDB = indexedDB.open("companies", 1);
+    let CompanyDB = indexedDB.open("companies", version);
     CompanyDB.onsuccess = function (event) {
         console.log('Database Ready');
         DB = CompanyDB.result;
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
     CompanyDB.onerror = function (event) {
-        console.log('There was an error');
+        console.log('There was an error, please upgrade the version of your indexdb in the code');
     };
     CompanyDB.onupgradeneeded = function (e) {
         let db = e.target.result;

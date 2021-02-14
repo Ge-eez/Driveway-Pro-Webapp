@@ -138,7 +138,7 @@ async function addNewUser(data) {
     let transaction = DB.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
     let role;
-    if(!data.role) role = "user"
+    if (!data.role) role = "user"
     else role = data.role
 
     let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no)
@@ -171,10 +171,10 @@ async function addUserToJSON(data) {
                 if (this.status == 200) {
                     const users = JSON.parse(this.responseText);
                     users.forEach(user => {
-                        if (user.email == data.email ) {
+                        if (user.email == data.email) {
                             console.log("file found")
                             alert("User already created globally")
-                                return false
+                            return false
                         }
                     })
                 }
@@ -282,13 +282,13 @@ function readJSON(data) {
         if (this.status == 200) {
             const users = JSON.parse(this.responseText);
             users.forEach(user => {
-                if (user.email == data.email ) {
+                if (user.email == data.email) {
                     console.log("file found")
                     let toBeAdded = user
                     if (match(toBeAdded.password, data.password)) {
                         addNewUser(toBeAdded)
                     }
-                    else{
+                    else {
                         invalidLogin()
                     }
                 }
