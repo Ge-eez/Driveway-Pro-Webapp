@@ -76,12 +76,9 @@ function relocation(chosen) {
     }
     current_location = (current_location.split('/'))
     current_location.pop()
-    console.log(current_location)
 
     link = (current_location).join('/') + "/" + chosen
-    console.log(link)
     location.href = link
-    console.log(current_location)
 }
 function match(a, b) {
     return a == b
