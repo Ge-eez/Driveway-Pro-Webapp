@@ -163,26 +163,19 @@ async function addCompanyToJSON(data) {
     console.log("adding company to JSON")
     return new Promise(function (resolve, reject) {
         function checker() {
-            let JSON_CONTENT;
             let xhr = new XMLHttpRequest();
             xhr.open('GET', './assets/js/jsonData/company.json', true);
-            xhr.responseType = 'blob';
             xhr.onload = function (e) {
                 if (this.status == 200) {
-                    var file = new File([this.response], 'temp');
-                    var fileReader = new FileReader();
-                    fileReader.addEventListener('load', function () {
-                        JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
-                        for (let i = 0; i < JSON_CONTENT.length; i++) {
-                            if ((JSON_CONTENT[i]).includes(data.email)) {
-                                console.log("file found")
-                                alert("Company already created globally")
+                    const companies = JSON.parse(this.responseText);
+                    companies.forEach(company => {
+                        if (company.email == data.email ) {
+                            console.log("file found")
+                            let toBeAdded = company
+                            alert("Company already created globally")
                                 return false
-                            }
-
                         }
-                    });
-                    fileReader.readAsText(file);
+                    })
                 }
             }
             xhr.send();
@@ -231,9 +224,6 @@ async function lookupCompanyInJSON(data) {
 }
 
 
-function invalidLogin() {
-    alert("TRY AGAIN WRONG CREDENTIALS")
-}
 async function loginCompany(data) {
     let myPromiseDB = lookupCompanyInDB(data)
     try {
@@ -274,32 +264,23 @@ function loggedIn(res) {
     relocation("company_page")
 }
 function readJSON(data) {
-    let JSON_CONTENT;
     let xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/js/jsonData/company.json', true);
-    xhr.responseType = 'blob';
     xhr.onload = function (e) {
         if (this.status == 200) {
-            var file = new File([this.response], 'temp');
-            var fileReader = new FileReader();
-            fileReader.addEventListener('load', function () {
-                JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
-                for (let i = 0; i < JSON_CONTENT.length; i++) {
-                    if ((JSON_CONTENT[i]).includes(data.email)) {
-                        console.log("file found")
-                        let closeBracket = (i + 1 == JSON_CONTENT.length) ? "" : "}"
-                        let toBeAdded = JSON.parse(JSON_CONTENT[i] + closeBracket)
-                        if (match(toBeAdded.password, data.password)) {
-                            addNewCompany(toBeAdded)
-                        }
-                        else{
-                            invalidLogin()
-                        }
+            const companies = JSON.parse(this.responseText);
+            companies.forEach(company => {
+                if (company.email == data.email ) {
+                    console.log("file found")
+                    let toBeAdded = company
+                    if (match(toBeAdded.password, data.password)) {
+                        addNewCompany(toBeAdded)
                     }
-
+                    else{
+                        invalidLogin()
+                    }
                 }
-            });
-            fileReader.readAsText(file);
+            })
         }
     }
     xhr.send();
