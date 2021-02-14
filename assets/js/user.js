@@ -138,7 +138,7 @@ async function addNewUser(data) {
     let transaction = DB.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
     let role;
-    if(!data.role) role = "user"
+    if (!data.role) role = "user"
     else role = data.role
 
     let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no)
@@ -165,26 +165,18 @@ async function addUserToJSON(data) {
     console.log("adding user to JSON")
     return new Promise(function (resolve, reject) {
         function checker() {
-            let JSON_CONTENT;
             let xhr = new XMLHttpRequest();
             xhr.open('GET', './assets/js/jsonData/user.json', true);
-            xhr.responseType = 'blob';
             xhr.onload = function (e) {
                 if (this.status == 200) {
-                    var file = new File([this.response], 'temp');
-                    var fileReader = new FileReader();
-                    fileReader.addEventListener('load', function () {
-                        JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
-                        for (let i = 0; i < JSON_CONTENT.length; i++) {
-                            if ((JSON_CONTENT[i]).includes(data.email)) {
-                                console.log("file found")
-                                alert("User already created globally")
-                                return false
-                            }
-
+                    const users = JSON.parse(this.responseText);
+                    users.forEach(user => {
+                        if (user.email == data.email) {
+                            console.log("file found")
+                            alert("User already created globally")
+                            return false
                         }
-                    });
-                    fileReader.readAsText(file);
+                    })
                 }
             }
             xhr.send();
@@ -229,11 +221,6 @@ async function lookupUserInJSON(data) {
         resolve(readJSON(data))
     });
 
-}
-
-
-function invalidLogin() {
-    alert("TRY AGAIN WRONG CREDENTIALS")
 }
 async function loginUser(data) {
     let myPromiseDB = lookupUserInDB(data)
@@ -287,34 +274,25 @@ function loggedIn(res) {
             break
     }
 }
+
 function readJSON(data) {
-    let JSON_CONTENT;
     let xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/js/jsonData/user.json', true);
-    xhr.responseType = 'blob';
     xhr.onload = function (e) {
         if (this.status == 200) {
-            var file = new File([this.response], 'temp');
-            var fileReader = new FileReader();
-            fileReader.addEventListener('load', function () {
-                JSON_CONTENT = ((fileReader.result).slice(1, -2)).split('},')
-                for (let i = 0; i < JSON_CONTENT.length; i++) {
-                    if ((JSON_CONTENT[i]).includes(data.email)) {
-                        console.log("file found")
-                        let closeBracket = (i + 1 == JSON_CONTENT.length) ? "" : "}"
-                        let toBeAdded = JSON.parse(JSON_CONTENT[i] + closeBracket)
-                        if (match(toBeAdded.password, data.password)) {
-                            addNewUser(toBeAdded)
-                        }
-                        
-                        else{
-                            invalidLogin()
-                        }
+            const users = JSON.parse(this.responseText);
+            users.forEach(user => {
+                if (user.email == data.email) {
+                    console.log("file found")
+                    let toBeAdded = user
+                    if (match(toBeAdded.password, data.password)) {
+                        addNewUser(toBeAdded)
                     }
-
+                    else {
+                        invalidLogin()
+                    }
                 }
-            });
-            fileReader.readAsText(file);
+            })
         }
     }
     xhr.send();

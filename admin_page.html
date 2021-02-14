@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="./assets/images/icons/icon.png" />
+ 
+	<!--===============================================================================================-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <!-- =========================================================================================== -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/admin.css">
+	<!--===============================================================================================-->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- ====================================================== -->
+    <script src="https://kit.fontawesome.com/dec944d78f.js" crossorigin="anonymous"></script>
+	<!--===============================================================================================-->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
+	<!--===============================================================================================-->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
+	<!--===============================================================================================-->
+	
+</head>
+<body>
+
+    <div class=" ">
+        <div class="row no-gutters mb-0">
+            <header id="company-header" class="col-12 col-md-3 col-xl-2">
+    
+    
+                <div class="row  pl-2 ">
+                    <li class="col-3  col-md-12 col-lg-12  col-xl-12">
+                        <a href="#profile" class="tab-links" onclick="openLink(event, 'profile')" >Profile</a>
+                    </li>
+                    <li class="col-6 col-md-12  col-lg-12 col-xl-12 "> 
+                        <a href="#companies"  class="tab-links" onclick="openLink(event, 'companies')">Companies</a>
+                    </li>
+                    
+                    <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
+                        <a href="#more"  class="tab-links" onclick="openLink(event, 'more')">More</a>
+                    </li>
+                    
+                </div>
+                
+            </header>
+    
+            <section id="check" class="col-12  col-md-9  col-xl-10 ">
+                
+                <div class="row tab-content" id="profile" >
+                    <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
+
+                        <h2 id="companyText"></h2>
+                        <h5 id="emailText"><i class="fas fa-envelope"></i></h5>
+
+                    </div>
+                    <div class="col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
+
+                        <h1>Update Profile</h1>
+                        <form action="#" id="update-profile">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Username">
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <label for="fName">Latitude</label>
+                                  <input type="text" class="form-control" id="latitude" placeholder="latitude">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="fName">Longtiude</label>
+                                  <input type="text" class="form-control" id="longtiude" placeholder="longtiude">
+                                </div>
+                              </div>
+                              
+                              <div class="form-group">
+                                <label for="phone">Charge</label>
+                                <input type="text" class="form-control" id="charge" placeholder="charge">
+                              </div>
+                              <div class="form-group">
+                                <label for="role">Slots</label>
+                                <input type="text" class="form-control" id="slots" placeholder="slots">
+                              </div>
+                              <button type="submit" class="login100-form-btn">Update</button>
+                        </form>
+
+                    </div>
+                    
+    
+                </div>
+    
+                <div class="" id="companies"> 
+                    
+                    <h2>Companies</h2>r</h2>
+                    
+                    <div id="pop-up">
+                        <a class=" " href="#">
+                            <i id="cancel" class="far fa-times-circle fa-2x" ></i>
+                        </a>
+                        
+                        
+                        <form action="#" class="form-container">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="fName">First Name</label>
+                                    <input type="text" class="form-control" id="officer-fName" placeholder="First name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="fName">Last Name</label>
+                                    <input type="text" class="form-control" id="officer-lName" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="text" class="form-control" id="officer-phone" placeholder="+251">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEamil">E-mail</label>
+                                <input type="email" class="form-control" id="officer-Email" placeholder="email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="role">Sex</label>
+                                <input type="text" class="form-control" id="officer-sex" placeholder="sex">
+                            </div>
+                            <button type="submit" class="login100-form-btn">Add</button>
+                        </form>
+                    </div>
+                    
+                    
+                    <div id="option" class="d-flex flex-row-reverse pr-2">
+                        <button id="add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
+                    </div>  
+
+                    <ul id="header" class="list-inline row no-gutters">
+                        <li class="col-1 ml-0 pl-5 ">
+                            <input class="input-group" type="checkbox" value="" id="selectAll" />
+                        </li>
+                        <li class="col-2 ">
+                            <i class="far fa-user mr-3"></i>Name
+                        </li>
+                        <li class="col-2 ">
+                            <i class="fas fa-phone-alt mr-3 "></i>Phone Number
+                        </li>
+                        <li class="col-3">
+                            <i class="fas fa-envelope mr-3"></i>Company Email
+                        </li>
+                        <li class="col-2 ">
+                            <i class="fas fa-male"> </i> <i class="fas fa-female mr-3"></i>Sex
+                        </li>
+                        
+                        <li class="col-2">
+                            <i class="fas fa-pen mr-3"></i></i>Action
+                        </li>
+                        
+                    </ul>
+                        
+                    <div class="officers-list addScroll">
+                        <!-- list added from javascript -->
+                        
+                    </div>
+                </div >
+
+                <div class="row tab-content " id="more">
+                   
+                </div>
+            </section>
+
+        </div>
+    
+    </div>
+    
+
+    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white mt-0">
+
+        <div class="container text-center text-md-left">
+
+            <div class="row text-center text-md-left mt-3 pb-3">
+
+                <div class="col-md-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Driveway Pro</h6>
+                    <p>Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet,
+                        consectetur
+                        adipisicing elit.</p>
+                </div>                
+
+                <hr class="w-100 clearfix d-md-none">
+
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+                    <p>
+                        <i class="fas fa-home mr-3"></i> Addis Ababa, Ethiopia
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope mr-3"></i> info@gmail.com
+                    </p>
+                    <p>
+                        <i class="fas fa-phone mr-3"></i> +251 900 00 0000
+                    </p>
+                    <p>
+                        <i class="fas fa-print mr-3"></i> +251 900 00 0000
+                    </p>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="row d-flex align-items-center">
+
+                <div class="col-12 ml-lg-0 text-center">
+
+                    <!-- Social buttons -->
+                    <div class="text-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="list-inline-item">
+                                <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                                    <i class="fab fa-google-plus-g"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn-floating btn-sm rgba-white-slight mx-1">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col-md-12 col-lg-12">
+
+                    <p class="text-center">© Ge'ez 2021
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+
+    
+
+   
+   
+    <!--===============================================================================================-->
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
+
+    
+	<!--===============================================================================================-->
+	<script src="./assets/js/admin_page.js"></script>
+</body>
+</html>
