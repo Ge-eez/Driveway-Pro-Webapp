@@ -25,3 +25,28 @@ function pop_up_answer(e){
 
 }
 okay.addEventListener('click', pop_up_answer)
+document.addEventListener("DOMContentLoaded", function () {
+
+    let who = document.getElementById('who')
+    let what = document.getElementById('what')
+    let services = document.getElementById('services')
+    let elsh = document.getElementById('elsh')
+    let ed = document.getElementById('ed')
+    let tedy = document.getElementById('tedy')
+    let minte = document.getElementById('minte')
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', './assets/js/jsonData/index.json', true);
+    xhr.onload = function (e) {
+        if (this.status == 200) {
+            const data = JSON.parse(this.responseText);
+            who.innerText = data.who
+            what.innerText = data.what
+            services.innerText = data.services
+            elsh.innerText = data.Elshadai
+            ed.innerText = data.Eden
+            tedy.innerText = data.Tewodros
+            minte.innerText = data.Mintesnot
+        }
+    }
+    xhr.send();
+})

@@ -119,10 +119,21 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: #cfd9df;
   background: linear-gradient(-135deg, var(--first-color), var(--second-color));
 }
-
+.about-holder{
+  width: 100%;  
+  padding: 15px;
+  background: linear-gradient(-135deg, var(--second-color), var(--first-color), var(--second-color));
+  border-radius: 1rem;
+}
+.carousel-caption {
+  top: 1px!important;
+}
+.carousel-caption p{
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 .wrap-login100 {
   width: 960px;
   background: #fff;
