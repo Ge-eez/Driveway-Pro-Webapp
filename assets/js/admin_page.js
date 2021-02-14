@@ -1,4 +1,4 @@
-const parkingOfficer = document.querySelector(".officers-list");
+const companyList = document.querySelector(".company-list");
 const addBtn = document.getElementById("add-btn");
 const cancelIcon = document.getElementById("cancel");
 const form = document.getElementById("pop-up");
@@ -7,41 +7,40 @@ const email = "super@admin.com";
 const formUpdate = document.getElementById("update-profile");
 
 //form inputs
-const companyInput = document.getElementById("company");
-const emailInput = document.getElementById("inputEmail");
+const companyPassword = document.getElementById("password");
 const latitudeInput = document.getElementById("latitude");
 const longtiudeInput = document.getElementById("longtiude");
 const chargeInput = document.getElementById("charge");
 const slotsInput = document.getElementById("slots");
 // 
-const officerFName = document.getElementById("officer-fName");
-const officerLName = document.getElementById("officer-lName");
-const officerEmail = document.getElementById("officer-Email");
-const officerPhone = document.getElementById("officer-phone");
-const officerSex = document.getElementById("officer-sex");
+const companyName = document.getElementById("company-name");
+const companyEmail = document.getElementById("company-email");
+
 //company profil data text
 const companyText = document.getElementById("companyText");
 const emailText = document.getElementById("emailText");
-const locationText = document.getElementById("locationText");
-const chargeText = document.getElementById("chargeText");
-const slotsText = document.getElementById("slotsText");
 
-let DB;
+let DBforUser;
+let DBforCompany;
 document.addEventListener("DOMContentLoaded",()=>{
     let userDB = indexedDB.open("users",2)
     userDB.onsuccess = function(){
-        DB = userDB.result;
+        DBforUser = userDB.result;
         displayProfile();
-        display_companies();
     }    
     userDB.onupgradeneeded = function(e){
         
-        let db = e.target.result;
-        let objectStore = db.createObjectStore('parkingOfficer', { keyPath: 'companyEmail' });
-        objectStore.createIndex('parkingOfficer', ['name','companyEamil'], { unique: true });
         console.log("created store");
     }
-
+    let companyDB = indexedDB.open("companies",2)
+    companyDB.onsuccess = function(){
+        DBforCompany = companyDB.result;
+        display_companies();
+    }    
+    companyDB.onupgradeneeded = function(e){
+        
+        console.log("created store");
+    }
    
 });
 
@@ -67,22 +66,30 @@ var i = 0;
 function add_company(e){
     e.preventDefault(); 
     
-    let poDB = DB.transaction(["companies"],'readwrite')
+    let poDB = DBforCompany.transaction(["companies"],'readwrite')
     let objStore = poDB.objectStore('companies');
     
     let poInputs = {
-        name: officerFName.value + " " + officerLName.value,
-        phoneNumber: officerPhone.value,
-        sex: officerSex.value,
-        companyEmail: officerEmail.value
+        name: companyName.value,
+        email: company-email.value,
+        password: companyPassword.value,
+        charge: chargeInput.value,
+        slots: slotsInput.value,
+        active_slots: slotsInput.value,
+        opens_at: "8AM",
+        closes_at: "8PM",
+        latitude: latitudeInput.value,
+        longitude: longtiudeInput.value
     }
 
     let result = objStore.add(poInputs);
-    result.onsuccess = ()=>{}
+    result.onsuccess = ()=>{
+        console.log("company added successfully")
+    }
     result.onerror = (e)=>{console.log(e)}
     poDB.oncomplete = ()=>{
-        console.log("new task added");
-        parkingOfficer.innerHTML = "";
+        console.log("new company added");
+        companyList.innerHTML = "";
         display_companies();
     }
 
@@ -91,7 +98,8 @@ function add_company(e){
    
 }
 function display_companies(){
-    let store = DB.transaction(['companies']).objectStore('companies');
+    
+    let store = DBforCompany.transaction(['companies'], 'readwrite').objectStore('companies');
     store.openCursor().onsuccess = function(e){
         let cursor = e.target.result;
         if(cursor){
@@ -102,13 +110,13 @@ function display_companies(){
                 </li>
                 <li class="col-2">${cursor.value.name}</li>
                 <li class="col-2 ">${cursor.value.email}</li>
-                <li class="col-3">${cursor.value.companyEmail}</li>
-                <li class="col-2">${cursor.value.sex}</li>
+                <li class="col-3">${cursor.value.charge}</li>
+                <li class="col-2">${cursor.value.latitude}, ${cursor.value.longitude}</li>
                 <li class="col-2 ">
                     <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="#"><i class="fa fa-edit"></i> </a>
                 </li>
             </ul>`;
-            parkingOfficer.innerHTML += listItem;
+            companyList.innerHTML += listItem;
             cursor.continue();
         }
     }
@@ -116,7 +124,7 @@ function display_companies(){
 }
 
 function displayProfile(){
-    let userStore = DB.transaction("users").objectStore("users");
+    let userStore = DBforUser.transaction("users").objectStore("users");
     userStore.openCursor().onsuccess = function(e){
         let cursor = e.target.result;
         if(cursor){       
@@ -136,7 +144,7 @@ function displayProfile(){
 formUpdate.addEventListener('submit',updateProfile);
 
 function updateProfile(){
-    let userStore = DB.transaction(["users"],"readwrite").objectStore("users");
+    let userStore = DBforUser.transaction(["users"],"readwrite").objectStore("users");
     let request = userStore.get(keyEmail);
     
 
