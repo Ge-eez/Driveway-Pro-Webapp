@@ -62,13 +62,13 @@ function openLink(e, id){
 }
 // profile part
  
-form.addEventListener('submit', add_parking_officer)
+form.addEventListener('submit', add_company)
 var i = 0;
-function add_parking_officer(e){
+function add_company(e){
     e.preventDefault(); 
     
-    let poDB = DB.transaction(["parkingOfficer"],'readwrite')
-    let objStore = poDB.objectStore('parkingOfficer');
+    let poDB = DB.transaction(["companies"],'readwrite')
+    let objStore = poDB.objectStore('companies');
     
     let poInputs = {
         name: officerFName.value + " " + officerLName.value,
@@ -136,7 +136,7 @@ function displayProfile(){
 formUpdate.addEventListener('submit',updateProfile);
 
 function updateProfile(){
-    let userStore = DB.transaction(["companies"],"readwrite").objectStore("companies");
+    let userStore = DB.transaction(["users"],"readwrite").objectStore("users");
     let request = userStore.get(keyEmail);
     
 
@@ -144,8 +144,6 @@ function updateProfile(){
         let updateData = {
             name: companyInput.value,
             email: keyEmail.slice(1,keyEmail.length-1),
-            opens_at: 8,
-            closes_at: 8,
             password: "We respect privacy",
             charge: chargeInput.value,
             slots: slotsInput.value,
