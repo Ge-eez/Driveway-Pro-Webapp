@@ -1,13 +1,17 @@
 //declare UI variables 
 const plateInput = document.querySelector("#plateInput")
 const parkBtn = document.querySelector("#parkbtn")
+const ticketDetailBtn = document.querySelector("#ticketDetails")
 const modals = document.querySelector(".modal-body")
+const act_tab = document.querySelector("#activeTicketsTab")
 
 let DB;
 
 document.addEventListener("DOMContentLoaded", () => {
     let TicketDB = indexedDB.open("Tickets", 1)
+    act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
+    ticketDetailBtn.addEventListener("click", ticketDetail)
     TicketDB.onerror = function(){
         console.log("there was an error")
     }
@@ -28,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let objectStore = db.createObjectStore("Tickets", {keyPath:'id', autoIncrement: true})
 
         objectStore.createIndex('active', 'active', {unique: false});
-        objectStore.createIndex('plate_Number', 'plate_Number', {unique: false});
+        objectStore.createIndex('plate_Number', 'plate_Number', {unique: true});
         objectStore.createIndex('StartTime', 'StartTime', {unique: false});
         objectStore.createIndex('endTime', 'endTime', {unique: false});
         objectStore.createIndex('price', 'price', {unique: false});
@@ -69,10 +73,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }); */ 
             plateInput.value = "";
             $('#parkModal').modal('show');
+            
         };
 
     
           
+    }
+    function actTab(){
+        
+    }
+    function ticketDetail(){
+        alterModal()
+        $('#activeTicketsModal').modal('show');
     }
     currentTime();
 
@@ -82,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function alterModal(){
+    modals.innerHTML = ""
     const ticketDetails = document.createElement("li")
     ticketDetails.appendChild(document.createTextNode("plate number :" + " " + plateInput.value))
     ticketDetails.appendChild(document.createElement("br"))
@@ -95,6 +108,7 @@ function alterModal(){
     ticketDetails.appendChild(document.createElement("br"))
 
     modals.appendChild(ticketDetails)
+
     
 
     
@@ -103,13 +117,15 @@ function alterModal(){
 
 function currentTime(){
     let today = new Date();
+    
     let minute;
     if(today.getMinutes() < 10){
         minute = "0" + today.getMinutes()
     }else{
         minute = today.getMinutes()
     }
-    let dateText =
+    /*AM PM time today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) */
+    let dateText = 
       today.getHours() +
       ":" +
       minute;
