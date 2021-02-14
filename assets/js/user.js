@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
     [ DB ]*/
 
-    let UserDB = indexedDB.open("users", 1);
+    let UserDB = indexedDB.open("users", version);
     UserDB.onsuccess = function (event) {
         console.log('Database Ready');
         DB = UserDB.result;
