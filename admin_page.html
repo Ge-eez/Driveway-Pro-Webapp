@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Company</title>
+    <title>Admin</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/company.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/admin.css">
 	<!--===============================================================================================-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
     <!-- ====================================================== -->
@@ -39,7 +39,7 @@
                         <a href="#profile" class="tab-links" onclick="openLink(event, 'profile')" >Profile</a>
                     </li>
                     <li class="col-6 col-md-12  col-lg-12 col-xl-12 "> 
-                        <a href="#parking-officer"  class="tab-links" onclick="openLink(event, 'parking-officer')">Parking Officer</a>
+                        <a href="#companies"  class="tab-links" onclick="openLink(event, 'companies')">Companies</a>
                     </li>
                     
                     <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
@@ -57,9 +57,6 @@
 
                         <h2 id="companyText"></h2>
                         <h5 id="emailText"><i class="fas fa-envelope"></i></h5>
-                        <h5 id="locationText"><i class="fas fa-map-marker-alt"></i></h5>
-                        <h5 id="chargeText"><i class="fas fa-dollar-sign"></i></h5>
-                        <h5 id="slotsText"><i class="fas fa-chart-area"></i></h5>
 
                     </div>
                     <div class="col-11 col-md-6 col-lg-7 col-xl-7 mt-5 ">
@@ -67,8 +64,8 @@
                         <h1>Update Profile</h1>
                         <form action="#" id="update-profile">
                             <div class="form-group">
-                                <label for="company">Company</label>
-                                <input type="text" class="form-control" id="company" placeholder="company name">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Username">
                               </div>
                               <div class="form-row">
                                 <div class="form-group col-md-6">
@@ -97,9 +94,9 @@
     
                 </div>
     
-                <div class="" id="parking-officer"> 
+                <div class="" id="companies"> 
                     
-                    <h2>Parking Officer</h2>
+                    <h2>Companies</h2>r</h2>
                     
                     <div id="pop-up">
                         <a class=" " href="#">
@@ -276,6 +273,6 @@
 
     
 	<!--===============================================================================================-->
-	<script src="./assets/js/company_page.js"></script>
+	<script src="./assets/js/admin_page.js"></script>
 </body>
 </html>
