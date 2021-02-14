@@ -103,7 +103,7 @@ li .active {
     text-align: center;
 }
 #pop-up{
-    position: fixed;
+    position: absolute;
     width: 25%;
     display: none;
     right:8%;

@@ -71,7 +71,7 @@ function add_company(e){
     
     let poInputs = {
         name: companyName.value,
-        email: company-email.value,
+        email: companyEmail.value,
         password: companyPassword.value,
         charge: chargeInput.value,
         slots: slotsInput.value,
