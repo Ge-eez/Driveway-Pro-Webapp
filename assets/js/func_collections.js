@@ -1,5 +1,5 @@
 let DB;
-let version = 1;
+let version = 2;
 if (!window.indexedDB) {
     console.log("Your browser doesn't support a stable version of IndexedDB. Client side db feature will not be available.");
 }
