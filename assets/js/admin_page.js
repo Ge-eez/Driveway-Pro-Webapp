@@ -20,6 +20,9 @@ const companyEmail = document.getElementById("company-email");
 const companyText = document.getElementById("companyText");
 const emailText = document.getElementById("emailText");
 
+const userName = document.getElementById('name')
+const phoneNumber = document.getElementById('phone')
+
 let DBforUser;
 let DBforCompany;
 document.addEventListener("DOMContentLoaded",()=>{
@@ -66,7 +69,7 @@ var i = 0;
 function add_company(e){
     e.preventDefault(); 
     
-    let poDB = DBforCompany.transaction(["companies"],'readwrite')
+    let poDB = DBforCompany.transaction("companies",'readwrite')
     let objStore = poDB.objectStore('companies');
     
     let poInputs = {
@@ -144,25 +147,25 @@ function displayProfile(){
 formUpdate.addEventListener('submit',updateProfile);
 
 function updateProfile(){
-    let userStore = DBforUser.transaction(["users"],"readwrite").objectStore("users");
-    let request = userStore.get(keyEmail);
+    let transaction = DBforUser.transaction(['users'], 'readwrite');
+    let objectStore = transaction.objectStore('users');
+    let sliced = keyEmail.slice(1,keyEmail.length-1)
+    let request = objectStore.get(sliced);
     
 
     request.onsuccess = function(){
         let updateData = {
-            name: companyInput.value,
+            company: "",
+            password: request.result.password,
+            plate_number: "",
+            role: "admin",
             email: keyEmail.slice(1,keyEmail.length-1),
-            password: "We respect privacy",
-            charge: chargeInput.value,
-            slots: slotsInput.value,
-            active_slots:"",
-            latitude: latitudeInput.value,
-            longitude: longtiudeInput.value
+            name: userName.value,
+            phone_no: phoneNumber.value,
             
         }
-        let updateTable = userStore.put(updateData);
+        let updateTable = objectStore.put(updateData);
         updateTable.onsuccess = function(){
-            location.reload();
             console.log("done")
         }
     }
@@ -181,6 +184,3 @@ cancelIcon.addEventListener('click',function(){
     form.style.display = "none";
     document.getElementById("add-btn").removeAttribute("disabled");
 });
-
-
-
