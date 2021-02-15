@@ -15,11 +15,13 @@ h1,h2{
 #company-header li{
     box-sizing: border-box;
     font-size: 1.5rem;
+    padding:2% 0% 2% 5%;
 }
 #company-header a{
     color: white;
     text-transform: capitalize;
     font-weight: bold;
+    font-size: 20px;
 }
   
 #company-header a:hover{
@@ -99,32 +101,56 @@ li .active {
     border-bottom: 2px solid;
     text-align: center;
 }
+
 #parking-officer .list-inline{
     border-bottom: 1px solid;
     padding-bottom: 1%;
+    margin-bottom: 0px;
     text-align: center;
 }
+#parking-officer .list-item{
+    padding: 1% 0%;
+    margin: 0;
+   
+}
+#parking-officer .list-item li{
+   
+    border-right: 5px solid yellow;
+}
+#parking-officer .list-item li:nth-child(1){
+    border-right: 5px solid red;
+}
+
 #pop-up{
     position: fixed;
-    width: 25%;
+    top: -1%;
+    width: 100%;
+    height: 100%;
     display: none;
-    right:8%;
-    top: 15%;
     padding: 0% 1% 1% 1%;
-    border: 1px solid none;
-    border-radius: 5%;
     z-index: 9;
-    background-color: rgb(204, 198, 198);
+    background-color: rgba(0,0,0,0.4);
 }
 #pop-up .far{
+    
     position: relative;
-    left: 94%;
-    top: -1%;
+    left: 80%;
+    top: 3%;
+    padding: 0;
     margin-top: 3px;
+    margin-bottom: 0;
 }
 .form-container {
-    max-width: 300px;
-    padding: 10px;
+    position: relative;
+    left: 20%;
+    /* top: 0; */
+    background-color: #fefefe;
+    width: 40%;
+    border: 1px solid none;
+    border-radius: 5%;
+    
+    padding:2% 3%;
+  
 }
 .addScroll{
     overflow-y:auto;
@@ -134,11 +160,7 @@ li .active {
     width: 20px;
     height: 20px;
 }
-#more{
-display: none;
-height: 600px;
-background-color: rgb(131, 54, 138);
-}
+
 
 /* Responsive */
 
@@ -249,15 +271,97 @@ background-color: rgb(131, 54, 138);
 
 
     #parking-officer{
- 
-        
+        display: none;       
         height: 400px;
       
     }
-    #more{
-      
-        height: 400px;
+    
+    #parking-officer h2{
+        background-color: #0a1b46;
+        color: white;
+        padding: 3% 0% 3% 4%;
+        margin: 0%;
+    }
+    #parking-officer #option{
+        margin: 0;
+        background-color: #061335;
+        padding: 1% 0% 1% 0%;
+        margin-bottom: 1%;
+        
+    }
+    #parking-officer #add-btn{
+        background-color: #cc088b;
+        color: white;
+        font-size: 0.5rem;
+        font-weight: bold;
+    }
+    #parking-officer #header{
+        padding-bottom: 1%;
+        border-bottom: 2px solid;
+        text-align: center;
+        font-size: 0.7rem;
+    }
+    #parking-officer .list-inline{
+        border-bottom: 1px solid;
+        padding-bottom: 1%;
+        text-align: center;
+        font-size: 0.7rem;
+    }
+    #parking-officer .list-inline li{
+        overflow-x: scroll;
+    }
+    #parking-officer .list-item{
+        padding: 1% 1%;
+        margin: 0;
        
     }
+    #parking-officer .list-item li{
+   
+        border-right: 2px solid yellow;
+    }
+    #parking-officer .list-item li:nth-child(1){
+        border-right: 2px solid red;
+    }
+    
+    #pop-up{
+        position: fixed;
+        top: -1%;
+        width: 100%;
+        height: 100%;
+        display: none;
+        padding: 0% 1% 1% 1%;
+        z-index: 9;
+        background-color: rgba(0,0,0,0.4);
+    }
+    #pop-up .far{
+        
+        position: relative;
+        left: 80%;
+        top: 3%;
+        padding: 0;
+        margin-top: 3px;
+        margin-bottom: 0;
+    }
+    .form-container {
+        position: relative;
+        left: 20%;
+        /* top: 0; */
+        background-color: #fefefe;
+        width: 40%;
+        border: 1px solid none;
+        border-radius: 5%;
+        
+        padding:2% 3%;
+      
+    }
+    .addScroll{
+        overflow-y:auto;
+        height: 550px;
+      }
+    #parking-officer ul>li>input{
+        width: 20px;
+        height: 20px;
+    }
+    
 
 }
