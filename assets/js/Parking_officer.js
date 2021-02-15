@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
             return;
         }
-        alterModal("#prkModal");
+        alterModal("#prkModal", plateInput.value);
         plateInput.style.borderColor = "";
         newTicket ={
             active:"true" , plate_Number : plateInput.value , StartTime:currentTime() , endTime:"--:--" , price:"$$.$$"
@@ -97,15 +97,18 @@ document.addEventListener("DOMContentLoaded", () => {
           
             objectStore.openCursor().onsuccess = function(event) {
               var cursor = event.target.result;
-              if(cursor.value.active === "true") {
-                displayTickets(cursor.value.plate_Number , cursor.value.plate_Number )  
-                //console.log(cursor.value.plate_Number)
-                cursor.continue();
-              } else if(cursor.value.active === "false"){
-                cursor.continue();
-              }else{
-                console.log('Entries all displayed.');
+              if(cursor){
+                if(cursor.value.active === "true") {
+                    displayTickets(cursor.value.plate_Number)  
+                    //console.log(cursor.value.plate_Number)
+                    cursor.continue();
+                  } else if(cursor.value.active === "false"){
+                    cursor.continue();
+                  }else{
+                    console.log('Entries all displayed.');
+                  }
               }
+              
             };
         }
         ticketDis.innerHTML = ""
@@ -129,17 +132,36 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.innerHTML = "details";                   // Insert text
         btn.addEventListener("click" , ticketDetail)
         btn.classList.add("btn","btn-primary")
+        const span = document.createElement("span")
+        span.innerHTML = plateNum
+        span.classList.add("span")
         li.appendChild(document.createTextNode("Plate Number: "))
-        li.appendChild(document.createTextNode(plateNum))
+        li.appendChild(span)
         li.appendChild(btn);
-
         ticketDis.appendChild(li)
         ticketDis.appendChild(document.createElement("br"))
+        function ticketDetail(e){
+            var a = e.currentTarget.parentNode.querySelector(".span").innerHTML;
+            var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
+          
+            objectStore.openCursor().onsuccess = async function(event) {
+              var cursor = event.target.result;
+              if(cursor){
+                if(cursor.value.plate_Number == a) {
+                    alterModal("#try",a,cursor.value.StartTime)
+                    $('#activeTicketsModal').modal('show');
+                  }else{
+                    cursor.continue();
+                }
+              }
+              
+            };
+            
+            
+        }
     }
-    function ticketDetail(){
-        alterModal("#try")
-        $('#activeTicketsModal').modal('show');
-    }
+    
+    
     currentTime();
 
 
@@ -147,12 +169,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function alterModal(a){
+function alterModal(a,b,c){
     document.querySelector(a).innerHTML = ""
     const ticketDetails = document.createElement("li")
-    ticketDetails.appendChild(document.createTextNode("plate number :" + " " + plateInput.value))
+    ticketDetails.appendChild(document.createTextNode("plate number :" + " " + b))
     ticketDetails.appendChild(document.createElement("br"))
-    ticketDetails.appendChild(document.createTextNode("Starting Time :" + " " + currentTime() )) 
+    ticketDetails.appendChild(document.createTextNode("Starting Time :" + " " + c )) 
     ticketDetails.appendChild(document.createElement("br"))
     ticketDetails.appendChild(document.createTextNode("ending Time :" + " " + "--:--" )) 
     ticketDetails.appendChild(document.createElement("br"))
