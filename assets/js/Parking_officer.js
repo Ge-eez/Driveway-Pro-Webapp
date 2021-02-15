@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function exitUser(){
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore('Tickets');
-
+        price()
         objectStore.openCursor().onsuccess = function (event) {
             var cursor = event.target.result;
             if (cursor) {
@@ -167,19 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     updateData.active = "false";
                     updateData.endTime = currentTime();
+                    updateData.price = price(cursor.value.StartTime, cursor.value.endTime) + " Br";
                     const request = cursor.update(updateData);
                     request.onsuccess = function(){
-                        console.log("here1")
-                        alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime )
+                        alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime, cursor.value.price)
                         $('#exitModal').modal('show');    
                     }
-                    console.log("here")
+                    
                     
                     //displayTickets(cursor.value.plate_Number)
                     //console.log(cursor.value.plate_Number)
                     cursor.continue();
                 }else {
-                    console.log('Entries all displayed.');
+                    
                     cursor.continue();
                 }
             }
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function alterModal(a, b, c , d = "--:--") {
+function alterModal(a, b, c , d = "--:--", f = "$$.$$") {
     document.querySelector(a).innerHTML = ""
     const ticketDetails = document.createElement("li")
     ticketDetails.appendChild(document.createTextNode("plate number :" + " " + b))
@@ -203,7 +203,7 @@ function alterModal(a, b, c , d = "--:--") {
     ticketDetails.appendChild(document.createElement("br"))
     ticketDetails.appendChild(document.createTextNode("Spot : " + " " + "5"))
     ticketDetails.appendChild(document.createElement("br"))
-    ticketDetails.appendChild(document.createTextNode("Price : " + " " + "$$.$$"))
+    ticketDetails.appendChild(document.createTextNode("Price : " + " " + f))
     ticketDetails.appendChild(document.createElement("br"))
 
     document.querySelector(a).appendChild(ticketDetails)
@@ -230,7 +230,15 @@ function currentTime() {
         minute;
     return (dateText);
 }
+function price(strTi = "21:53",endTi = "23:02"){
+       a = strTi.replace(":" , ".")
+       b = endTi.replace(":" , ".")
+       return(((b - a).toFixed(2) * 10.0).toFixed(2));
+        
 
+
+
+}
 
 
 function openLink(e, id) {
