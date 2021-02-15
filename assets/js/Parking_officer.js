@@ -1,9 +1,12 @@
 //declare UI variables 
 const plateInput = document.querySelector("#plateInput")
 const parkBtn = document.querySelector("#parkbtn")
-const ticketDetailBtn = document.querySelector("#ticketDetails")
 const modals = document.querySelector(".modal-body")
 const act_tab = document.querySelector("#activeTicketsTab")
+const plateDis = document.querySelector("#plateDisplay")
+const ticketDis = document.querySelector("#displayTickets")
+const strtTimeDis = document.querySelector("#strTime") 
+var count = false;
 
 let DB;
 
@@ -11,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let TicketDB = indexedDB.open("Tickets", 1)
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
-    ticketDetailBtn.addEventListener("click", ticketDetail)
+    strtTimeDis.innerHTML = currentTime()
     TicketDB.onerror = function(){
         console.log("there was an error")
     }
@@ -55,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
             return;
         }
-        alterModal();
+        alterModal("#prkModal");
         plateInput.style.borderColor = "";
         newTicket ={
             active:"true" , plate_Number : plateInput.value , StartTime:currentTime() , endTime:"--:--" , price:"$$.$$"
@@ -81,9 +84,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function actTab(){
         
+        function displayData() {
+            var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
+          
+            objectStore.openCursor().onsuccess = function(event) {
+              var cursor = event.target.result;
+              if(cursor.value.active === "true") {
+                displayTickets(cursor.value.plate_Number , cursor.value.plate_Number )  
+                //console.log(cursor.value.plate_Number)
+                cursor.continue();
+              } else if(cursor.value.active === "false"){
+                cursor.continue();
+              }else{
+                console.log('Entries all displayed.');
+              }
+            };
+        }
+        ticketDis.innerHTML = ""
+        displayData()
+        
+        /* ticketDis.innerHTML = ""
+        for (let index = 0; index < 3; index++) {
+            displayTickets()
+            
+        } */
+        
+        
+    }
+    function displayTickets(plateNum){
+        
+        const li = document.createElement("li");
+        
+        li.classList.add("list-group-item","d-flex", "justify-content-between", "align-items-center")
+        
+        var btn = document.createElement("BUTTON");   // Create a <button> element
+        btn.innerHTML = "details";                   // Insert text
+        btn.addEventListener("click" , ticketDetail)
+        btn.classList.add("btn","btn-primary")
+        li.appendChild(document.createTextNode("Plate Number: "))
+        li.appendChild(document.createTextNode(plateNum))
+        li.appendChild(btn);
+
+        ticketDis.appendChild(li)
+        ticketDis.appendChild(document.createElement("br"))
     }
     function ticketDetail(){
-        alterModal()
+        alterModal("#try")
         $('#activeTicketsModal').modal('show');
     }
     currentTime();
@@ -93,8 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function alterModal(){
-    modals.innerHTML = ""
+function alterModal(a){
+    document.querySelector(a).innerHTML = ""
     const ticketDetails = document.createElement("li")
     ticketDetails.appendChild(document.createTextNode("plate number :" + " " + plateInput.value))
     ticketDetails.appendChild(document.createElement("br"))
@@ -107,7 +153,7 @@ function alterModal(){
     ticketDetails.appendChild(document.createTextNode("Price : " + " " + "$$.$$" )) 
     ticketDetails.appendChild(document.createElement("br"))
 
-    modals.appendChild(ticketDetails)
+    document.querySelector(a).appendChild(ticketDetails)
 
     
 

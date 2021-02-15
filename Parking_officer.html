@@ -43,7 +43,7 @@
                     </li>
 
                     <li class="col-3  col-md-12 col-lg-12  col-xl-12">
-                        <a href="#Active_tickets" class="tab-links" id="activeTicketsTab" onclick="openLink(event, 'Active_tickets')">Active
+                        <a href="#Active_tickets" class="tab-links" id="activeTicketsTab" onclick="openLink(event, 'Active_tickets')">
                             Tickets</a>
                     </li>
 
@@ -77,7 +77,7 @@
                                 aria-label="Default" aria-describedby="inputGroup-sizing-default"
                                 style="margin-left: 25%; width: 50%;"></span>
                         <br>
-                        <span>Start Time : <div>2:54AM</div></span>
+                        <span>Start Time : <div id="strTime"></div></span>
                         <br>
                         <span>End Time : <div>-- : -- </div></span>
                         <div class="div" style="margin-top: 5%; margin-left: 45%;"><button type="button" id="parkbtn"
@@ -118,19 +118,14 @@
 
                         <h1>Active Tickets!</h1>
                         <br>
-                        <ul class="list-group overflow-auto" style="height: 500px;">
-                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
-                                id="tickets">
-                                Plate number:<span>A25252</span> 
+                        <ul class="list-group overflow-auto" style="height: 500px;" id="displayTickets">
+                            
+                            
 
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    id="ticketDetails">
-                                    Details
-                                </button>
-                            </li>
+                            
 
-
-                            <div class="modal fade" id="activeTicketsModal" tabindex="-1" role="dialog"
+                        </ul>
+                        <div class="modal fade" id="activeTicketsModal" tabindex="-1" role="dialog"
                                 aria-labelledby="activeTicketsModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -147,41 +142,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
-                                id="tickets">
-                                <span>Plate number:</span> B25252
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#exampleModal">
-                                    Details
-                                </button>
-                            </li>
-                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
-                                id="tickets">
-                                <span>Plate number:</span> A25252
-                                <span class="badge bg-primary rounded-pill">A</span>
-                            </li>
-
-                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
-                                id="tickets">
-                                <span>Plate number:</span> B25252
-                                <span class="badge bg-primary rounded-pill">A</span>
-                            </li>
-
-                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
-                                id="tickets">
-                                <span>Plate number:</span> B25252
-                                <span class="badge bg-primary rounded-pill">A</span>
-                            </li>
-
-                            <li class="shadow-sm list-group-item d-flex justify-content-between align-items-center"
-                                id="tickets">
-                                <span>Plate number:</span> B25252
-                                <span class="badge bg-primary rounded-pill">A</span>
-                            </li>
-
-                        </ul>
-
                     </div>
 
 
