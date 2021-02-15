@@ -28,6 +28,9 @@ const locationText = document.getElementById("locationText");
 const chargeText = document.getElementById("chargeText");
 const slotsText = document.getElementById("slotsText");
 
+
+
+
 let DBCompany;
 let DBUser;
 document.addEventListener("DOMContentLoaded",()=>{
@@ -110,18 +113,19 @@ function display_parking_officer(){
         let cursor = e.target.result;
         if(cursor){
             let listItem = `
-            <ul class="list-inline row list-item">
-                <li class="col-1 ml-0 pl-5 ">
-                    <input class="input-group" type="checkbox" value="" id="selectAll" />
+            <ul class="list-inline row list-item mt-0 " myAtr =${cursor.value.email}>
+                <li class="col-1 pl-lg-5 ">
+                    <input class="input-group" type="checkbox" onclick="onSelect(event)" value="" name="list" />
                 </li>
                 <li class="col-2">${cursor.value.name}</li>
                 <li class="col-2 ">${cursor.value.phone_no}</li>
-                <li class="col-3">${cursor.value.email}</li>
+                <li  class=" col-3">${cursor.value.email}</li>
                 <li class="col-2">${cursor.value.role}</li>
-                <li class="col-2 ">
-                    <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="#"><i class="fa fa-edit"></i> </a>
+                <li class="col-2 delete-item">
+                    <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="edit_PO.html?email=${cursor.value.email}"><i class="fa fa-edit"></i> </a>
                 </li>
             </ul>`;
+            
             parkingOfficer.innerHTML += listItem;
             cursor.continue();
         }
@@ -180,9 +184,7 @@ function updateProfile(){
     }
 }
 
-
-// parking officer part
-
+//parking officer create form
 addBtn.addEventListener('click',function(btn){
     
     form.style.display = "block";
@@ -193,6 +195,60 @@ cancelIcon.addEventListener('click',function(){
     form.style.display = "none";
     document.getElementById("add-btn").removeAttribute("disabled");
 });
+
+//checkbox
+const selectAllBox = document.getElementById("select-all");
+
+selectAllBox.onclick = function(){
+    
+    let checkboxes = document.getElementsByName('list')
+    if(selectAllBox.checked){
+        for (let index = 0; index < checkboxes.length; index++) {
+       
+            checkboxes[index].checked = true;
+            checkboxes[index].parentElement.parentElement.style.background  = "#00bfff";
+        }
+    }else{
+        for (let index = 0; index < checkboxes.length; index++) {
+            checkboxes[index].checked = false;
+            checkboxes[index].parentElement.parentElement.style.background  = "";
+        }
+    }
+   
+}
+
+function onSelect(event){
+    if(event.target.checked){
+        event.target.parentElement.parentElement.style.background = "#00bfff"
+    }else{
+        event.target.parentElement.parentElement.style.background = ""
+    }
+    
+}
+
+//action on the officers list
+
+// remove
+parkingOfficer.addEventListener('click',removeList);
+function removeList(e){
+    if (e.target.parentElement.classList.contains('delete-item')) {
+        if (confirm('Are You Sure about that ?')) {
+            
+            let taskID = e.target.parentElement.parentElement.getAttribute('myAtr');
+            // use a transaction
+            let transaction = DBUser.transaction(['users'], 'readwrite');
+            let objectStore = transaction.objectStore('users');
+            objectStore.delete(taskID);
+
+            transaction.oncomplete = () => {
+                e.target.parentElement.parentElement.remove();
+            }
+
+        }
+    }
+}
+
+
 
 
 
