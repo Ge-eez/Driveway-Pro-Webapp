@@ -52,7 +52,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
     function parkUser(){
-        if (plateInput.value === "") {
+        var regex = /^([A-Z a-z][0-9]{5})+$/;
+        var OK = regex.exec(plateInput.value);
+        if (!OK) {
+            console.error(plateInput.value + 'Proper plate number');
+        } else {
+            console.log('Thanks, your phone number is ' + OK[0]);
+        }
+
+        if (plateInput.value === "" || !OK ) {
             
             plateInput.style.borderColor = "red";
       
