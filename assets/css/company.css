@@ -15,11 +15,13 @@ h1,h2{
 #company-header li{
     box-sizing: border-box;
     font-size: 1.5rem;
+    padding:2% 0% 2% 5%;
 }
 #company-header a{
     color: white;
     text-transform: capitalize;
     font-weight: bold;
+    font-size: 20px;
 }
   
 #company-header a:hover{
@@ -134,11 +136,7 @@ li .active {
     width: 20px;
     height: 20px;
 }
-#more{
-display: none;
-height: 600px;
-background-color: rgb(131, 54, 138);
-}
+
 
 /* Responsive */
 
@@ -254,10 +252,6 @@ background-color: rgb(131, 54, 138);
         height: 400px;
       
     }
-    #more{
-      
-        height: 400px;
-       
-    }
+
 
 }
