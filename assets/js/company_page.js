@@ -17,8 +17,10 @@ const slotsInput = document.getElementById("slots");
 const officerFName = document.getElementById("officer-fName");
 const officerLName = document.getElementById("officer-lName");
 const officerEmail = document.getElementById("officer-Email");
+const officerPassword = document.getElementById("officer-pass");
 const officerPhone = document.getElementById("officer-phone");
-const officerSex = document.getElementById("officer-sex");
+const officerCompany = document.getElementById("officer-company");
+const officerRole = document.getElementById("role");
 //company profil data text
 const companyText = document.getElementById("companyText");
 const emailText = document.getElementById("emailText");
@@ -26,22 +28,25 @@ const locationText = document.getElementById("locationText");
 const chargeText = document.getElementById("chargeText");
 const slotsText = document.getElementById("slotsText");
 
-let DB;
+let DBCompany;
+let DBUser;
 document.addEventListener("DOMContentLoaded",()=>{
     let companyDB = indexedDB.open("companies",2)
     companyDB.onsuccess = function(){
-        DB = companyDB.result;
+        DBCompany = companyDB.result;
         displayProfile();
-        display_parking_officer();
+        
     }    
     companyDB.onupgradeneeded = function(e){
         
-        let db = e.target.result;
-        let objectStore = db.createObjectStore('parkingOfficer', { keyPath: 'companyEmail' });
-        objectStore.createIndex('parkingOfficer', ['name','companyEamil'], { unique: true });
-        console.log("created store");
+        
     }
 
+    let userDB = indexedDB.open("users");
+    userDB.onsuccess = function(){
+        DBUser = userDB.result;
+        display_parking_officer();
+    }
    
 });
 
@@ -65,21 +70,23 @@ function openLink(e, id){
     document.getElementById(id).style.display = "block";
    
 }
-// profile part
+// parking officer
  
 form.addEventListener('submit', add_parking_officer)
 var i = 0;
 function add_parking_officer(e){
     e.preventDefault(); 
     
-    let poDB = DB.transaction(["parkingOfficer"],'readwrite')
-    let objStore = poDB.objectStore('parkingOfficer');
-    
+    let poDB = DBUser.transaction(["users"],'readwrite')
+    let objStore = poDB.objectStore('users');
     let poInputs = {
+        company: officerCompany.value,
+        email: officerEmail.value,
         name: officerFName.value + " " + officerLName.value,
-        phoneNumber: officerPhone.value,
-        sex: officerSex.value,
-        companyEmail: officerEmail.value
+        password:officerPassword.value,
+        phone_no: officerPhone.value,
+        plate_number: "",
+        role: officerRole.value
     }
 
     let result = objStore.add(poInputs);
@@ -87,6 +94,7 @@ function add_parking_officer(e){
     result.onerror = (e)=>{console.log(e)}
     poDB.oncomplete = ()=>{
         console.log("new task added");
+        
         parkingOfficer.innerHTML = "";
         display_parking_officer();
     }
@@ -96,7 +104,8 @@ function add_parking_officer(e){
    
 }
 function display_parking_officer(){
-    let store = DB.transaction(['parkingOfficer']).objectStore('parkingOfficer');
+    let store = DBUser.transaction(['users']).objectStore('users');
+    
     store.openCursor().onsuccess = function(e){
         let cursor = e.target.result;
         if(cursor){
@@ -106,9 +115,9 @@ function display_parking_officer(){
                     <input class="input-group" type="checkbox" value="" id="selectAll" />
                 </li>
                 <li class="col-2">${cursor.value.name}</li>
-                <li class="col-2 ">${cursor.value.phoneNumber}</li>
-                <li class="col-3">${cursor.value.companyEmail}</li>
-                <li class="col-2">${cursor.value.sex}</li>
+                <li class="col-2 ">${cursor.value.phone_no}</li>
+                <li class="col-3">${cursor.value.email}</li>
+                <li class="col-2">${cursor.value.role}</li>
                 <li class="col-2 ">
                     <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="#"><i class="fa fa-edit"></i> </a>
                 </li>
@@ -120,8 +129,9 @@ function display_parking_officer(){
 
 }
 
+// profile part
 function displayProfile(){
-    let companyStore = DB.transaction(["companies"]).objectStore("companies");
+    let companyStore = DBCompany.transaction(["companies"]).objectStore("companies");
     companyStore.openCursor().onsuccess = function(e){
         let cursor = e.target.result;
         if(cursor){       
@@ -144,7 +154,7 @@ function displayProfile(){
 formUpdate.addEventListener('submit',updateProfile);
 
 function updateProfile(){
-    let companyStore = DB.transaction(["companies"],"readwrite").objectStore("companies");
+    let companyStore = DBCompany.transaction(["companies"],"readwrite").objectStore("companies");
     let request = companyStore.get(keyEmail);
     
 
