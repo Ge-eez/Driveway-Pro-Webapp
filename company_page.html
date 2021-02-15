@@ -35,16 +35,14 @@
     
     
                 <div class="row  pl-2 ">
-                    <li class="col-3  col-md-12 col-lg-12  col-xl-12">
+                    <li class="col-6  col-md-12 col-lg-12  col-xl-12">
                         <a href="#profile" class="tab-links active" onclick="openLink(event, 'profile')" >Profile</a>
                     </li>
                     <li class="col-6 col-md-12  col-lg-12 col-xl-12 "> 
                         <a href="#parking-officer"  class="tab-links" onclick="openLink(event, 'parking-officer')">Parking Officer</a>
                     </li>
                     
-                    <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
-                        <a href="#more"  class="tab-links" onclick="openLink(event, 'more')">More</a>
-                    </li>
+                   
                     
                 </div>
                 
@@ -123,13 +121,20 @@
                                 <input type="text" class="form-control" id="officer-phone" placeholder="+251">
                             </div>
                             <div class="form-group">
+                                <label for="company">Company</label>
+                                <input type="text" class="form-control" id="officer-company" placeholder="email">
+                            </div>
+                            <div class="form-group">
                                 <label for="inputEamil">E-mail</label>
                                 <input type="email" class="form-control" id="officer-Email" placeholder="email">
                             </div>
-                            
                             <div class="form-group">
-                                <label for="role">Sex</label>
-                                <input type="text" class="form-control" id="officer-sex" placeholder="sex">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="officer-pass" placeholder="password">
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" class="form-control" id="role" placeholder="role">
                             </div>
                             <button type="submit" class="login100-form-btn">Add</button>
                         </form>
@@ -151,10 +156,10 @@
                             <i class="fas fa-phone-alt mr-3 "></i>Phone Number
                         </li>
                         <li class="col-3">
-                            <i class="fas fa-envelope mr-3"></i>Company Email
+                            <i class="fas fa-envelope mr-3"></i>Email
                         </li>
                         <li class="col-2 ">
-                            <i class="fas fa-male"> </i> <i class="fas fa-female mr-3"></i>Sex
+                            <i class="fas fa-male"> </i> <i class="fas fa-female mr-3"></i>Role
                         </li>
                         
                         <li class="col-2">
@@ -167,10 +172,6 @@
                         <!-- list added from javascript -->
                         
                     </div>
-                </div >
-
-                <div class="row tab-content " id="more">
-                   
                 </div>
             </section>
 
