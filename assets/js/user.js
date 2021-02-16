@@ -138,10 +138,13 @@ async function addNewUser(data) {
     let transaction = DB.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
     let role;
+    let company;
     if (!data.role) role = "user"
     else role = data.role
+    if (!data.company) company = ""
+    else company = data.company
 
-    let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no)
+    let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no, company)
 
     return new Promise(function(resolve, reject) {
         let request = objectStore.add(res);
@@ -283,7 +286,6 @@ function readJSON(data) {
                     console.log("file found")
                     let toBeAdded = user
                     if (match(toBeAdded.password, data.password)) {
-                        console.log(data)
                         addNewUser(toBeAdded)
                     } else {
                         invalidLogin()
