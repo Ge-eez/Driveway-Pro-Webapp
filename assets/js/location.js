@@ -21,8 +21,8 @@ function GetMap() {
         }
         
 
-        console.log(position.coords.latitude,
-            position.coords.longitude);
+        // console.log(position.coords.latitude,
+        //     position.coords.longitude);
         //Center the map on the user's location.
         map.setView({ center: loc, zoom: 14 });
     });

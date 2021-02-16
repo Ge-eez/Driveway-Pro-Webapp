@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const parkContent = document.createElement('div');
                     parkContent.className = 'park_content';
+
+                    const ticketContent = document.createElement('div');
+                    ticketContent.className = 'ticket_content';
                     
 
                     let lat = position.coords.latitude;
@@ -111,61 +114,81 @@ document.addEventListener('DOMContentLoaded', () => {
                        
                         // console.log(cursor.value.name);
                         console.log(written_content.getAttribute('data-name'));
+                        
 
                         parkHere.addEventListener('click', parkHereTimer) 
                         function parkHereTimer(e) {
-                            console.log('clicked');
-                            console.log()
+                            console.log('clicked');   
                             
-                            if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {
-                                const promptMessage = document.createElement('a');
-                                promptMessage.className = 'details';
-                                promptMessage.innerHTML = '<p>more details</p>';
-                                modal.style.display = "block";
 
-
-                                span.onclick = function() {
-                                    modal.style.display = "none";
-                                    modal_content.innerHTML = '';
-                                }
-                
-                                window.onclick = function(event) {
-                                    if (event.target == modal) {
-                                        modal.style.display = "none";
-                                        modal_content.innerHTML = '';
-                                    }
-                                }
-
+                            console.log(e.target.parentElement.parentElement.firstChild.classList);                       
+                            if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {                         
                                 const exit = document.createElement('div');
                                 exit.className = 'exit';
-                                exit.innerHTML = '<a class="parkHere">Exit</a>'; 
+                                exit.innerHTML = '<a class="parkHere">Exit</a>';                                 
 
                                 function addZero(i) {
                                     if (i < 10) { i = "0" + i } // add zero in front of numbers < 10
                                     return i;
                                 }
 
-                                var today = new Date();
-                                var h = today.getHours();
-                                var m = today.getMinutes();
-                                var s = today.getSeconds();
-                                //get the AM / PM value 
-                                let am_pm = h > 12 ? 'PM' : 'AM';
-                                // Convert the hour to 12 format 
-                                h = h % 12 || 12;
-                                // add zero 
-                                m = addZero(m);
-                                s = addZero(s);
-                                // Assign to the UI [p]
-                                timerDemo.innerHTML = `Your starting time: ${h} : ${addZero(m)} : ${addZero(s)} ${am_pm }`;
+                                // function startTime() {
+                                    var today = new Date();
+                                    var h = today.getHours();
+                                    var m = today.getMinutes();
+                                    var s = today.getSeconds();
+                                    let startHour = h;
+                                    let startMin = m;
+                                    let startSec = s;
+                                    //get the AM / PM value 
+                                    let am_pm = h > 12 ? 'PM' : 'AM';
+                                    // Convert the hour to 12 format 
+                                    h = h % 12 || 12;
+                                    // add zero 
+                                    m = addZero(m);
+                                    
+                                    console.log(startHour, startMin, startSec);
+                                    // Assign to the UI [p]
+                                    timerDemo.innerHTML = `Your starting time: ${h} : ${addZero(m)} : ${s} ${am_pm }`;
+                                    // setTimeout(startTime, 500);
 
-                                let startHour = h;
-                                let startMin = m;
-                                let startSec = s;
+                                // }
+                                // startTime();
+                                
+                                
                                 
                                 let companyName = (e.target.parentElement.parentElement.firstChild.getAttribute('data-name'));
                                 let companyClosesAt = (e.target.parentElement.parentElement.firstChild.getAttribute('data-closes_at'));
                                 let companyCharge = (e.target.parentElement.parentElement.firstChild.getAttribute('data-charge'));
+                                let companyActiveSlots = (e.target.parentElement.parentElement.firstChild.getAttribute('data-active_slots'));
+                                console.log(companyActiveSlots);
+
+                                var transaction = DB.transaction(["companies"], "readwrite");
+                                var slotsChecker = transaction.objectStore("companies");
+                                var req = slotsChecker.openCursor();
+                                req.onerror = function(event) {
+                                    console.log("An error occured");
+                                };
+
+                                req.onsuccess = function(event) {
+                                    var cursor = event.target.result;
+                                    if(cursor){
+                                        // if(cursor.value.email == CompanyDB.email){//we find by id an user we want to update
+                                            // var company = {};
+                                            // company.active_slots -= 1;
+
+                                            // var res = cursor.update(company);
+                                            // res.onsuccess = function(e){
+                                            //     console.log("update success!!");
+                                            // }
+                                            // res.onerror = function(e){
+                                            //     console.log("update failed!!");
+                                            // }
+                                        // }
+                                        cursor.continue();
+                                    }
+                                }
+                                console.log(companyActiveSlots);
 
                                 let arrayOfBreaks = [];
                                 for (let index = 0; index < 5; index++) {
@@ -194,8 +217,55 @@ document.addEventListener('DOMContentLoaded', () => {
                                 parkContent.appendChild(arrayOfBreaks[4]);
                                 parkContent.appendChild(exit);
 
-                                
-                                // document.close();
+                                exit.addEventListener('click', userTicket) 
+                                function userTicket(e) {
+                                    console.log('exited');
+                                    console.log(e.target.parentElement.parentElement.parentElement.classList);
+                                    if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
+                                        // let companyName = (e.target.parentElement.parentElement.parentElement.getAttribute('data-name'));
+                                        // let companyClosesAt = (e.target.parentElement.parentElement.parentElement.getAttribute('data-closes_at'));
+                                        // let companyCharge = (e.target.parentElement.parentElement.parentElement.getAttribute('data-charge'));
+                                        console.log(companyCharge, companyClosesAt, companyName);
+
+                                        var now = new Date();
+                                        var hour = now.getHours();
+                                        var min = now.getMinutes();
+                                        var sec = now.getSeconds();
+                                        let x = `companyCharge 10.45`.match(/\d+/g).map(Number);
+                                        let charge = Number(`${x[0]}.${x[1]}`);
+                                        let price = ((hour-startHour)*charge) + ((min - startMin)*(charge/60)) + ((sec - startSec)*(charge/3600));
+                                        
+                                        console.log(hour);
+                                        console.log(startHour, startMin, startSec);
+
+                                        console.log((hour-startHour));
+
+                                        let arrayOfBreaks = [];
+                                        for (let index = 0; index < 5; index++) {
+                                            const br = document.createElement('p');
+                                            br.className = 'detailsBreak';
+                                            br.innerHTML = '<br>';
+                                            arrayOfBreaks.push(br);                    
+                                        }
+
+                                        nearbylists.innerHTML = '';
+
+                                        nearbylists.appendChild(ticketContent);
+                                        ticketContent.style.display = 'flex';
+                                        parkContent.style.flexDirection = 'column';
+                                        parkContent.style.textAlign = 'left';
+
+                                        ticketContent.appendChild(document.createTextNode(companyName));
+                                        ticketContent.appendChild(arrayOfBreaks[0]);
+                                        ticketContent.appendChild(document.createTextNode(`Your plate Number: ${userPlate}`));
+                                        ticketContent.appendChild(arrayOfBreaks[1]);                                    
+                                        ticketContent.appendChild(document.createTextNode(`Your total price is ${price.toFixed(2)}`));
+                                        ticketContent.appendChild(arrayOfBreaks[2]);
+                                        ticketContent.appendChild(exit);
+
+                                    }
+                                }
+
                             }
                         }
 
