@@ -1,19 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
     /*==================================================================
     [ DB ]*/
 
     let UserDB = indexedDB.open("users", version);
-    UserDB.onsuccess = function (event) {
+    UserDB.onsuccess = function(event) {
         console.log('Database Ready');
         DB = UserDB.result;
         // display
 
     };
-    UserDB.onerror = function (event) {
+    UserDB.onerror = function(event) {
         console.log('There was an error');
     };
-    UserDB.onupgradeneeded = function (e) {
+    UserDB.onupgradeneeded = function(e) {
         let db = e.target.result;
 
         let objectStore = db.createObjectStore('users', { keyPath: 'email' });
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let loggingIn = true;
     let signingUp = true;
 
-    validate_form.addEventListener('submit', function (e) {
+    validate_form.addEventListener('submit', function(e) {
         e.preventDefault();
         let check = true;
 
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let loginButton = document.querySelector('.login100-form-btn')
     let signup = document.querySelector('.sign-up')
 
-    forgot.addEventListener('click', function () {
+    forgot.addEventListener('click', function() {
         hider(name, phone_number, plate_number, password, forgotPassword, getBackSU, signup)
         shower(getBackLI)
         loginButton.textContent = ("Verify");
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         signingUp = false;
     });
 
-    signup.addEventListener('click', function () {
+    signup.addEventListener('click', function() {
         hider(forgotPassword, signup)
         shower(name, phone_number, plate_number, getBackSU)
         loginButton.textContent = ("Signup");
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearForm(...input)
     });
 
-    getBackLI.addEventListener('click', function () {
+    getBackLI.addEventListener('click', function() {
         hider(name, phone_number, plate_number, getBackLI)
         shower(password, forgotPassword, signup)
         loginButton.textContent = ("Login");
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         signingUp = false;
         clearForm(...input)
     })
-    getBackSU.addEventListener('click', function () {
+    getBackSU.addEventListener('click', function() {
         hider(name, phone_number, plate_number, getBackSU)
         shower(password, forgotPassword, signup)
         loginButton.textContent = ("Login");
@@ -143,9 +143,9 @@ async function addNewUser(data) {
 
     let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no)
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         let request = objectStore.add(res);
-        request.onsuccess = function () {
+        request.onsuccess = function() {
             clearForm(...input)
             resolve(request.result);
         }
@@ -163,11 +163,11 @@ async function addNewUser(data) {
 }
 async function addUserToJSON(data) {
     console.log("adding user to JSON")
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         function checker() {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', './assets/js/jsonData/user.json', true);
-            xhr.onload = function (e) {
+            xhr.onload = function(e) {
                 if (this.status == 200) {
                     const users = JSON.parse(this.responseText);
                     users.forEach(user => {
@@ -208,16 +208,16 @@ async function lookupUserInDB(data) {
     console.log("looking for the user in the DB")
     let email_id = data.email;
     let objectStore = DB.transaction('users').objectStore('users');
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         let request = objectStore.get(email_id);
-        request.onsuccess = function () {
+        request.onsuccess = function() {
             resolve(request.result);
         }
     });
 }
 async function lookupUserInJSON(data) {
     console.log("looking for the user in the JSON")
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         resolve(readJSON(data))
     });
 
@@ -225,20 +225,18 @@ async function lookupUserInJSON(data) {
 async function loginUser(data) {
     let myPromiseDB = lookupUserInDB(data)
     try {
-        myPromiseDB.then(function (result) {
+        myPromiseDB.then(function(result) {
             console.log("Finished looking up in the db")
             if (result) {
                 if (match(data.password, result.password)) {
                     // login user
                     console.log("Login")
                     loggedIn(result)
-                }
-                else {
+                } else {
                     // invalid login
                     invalidLogin()
                 }
-            }
-            else {
+            } else {
                 // Not in the DB
                 console.log("User not found in the db")
                 throw "err"
@@ -246,8 +244,7 @@ async function loginUser(data) {
         }).catch(err => {
             lookupUserInJSON(data)
         });
-    }
-    catch (err) {
+    } catch (err) {
         console.log(`Caught by try/catch ${error}`);
     }
 
@@ -278,7 +275,7 @@ function loggedIn(res) {
 function readJSON(data) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/js/jsonData/user.json', true);
-    xhr.onload = function (e) {
+    xhr.onload = function(e) {
         if (this.status == 200) {
             const users = JSON.parse(this.responseText);
             users.forEach(user => {
@@ -286,9 +283,9 @@ function readJSON(data) {
                     console.log("file found")
                     let toBeAdded = user
                     if (match(toBeAdded.password, data.password)) {
+                        console.log(data)
                         addNewUser(toBeAdded)
-                    }
-                    else {
+                    } else {
                         invalidLogin()
                     }
                 }
@@ -296,4 +293,4 @@ function readJSON(data) {
         }
     }
     xhr.send();
-} 
+}
