@@ -112,7 +112,7 @@ function display_parking_officer(){
     store.openCursor().onsuccess = function(e){
         let cursor = e.target.result;
         if(cursor){
-            if(cursor.value.company === keyEmail.slice(1,keyEmail.length-1) && cursor.value.role === "parking officer"){
+            if(cursor.value.company === keyEmail.slice(1,keyEmail.length-1) && cursor.value.role === "parking_officer"){
                 let listItem = `
                         <ul class="list-inline row list-item mt-0 " myAtr =${cursor.value.email}>
                             <li class="col-1 pl-lg-5 ">
