@@ -19,7 +19,7 @@ const officerLName = document.getElementById("officer-lName");
 const officerEmail = document.getElementById("officer-Email");
 const officerPassword = document.getElementById("officer-pass");
 const officerPhone = document.getElementById("officer-phone");
-const officerCompany = document.getElementById("officer-company");
+
 const officerRole = document.getElementById("role");
 //company profil data text
 const companyText = document.getElementById("companyText");
@@ -83,7 +83,7 @@ function add_parking_officer(e){
     let poDB = DBUser.transaction(["users"],'readwrite')
     let objStore = poDB.objectStore('users');
     let poInputs = {
-        company: officerCompany.value,
+        company:keyEmail.slice(1,keyEmail.length-1),
         email: officerEmail.value,
         name: officerFName.value + " " + officerLName.value,
         password:officerPassword.value,
@@ -94,7 +94,7 @@ function add_parking_officer(e){
 
     let result = objStore.add(poInputs);
     result.onsuccess = ()=>{}
-    result.onerror = (e)=>{console.log(e)}
+    result.onerror = (e)=>{alert("This user already exist.")}
     poDB.oncomplete = ()=>{
         console.log("new task added");
         
@@ -112,22 +112,26 @@ function display_parking_officer(){
     store.openCursor().onsuccess = function(e){
         let cursor = e.target.result;
         if(cursor){
-            let listItem = `
-            <ul class="list-inline row list-item mt-0 " myAtr =${cursor.value.email}>
-                <li class="col-1 pl-lg-5 ">
-                    <input class="input-group" type="checkbox" onclick="onSelect(event)" value="" name="list" />
-                </li>
-                <li class="col-2">${cursor.value.name}</li>
-                <li class="col-2 ">${cursor.value.phone_no}</li>
-                <li  class=" col-3">${cursor.value.email}</li>
-                <li class="col-2">${cursor.value.role}</li>
-                <li class="col-2 delete-item">
-                    <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="edit_PO.html?email=${cursor.value.email}"><i class="fa fa-edit"></i> </a>
-                </li>
-            </ul>`;
+            if(cursor.value.company === keyEmail.slice(1,keyEmail.length-1) && cursor.value.role === "parking officer"){
+                let listItem = `
+                        <ul class="list-inline row list-item mt-0 " myAtr =${cursor.value.email}>
+                            <li class="col-1 pl-lg-5 ">
+                                <input class="input-group" type="checkbox" onclick="onSelect(event)" value="" name="list" />
+                            </li>
+                            <li class="col-2">${cursor.value.name}</li>
+                            <li class="col-2 ">${cursor.value.phone_no}</li>
+                            <li  class=" col-3">${cursor.value.email}</li>
+                            <li class="col-2">${cursor.value.role}</li>
+                            <li class="col-2 delete-item">
+                                <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="edit_PO.html?email=${cursor.value.email}"><i class="fa fa-edit"></i> </a>
+                            </li>
+                        </ul>`;
             
-            parkingOfficer.innerHTML += listItem;
+                parkingOfficer.innerHTML += listItem;
+           
+            }
             cursor.continue();
+            
         }
     }
 
