@@ -1,111 +1,132 @@
 /* company page */
-h1,h2{
+
+h1,
+h2 {
     text-transform: uppercase;
     font-weight: bold;
 }
-#company-header{
-    background: linear-gradient(to bottom,#E76900 0%, #051c55 100%);
+
+#company-header {
+    background: linear-gradient(to bottom, #E76900 0%, #051c55 100%);
     height: auto;
     padding-top: 5%;
     margin: 0;
-   
-  }
-  
-  
-#company-header li{
+}
+
+#company-header li {
     box-sizing: border-box;
     font-size: 24px;
 }
-#company-header a{
+
+#company-header a {
     color: white;
     text-transform: capitalize;
     font-weight: normal;
 }
-  
-#company-header a:hover, #company-header .active{
-    font-weight: bold;
 
+#company-header a:hover,
+#company-header .active {
+    font-weight: bold;
 }
-  
+
 li .active {
     padding: 5% 25% 5% 3%;
 }
-  
-  
+
+
 /* profile section */
-#profile{
+
+#profile {
     height: auto;
     margin: 0;
     padding: 0;
     margin-bottom: 5%;
 }
-#profile>div:nth-child(1){
+
+#profile>div:nth-child(1) {
     border: 1px solid;
     border-bottom-right-radius: 30%;
     height: 12rem;
     margin: auto;
     text-align: center;
     color: #fff;
-    background-color:#E76900;
+    background-color: #E76900;
 }
-#profile>div:nth-child(1)>h5{
+
+#profile>div:nth-child(1)>h5 {
     text-align: left;
     margin: 5% 0% 5% 4%;
 }
-#profile>div:nth-child(1)>h5>i{
+
+#profile>div:nth-child(1)>h5>i {
     margin-right: 8%;
 }
-#profile>div:nth-child(2){
+
+#profile>div:nth-child(2) {
     border: 1px solid;
     border-radius: 5%;
     margin-left: 2%;
     padding: 5% 1%;
     text-align: center;
 }
-#profile>div:nth-child(2)>form{
+
+#profile>div:nth-child(2)>form {
     text-align: left;
-    margin: 2% 3% 3% 1%  ;
+    margin: 2% 3% 3% 1%;
 }
 
+
 /* parking officer section */
-#companies, #users{
+
+#companies,
+#users {
     display: none;
     height: 800px;
 }
 
-#companies h2, #users h2{
+#companies h2,
+#users h2 {
     background-color: #0a1b46;
     color: white;
     padding: 3% 0% 3% 5%;
     margin: 0%;
 }
-#companies #option, #users #option{
+
+#companies #option,
+#users #option {
     margin: 0;
     background-color: #061335;
     padding: 1% 0% 1% 0%;
     margin-bottom: 2%;
-    
 }
-#companies #add-btn, #users #add-btn{
+
+#companies #add-btn,
+#users #add-btn {
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
 }
-#companies #header, #users #header{
+
+#companies #header,
+#users #header {
     padding-bottom: 1%;
     border-bottom: 2px solid;
     text-align: center;
 }
-#companies .list-inline, #users .list-inline{
+
+#companies .list-inline,
+#users .list-inline {
     border-bottom: 1px solid;
     padding-bottom: 1%;
     text-align: center;
 }
-#user-pop-up, #company-pop-up{
+
+#user-pop-up,
+#company-pop-up {
     position: absolute;
     width: 25%;
     display: none;
-    right:8%;
+    right: 8%;
     top: 15%;
     padding: 0% 1% 1% 1%;
     border: 1px solid none;
@@ -113,90 +134,92 @@ li .active {
     z-index: 9;
     background-color: rgb(204, 198, 198);
 }
-#user-pop-up .far, #company-pop-up .far{
+
+#user-pop-up .far,
+#company-pop-up .far {
     position: relative;
     left: 94%;
     top: -1%;
     margin-top: 3px;
 }
+
 .form-container {
     max-width: 300px;
     padding: 10px;
 }
-.addScroll{
-    overflow-y:auto;
+
+.addScroll {
+    overflow-y: auto;
     height: 550px;
-  }
-#companies ul>li>input, #users  ul>li>input{
+}
+
+#companies ul>li>input,
+#users ul>li>input {
     width: 20px;
     height: 20px;
 }
 
+
 /* Responsive */
 
-@media(max-width:1200px){
-    h1,h2{
+@media(max-width:1200px) {
+    h1,
+    h2 {
         font-size: 1.2rem;
     }
-    #profile>div:nth-child(1){
+    #profile>div:nth-child(1) {
         height: 300px;
     }
-    #profile>div:nth-child(1)>h5{
+    #profile>div:nth-child(1)>h5 {
         margin: 3% 0% 5% 1%;
         font-size: 1rem;
     }
-    #profile>div:nth-child(1)>h5>i{
+    #profile>div:nth-child(1)>h5>i {
         margin-right: 2%;
     }
-    #profile>div:nth-child(2){
+    #profile>div:nth-child(2) {
         margin-right: 0%;
     }
-  
 }
-@media(max-width:768){
-    #company-header{
+
+@media(max-width:768) {
+    #company-header {
         font-size: 1rem;
-       
-      }
-    h1,h2{
+    }
+    h1,
+    h2 {
         font-size: 1.2rem;
     }
-    
-    #profile>div:nth-child(1){
-     
+    #profile>div:nth-child(1) {
         height: 300px;
- 
     }
-    #profile>div:nth-child(1)>h5{
+    #profile>div:nth-child(1)>h5 {
         text-align: justify;
-        margin:0% 0% 2% 1%;
+        margin: 0% 0% 2% 1%;
         font-size: 1rem;
-     
     }
-    #profile>div:nth-child(1)>h5>i{
+    #profile>div:nth-child(1)>h5>i {
         margin-right: 2%;
     }
-    #profile>div:nth-child(2){
-    
+    #profile>div:nth-child(2) {
         border-radius: 5%;
-       
         margin-right: 0%;
-       
     }
-    
 }
-@media (max-width: 576px){
-    h1,h2{
+
+@media (max-width: 576px) {
+    h1,
+    h2 {
         font-size: 1.2rem;
         text-transform: uppercase;
         font-weight: bold;
     }
-    #company-header{
+    #company-header {
         height: fit-content;
-        padding:2% 0% 2% 5%;
-        background: linear-gradient(to right,#E76900 0%, #051c55 100%);
+        padding: 2% 0% 2% 5%;
+        background: linear-gradient(to right, #E76900 0%, #051c55 100%);
     }
-    #company-header a{
+    #company-header a {
         margin-bottom: 0%;
         font-size: 14px;
         line-height: 1.7;
@@ -206,50 +229,38 @@ li .active {
         margin: 0;
         background-color: rgb(57, 125, 228);
     }
-
     /* profile section responsive */
-    #profile{
-
+    #profile {
         height: auto;
         margin-bottom: 5%;
     }
-    #profile>div:nth-child(1){
-   
+    #profile>div:nth-child(1) {
         height: 200px;
-     
     }
-    #profile>div:nth-child(1)>h5{
+    #profile>div:nth-child(1)>h5 {
         text-align: justify;
-        margin:0% 0% 2% 1%;
+        margin: 0% 0% 2% 1%;
         font-size: 1rem;
         /* font-size: 1rem; */
     }
-    #profile>div:nth-child(1)>h5>i{
+    #profile>div:nth-child(1)>h5>i {
         margin-right: 5%;
     }
-    #profile>div:nth-child(2){
+    #profile>div:nth-child(2) {
         border: 1px solid;
         border-radius: 5%;
         margin-left: 5%;
         padding: 5% 1%;
         text-align: center;
     }
-    #profile>div:nth-child(2)>form{
+    #profile>div:nth-child(2)>form {
         text-align: left;
-        margin: 0 ;
+        margin: 0;
     }
-
-
-    #companies{
- 
-        
+    #companies {
         height: 400px;
-      
     }
-    #users{
-      
+    #users {
         height: 400px;
-       
     }
-
 }
