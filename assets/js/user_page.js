@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             userPlate = cursor.value.plate_number;
         }
-        console.log('Nearby parking places displayed successfully');
         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
         // where R is earth’s radius (mean radius = 6,371km);
         // note that angles need to be in radians to pass to trig functions!
@@ -101,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const link = document.createElement('a');
                     link.className = 'details';
-                    link.innerHTML = '<p>more details</p>';
+                    link.innerHTML = '<a style="color: #7CB9E8">more details</a>';
 
                     const parkHere = document.createElement('div');
                     parkHere.className = 'parkHereContainer';
@@ -140,9 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1)) {
                         // Create text node and append it
                         li.setAttribute('data-email', cursor.value.email);
-                        li.setAttribute('data-name', `Name of Company: ${cursor.value.name}`);
+                        li.setAttribute('data-name', `Company: ${cursor.value.name}`);
                         li.setAttribute('data-closes_at', `Parking place closes at: ${cursor.value.closes_at}`);
-                        li.setAttribute('data-charge', `Charges ${cursor.value.charge} Birr per hour`);
+                        li.setAttribute('data-charge', `Charges per hour: ${cursor.value.charge} Birr`);
                         li.setAttribute('data-active_slots', `Current parking slots available: ${cursor.value.active_slots}`);
                         li.appendChild(document.createTextNode(cursor.value.name));
                         li.appendChild(document.createTextNode(cursor.value.email));
@@ -160,12 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         getdir.style.padding = '0';            
 
                         parkHere.addEventListener('click', parkHereTimer); 
-                        function parkHereTimer(e) {    
-                            console.log(e.target.parentElement.parentElement.firstChild.classList);                       
+                        function parkHereTimer(e) {                      
                             if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {                         
                                 const exit = document.createElement('div');
                                 exit.className = 'exit';
-                                exit.innerHTML = '<a class="parkHere">Done Parking</a>';   
+                                exit.innerHTML = '<a class="parkHere" style="font-size: 1.2rem">Done Parking</a>';   
 
                                 let today = new Date();
                                 let h = today.getHours();
@@ -252,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 };
 
                                 req.onsuccess = function(event) {
-                                    console.log(companyEmail);
                                     var cursor = event.target.result;
                                     if(cursor){
                                         if(cursor.value.email === companyEmail){//we find by id an user we want to update
@@ -287,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 parkContent.style.flexDirection = 'column';
                                 parkContent.style.textAlign = 'center';
                                 parkContent.style.margin = '4rem';
+                                parkContent.style.fontSize = '1.2rem';
 
                                 parkContent.appendChild(document.createTextNode(companyName));
                                 parkContent.appendChild(arrayOfBreaks[0]);
@@ -302,12 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 exit.addEventListener('click', userTicket) 
                                 function userTicket(e) {
-                                    console.log('exited');
-                                    console.log(e.target.parentElement.parentElement.parentElement.classList);
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
                                         done.className = 'done parkHereContainer';
-                                        done.innerHTML = '<a class="parkHere">Exit</a>';
+                                        done.innerHTML = '<a class="parkHere" style="font-size: 1.2rem">Exit</a>';
                                         
                                         var now = new Date();
                                         var hour = now.getHours();
@@ -336,10 +332,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ticketContent.style.flexDirection = 'column';
                                         ticketContent.style.textAlign = 'center';
                                         ticketContent.style.margin = '4rem';
+                                        ticketContent.style.fontSize = '1.2rem';
 
                                         const infoDone = document.createElement('div');
                                         infoDone.className = 'done';
                                         infoDone.innerHTML = '<p>Please make sure to show this page to the parking officer :) Thank you for using our service</p>';
+
+                                        infoDone.style.fontSize = '1.5rem';
 
                                         ticketContent.appendChild(infoDone);
                                         ticketContent.appendChild(arrayOfBreaks[0]);
@@ -347,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ticketContent.appendChild(arrayOfBreaks[1]);
                                         ticketContent.appendChild(document.createTextNode(`Your plate Number: ${userPlate}`));
                                         ticketContent.appendChild(arrayOfBreaks[2]);                                    
-                                        ticketContent.appendChild(document.createTextNode(`Your total price is ${price.toFixed(2)}`));
+                                        ticketContent.appendChild(document.createTextNode(`Your total price is ${price.toFixed(2)} Birr`));
                                         ticketContent.appendChild(arrayOfBreaks[3]);
                                         ticketContent.appendChild(timerDemo);
                                         ticketContent.appendChild(arrayOfBreaks[4]);
@@ -360,29 +359,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                             const closingInfo = document.createElement('div');
                                             closingInfo.className = 'done';
-                                            closingInfo.innerHTML = '<p>Drive Way Pro!! Thank you for using our service</p>';
+                                            closingInfo.innerHTML = '<p>Drive Way Pro</p>';
 
+                                            closingInfo.style.fontSize = '4rem';
+                                            closingInfo.style.textAlign = 'center';
+                                            closingInfo.style.margin = '1.5rem';
                                             
                                             nearbylists.appendChild(closingContent);
                                             closingContent.appendChild(closingInfo);
-
-
-                                            // modal.style.display = "block";
-                                            // modal.style.position = "absolute";
-                                            // modal.style.zIndex = "1000";
-                                            // modal_content.style.textAlign = "center";
-
-                                            // span.onclick = function() {
-                                            //     modal.style.display = "none";
-                                            //     modal_content.innerHTML = '';
-                                            // }
-
-                                            // window.onclick = function(event) {
-                                            //     if (event.target == modal) {
-                                            //         modal.style.display = "none";
-                                            //         modal_content.innerHTML = '';
-                                            //     }
-                                            // }
 
                                         }
 
@@ -429,8 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal_content.appendChild(document.createTextNode(dataActiveSlots));
                 modal_content.appendChild(arrayOfBreaks[3]);
 
-
-                // modal_content.style.display = "block";
                 modal.style.display = "block";
 
                 span.onclick = function() {
