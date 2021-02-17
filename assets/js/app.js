@@ -25,6 +25,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     };
 
+    if (!localStorage.getItem("user")) {
+        console.log(`Login`);
+        let arrayOfBreaks = [];
+        for (let index = 0; index < 2; index++) {
+            const br = document.createElement('p');
+            br.className = 'detailsBreak';
+            br.innerHTML = '<br>';
+            arrayOfBreaks.push(br);                    
+        }
+
+        const info = document.createElement('a');
+        info.className = 'details';
+        info.innerHTML = '<p>You must first login to access this page :) Thank you</p>';
+
+        const infoBtn = document.createElement('div');
+        infoBtn.className = 'parkHereContainer';
+        infoBtn.innerHTML = '<a class="parkHere">Log in</a>';
+
+        modal_content.appendChild(info);
+        modal_content.appendChild(arrayOfBreaks[0]);
+        modal_content.appendChild(infoBtn);
+        modal_content.appendChild(arrayOfBreaks[1]);
+
+        modal.style.display = "block";
+        modal.style.position = "absolute";
+        modal.style.zIndex = "1000";
+
+        span.onclick = function() {
+            modal.style.display = "none";
+            modal_content.innerHTML = '';
+            window.history.back();
+        }
+
+        infoBtn.onclick = function() {
+            modal.style.display = "none";
+            modal_content.innerHTML = '';
+            window.history.back();
+        }
+    }
+
     parkBtn.addEventListener("click", park);
     function park(e) {
         let objectStoreUser = db.transaction("users").objectStore("users");
@@ -93,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Identify nearby parking place within a distance of 5 km
                     if (distance <= 5 && (cursor.value.active_slots > 0)) {
                         // Create text node and append it
+                        li.setAttribute('data-email', cursor.value.email);
                         li.setAttribute('data-name', `Name of Company: ${cursor.value.name}`);
                         li.setAttribute('data-closes_at', `Parking place closes at: ${cursor.value.closes_at}`);
                         li.setAttribute('data-charge', `Charges ${cursor.value.charge} Birr per hour`);
@@ -127,10 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 exit.className = 'exit';
                                 exit.innerHTML = '<a class="parkHere">Exit</a>';                                 
 
-                                function addZero(i) {
-                                    if (i < 10) { i = "0" + i } // add zero in front of numbers < 10
-                                    return i;
-                                }
+                                // function addZero(i) {
+                                //     if (i < 10) { i = "0" + i } // add zero in front of numbers < 10
+                                //     return i;
+                                // }
 
                                 // function startTime() {
                                     var today = new Date();
@@ -145,23 +186,39 @@ document.addEventListener('DOMContentLoaded', () => {
                                     // Convert the hour to 12 format 
                                     h = h % 12 || 12;
                                     // add zero 
-                                    m = addZero(m);
                                     
                                     console.log(startHour, startMin, startSec);
                                     // Assign to the UI [p]
-                                    timerDemo.innerHTML = `Your starting time: ${h} : ${addZero(m)} : ${s} ${am_pm }`;
+                                    timerDemo.innerHTML = `Your starting time: ${h} : ${m} : ${s} ${am_pm }`;
                                     // setTimeout(startTime, 500);
 
                                 // }
                                 // startTime();
                                 
                                 
-                                
+                                let companyEmail = (e.target.parentElement.parentElement.firstChild.getAttribute('data-email'));
                                 let companyName = (e.target.parentElement.parentElement.firstChild.getAttribute('data-name'));
                                 let companyClosesAt = (e.target.parentElement.parentElement.firstChild.getAttribute('data-closes_at'));
                                 let companyCharge = (e.target.parentElement.parentElement.firstChild.getAttribute('data-charge'));
                                 let companyActiveSlots = (e.target.parentElement.parentElement.firstChild.getAttribute('data-active_slots'));
                                 console.log(companyActiveSlots);
+                                // let arr = `8:30:04`.match(/\d+/g).map(Number);
+                                // let arr1 = companyClosesAt.match(/\d+/g).map(Number);
+                                // console.log(arr1.length);
+                                // if (arr1.length < 3) {
+                                //     let z = '';
+                                //     for (let index = 0; index < 3; index++) {
+                                //         if (arr1[index] == 'undefined') {
+                                //             z = String(index);
+                                //             console.log(z);
+                                //             arr1.z = '0';
+                                //         }
+                                        
+                                //     }
+                                //     console.log(typeof(arr1), arr1[1]);
+                                // }
+                                
+                                // console.log(companyClosesAt);
 
                                 var transaction = DB.transaction(["companies"], "readwrite");
                                 var slotsChecker = transaction.objectStore("companies");
@@ -171,9 +228,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 };
 
                                 req.onsuccess = function(event) {
+                                    console.log(companyEmail);
                                     var cursor = event.target.result;
                                     if(cursor){
-                                        // if(cursor.value.email == CompanyDB.email){//we find by id an user we want to update
+                                        if(cursor.value.email === companyEmail){//we find by id an user we want to update
                                             // var company = {};
                                             // company.active_slots -= 1;
 
@@ -184,11 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                             // res.onerror = function(e){
                                             //     console.log("update failed!!");
                                             // }
-                                        // }
+                                        }
                                         cursor.continue();
                                     }
                                 }
-                                console.log(companyActiveSlots);
+                                // console.log(companyActiveSlots);
 
                                 let arrayOfBreaks = [];
                                 for (let index = 0; index < 5; index++) {
@@ -231,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         var hour = now.getHours();
                                         var min = now.getMinutes();
                                         var sec = now.getSeconds();
-                                        let x = `companyCharge 10.45`.match(/\d+/g).map(Number);
+                                        let x = companyCharge.match(/\d+/g).map(Number);
                                         let charge = Number(`${x[0]}.${x[1]}`);
                                         let price = ((hour-startHour)*charge) + ((min - startMin)*(charge/60)) + ((sec - startSec)*(charge/3600));
                                         
