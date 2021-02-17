@@ -135,8 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let closingHour = cursor.value.closes_at.includes('PM') || cursor.value.closes_at.includes('pm') || cursor.value.closes_at.includes('Pm') || cursor.value.closes_at.includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
 
+                    let openingHour = cursor.value.opens_at.includes('PM') || cursor.value.opens_at.includes('pm') || cursor.value.opens_at.includes('Pm') || cursor.value.opens_at.includes('pM') ? cursor.value.opens_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.opens_at.match(/\d+/g).map(Number)[0];
+
                     // Identify nearby parking place within a distance of 5 km
-                    if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1)) {
+                    if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1) && ((hourNow - openingHour) >= 0)) {
                         // Create text node and append it
                         li.setAttribute('data-email', cursor.value.email);
                         li.setAttribute('data-name', `Company: ${cursor.value.name}`);
