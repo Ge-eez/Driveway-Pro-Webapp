@@ -113,11 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const ticketContent = document.createElement('div');
                     ticketContent.className = 'ticket_content';
-                    
 
+                    const closingContent = document.createElement('div');
+                    closingContent.className = 'closing_content';
+                    
                     let lat = position.coords.latitude;
                     let lng = position.coords.longitude;
-                    console.log(cursor.value.latitude);
+
                     let R = 6371; // km
                     let dLat = (cursor.value.latitude - lat).toRad();
                     let dLon = (cursor.value.longitude - lng).toRad();
@@ -128,10 +130,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
                     let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
                     let distance = R * c;
-                    console.log(distance);
+
+                    let hoursNow = new Date();
+                    let hourNow = hoursNow.getHours();
+
+                    let closingHour = cursor.value.closes_at.includes('PM') || cursor.value.closes_at.includes('pm') || cursor.value.closes_at.includes('Pm') || cursor.value.closes_at.includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
 
                     // Identify nearby parking place within a distance of 5 km
-                    if (distance <= 5 && (cursor.value.active_slots > 0)) {
+                    if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1)) {
                         // Create text node and append it
                         li.setAttribute('data-email', cursor.value.email);
                         li.setAttribute('data-name', `Name of Company: ${cursor.value.name}`);
@@ -152,73 +158,91 @@ document.addEventListener('DOMContentLoaded', () => {
                         map.style.display = 'none';
                         parkBtn.style.display = 'none';
                         getdir.style.padding = '0';            
-                       
-                        // console.log(cursor.value.name);
-                        console.log(written_content.getAttribute('data-name'));
-                        
 
-                        parkHere.addEventListener('click', parkHereTimer) 
-                        function parkHereTimer(e) {
-                            console.log('clicked');   
-                            
-
+                        parkHere.addEventListener('click', parkHereTimer); 
+                        function parkHereTimer(e) {    
                             console.log(e.target.parentElement.parentElement.firstChild.classList);                       
                             if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {                         
                                 const exit = document.createElement('div');
                                 exit.className = 'exit';
-                                exit.innerHTML = '<a class="parkHere">Exit</a>';                                 
+                                exit.innerHTML = '<a class="parkHere">Done Parking</a>';   
 
-                                // function addZero(i) {
-                                //     if (i < 10) { i = "0" + i } // add zero in front of numbers < 10
-                                //     return i;
-                                // }
+                                let today = new Date();
+                                let h = today.getHours();
+                                let m = today.getMinutes();
+                                let s = today.getSeconds();
+                                let startHour = h;
+                                let startMin = m;
+                                let startSec = s;
+                                //get the AM / PM value 
+                                let am_pm = h > 12 ? 'PM' : 'AM';
+                                // Convert the hour to 12 format 
+                                h = h % 12 || 12;
 
-                                // function startTime() {
-                                    var today = new Date();
-                                    var h = today.getHours();
-                                    var m = today.getMinutes();
-                                    var s = today.getSeconds();
-                                    let startHour = h;
-                                    let startMin = m;
-                                    let startSec = s;
-                                    //get the AM / PM value 
-                                    let am_pm = h > 12 ? 'PM' : 'AM';
-                                    // Convert the hour to 12 format 
-                                    h = h % 12 || 12;
-                                    // add zero 
-                                    
-                                    console.log(startHour, startMin, startSec);
-                                    // Assign to the UI [p]
-                                    timerDemo.innerHTML = `Your starting time: ${h} : ${m} : ${s} ${am_pm }`;
-                                    // setTimeout(startTime, 500);
-
-                                // }
-                                // startTime();
-                                
+                                // Assign to the UI [p]
+                                timerDemo.innerHTML = `Start time: ${h} : ${m} : ${s} ${am_pm }`;                                
                                 
                                 let companyEmail = (e.target.parentElement.parentElement.firstChild.getAttribute('data-email'));
                                 let companyName = (e.target.parentElement.parentElement.firstChild.getAttribute('data-name'));
                                 let companyClosesAt = (e.target.parentElement.parentElement.firstChild.getAttribute('data-closes_at'));
                                 let companyCharge = (e.target.parentElement.parentElement.firstChild.getAttribute('data-charge'));
                                 let companyActiveSlots = (e.target.parentElement.parentElement.firstChild.getAttribute('data-active_slots'));
-                                console.log(companyActiveSlots);
-                                // let arr = `8:30:04`.match(/\d+/g).map(Number);
-                                // let arr1 = companyClosesAt.match(/\d+/g).map(Number);
-                                // console.log(arr1.length);
-                                // if (arr1.length < 3) {
-                                //     let z = '';
-                                //     for (let index = 0; index < 3; index++) {
-                                //         if (arr1[index] == 'undefined') {
-                                //             z = String(index);
-                                //             console.log(z);
-                                //             arr1.z = '0';
-                                //         }
-                                        
-                                //     }
-                                //     console.log(typeof(arr1), arr1[1]);
-                                // }
-                                
-                                // console.log(companyClosesAt);
+                                // console.log(companyActiveSlots);
+                                let current = `8:30:04`.match(/\d+/g).map(Number);
+                                let closesAt = companyClosesAt.match(/\d+/g).map(Number);
+                                let closes = 0;
+
+                                if (closesAt.length === 1) {
+                                    closes = Number(`${closesAt[0]}.${0}.${0}`);
+                                } else if (closesAt.length === 2) {
+                                    closes = Number(`${closesAt[0]}.${closesAt[1]}.${0}`);
+                                } else {
+                                    closes = Number(`${closesAt[0]}.${closesAt[1]}.${closesAt[2]}`);
+                                }
+                                let currently = Number(`${current[0]}.${current[1]}.${current[2]}`);
+
+                                if (closes - currently <= 0.30) {
+                                    let arrayOfBreaks = [];
+                                    for (let index = 0; index < 2; index++) {
+                                        const br = document.createElement('p');
+                                        br.className = 'detailsBreak';
+                                        br.innerHTML = '<br>';
+                                        arrayOfBreaks.push(br);                    
+                                    }
+                                    const notify = document.createElement('a');
+                                    notify.className = 'details';
+                                    notify.innerHTML = '<p>You have less than 30 minutes to unpark your vehicle please respect the companys closing hour</p>';
+
+                                    const notifyBtn = document.createElement('div');
+                                    notifyBtn.className = 'parkHereContainer';
+                                    notifyBtn.innerHTML = '<a class="parkHere">Log in</a>';
+
+                                    modal_content.appendChild(notify);
+                                    modal_content.appendChild(arrayOfBreaks[0]);
+                                    modal_content.appendChild(notifyBtn);
+                                    modal_content.appendChild(arrayOfBreaks[1]);
+
+                                    modal.style.display = "block";
+                                    modal.style.position = "absolute";
+                                    modal.style.zIndex = "1000";
+
+                                    span.onclick = function() {
+                                        modal.style.display = "none";
+                                        modal_content.innerHTML = '';
+                                    }
+
+                                    notifyBtn.onclick = function() {
+                                        modal.style.display = "none";
+                                        modal_content.innerHTML = '';
+                                    }
+
+                                    window.onclick = function(event) {
+                                        if (event.target == modal) {
+                                            modal.style.display = "none";
+                                            modal_content.innerHTML = '';
+                                        }
+                                    }
+                                }
 
                                 var transaction = DB.transaction(["companies"], "readwrite");
                                 var slotsChecker = transaction.objectStore("companies");
@@ -261,7 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 nearbylists.appendChild(parkContent);
                                 parkContent.style.display = 'flex';
                                 parkContent.style.flexDirection = 'column';
-                                parkContent.style.textAlign = 'left';
+                                parkContent.style.textAlign = 'center';
+                                parkContent.style.margin = '4rem';
 
                                 parkContent.appendChild(document.createTextNode(companyName));
                                 parkContent.appendChild(arrayOfBreaks[0]);
@@ -280,11 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     console.log('exited');
                                     console.log(e.target.parentElement.parentElement.parentElement.classList);
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
-                                        // let companyName = (e.target.parentElement.parentElement.parentElement.getAttribute('data-name'));
-                                        // let companyClosesAt = (e.target.parentElement.parentElement.parentElement.getAttribute('data-closes_at'));
-                                        // let companyCharge = (e.target.parentElement.parentElement.parentElement.getAttribute('data-charge'));
-                                        console.log(companyCharge, companyClosesAt, companyName);
-
+                                        const done = document.createElement('div');
+                                        done.className = 'done parkHereContainer';
+                                        done.innerHTML = '<a class="parkHere">Exit</a>';
+                                        
                                         var now = new Date();
                                         var hour = now.getHours();
                                         var min = now.getMinutes();
@@ -293,13 +317,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                         let charge = Number(`${x[0]}.${x[1]}`);
                                         let price = ((hour-startHour)*charge) + ((min - startMin)*(charge/60)) + ((sec - startSec)*(charge/3600));
                                         
-                                        console.log(hour);
-                                        console.log(startHour, startMin, startSec);
-
-                                        console.log((hour-startHour));
+                                        const endTime = document.createElement('div');
+                                        endTime.className = 'endTime';
+                                        endTime.innerHTML = `End time: ${hour} : ${min} : ${sec} ${am_pm }`; 
 
                                         let arrayOfBreaks = [];
-                                        for (let index = 0; index < 5; index++) {
+                                        for (let index = 0; index < 7; index++) {
                                             const br = document.createElement('p');
                                             br.className = 'detailsBreak';
                                             br.innerHTML = '<br>';
@@ -310,16 +333,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                         nearbylists.appendChild(ticketContent);
                                         ticketContent.style.display = 'flex';
-                                        parkContent.style.flexDirection = 'column';
-                                        parkContent.style.textAlign = 'left';
+                                        ticketContent.style.flexDirection = 'column';
+                                        ticketContent.style.textAlign = 'center';
+                                        ticketContent.style.margin = '4rem';
 
-                                        ticketContent.appendChild(document.createTextNode(companyName));
+                                        const infoDone = document.createElement('div');
+                                        infoDone.className = 'done';
+                                        infoDone.innerHTML = '<p>Please make sure to show this page to the parking officer :) Thank you for using our service</p>';
+
+                                        ticketContent.appendChild(infoDone);
                                         ticketContent.appendChild(arrayOfBreaks[0]);
+                                        ticketContent.appendChild(document.createTextNode(companyName));
+                                        ticketContent.appendChild(arrayOfBreaks[1]);
                                         ticketContent.appendChild(document.createTextNode(`Your plate Number: ${userPlate}`));
-                                        ticketContent.appendChild(arrayOfBreaks[1]);                                    
+                                        ticketContent.appendChild(arrayOfBreaks[2]);                                    
                                         ticketContent.appendChild(document.createTextNode(`Your total price is ${price.toFixed(2)}`));
-                                        ticketContent.appendChild(arrayOfBreaks[2]);
-                                        ticketContent.appendChild(exit);
+                                        ticketContent.appendChild(arrayOfBreaks[3]);
+                                        ticketContent.appendChild(timerDemo);
+                                        ticketContent.appendChild(arrayOfBreaks[4]);
+                                        ticketContent.appendChild(endTime);
+                                        ticketContent.appendChild(arrayOfBreaks[5]);
+                                        ticketContent.appendChild(done);
+
+                                        done.onclick = function() {   
+                                            ticketContent.innerHTML = '';  
+
+                                            const closingInfo = document.createElement('div');
+                                            closingInfo.className = 'done';
+                                            closingInfo.innerHTML = '<p>Drive Way Pro!! Thank you for using our service</p>';
+
+                                            
+                                            nearbylists.appendChild(closingContent);
+                                            closingContent.appendChild(closingInfo);
+
+
+                                            // modal.style.display = "block";
+                                            // modal.style.position = "absolute";
+                                            // modal.style.zIndex = "1000";
+                                            // modal_content.style.textAlign = "center";
+
+                                            // span.onclick = function() {
+                                            //     modal.style.display = "none";
+                                            //     modal_content.innerHTML = '';
+                                            // }
+
+                                            // window.onclick = function(event) {
+                                            //     if (event.target == modal) {
+                                            //         modal.style.display = "none";
+                                            //         modal_content.innerHTML = '';
+                                            //     }
+                                            // }
+
+                                        }
 
                                     }
                                 }
@@ -342,19 +407,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function details(e) {
         if (e.target.parentElement.classList.contains('details')) {
-                // get the task id
                 let arrayOfBreaks = [];
                 for (let index = 0; index < 4; index++) {
                     const br = document.createElement('p');
                     br.className = 'detailsBreak';
                     br.innerHTML = '<br>';
                     arrayOfBreaks.push(br);                    
-                }
-
-                // const parkHere = document.createElement('div');
-                // parkHere.className = 'parkHereContainer';
-                // parkHere.innerHTML = '<a class="parkHere">Park Here</a>';               
-
+                }  
 
                 let dataName = (e.target.parentElement.parentElement.getAttribute('data-name'));
                 let dataCharge = (e.target.parentElement.parentElement.getAttribute('data-charge'));
@@ -368,13 +427,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal_content.appendChild(document.createTextNode(dataClosesAt));
                 modal_content.appendChild(arrayOfBreaks[2]);
                 modal_content.appendChild(document.createTextNode(dataActiveSlots));
-                // modal_content.appendChild(arrayOfBreaks[3]);
-                // modal_content.appendChild(parkHere);
+                modal_content.appendChild(arrayOfBreaks[3]);
 
 
                 // modal_content.style.display = "block";
                 modal.style.display = "block";
-
 
                 span.onclick = function() {
                     modal.style.display = "none";
@@ -391,66 +448,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }
-
-    // nearbylists.addEventListener('click', parkHereTimer);
-
-    // function parkHereTimer(e) {
-        // console.log(e.target.parentElement.classList);
-        // if (e.target.parentElement.parentElement.classList.contains('details')) {
-        //     let nameData = (e.target.parentElement.parentElement.getAttribute('data-name'));
-        //     console.log(nameData);
-                // get the task id
-                // let arrayOfBreaks = [];
-                // for (let index = 0; index < 4; index++) {
-                //     const br = document.createElement('p');
-                //     br.className = 'details';
-                //     br.innerHTML = '<br>';
-                //     arrayOfBreaks.push(br);
-                    
-                // }
-
-                // const parkHere = document.createElement('div');
-                // parkHere.className = 'parkHereContainer';
-                // parkHere.innerHTML = '<a class="parkHere">Park Here</a>';               
-
-
-                // let dataName = (e.target.parentElement.parentElement.getAttribute('data-name'));
-                // let dataCharge = (e.target.parentElement.parentElement.getAttribute('data-charge'));
-                // let dataClosesAt = (e.target.parentElement.parentElement.getAttribute('data-closes_at'));
-                // let dataActiveSlots = (e.target.parentElement.parentElement.getAttribute('data-active_slots'));
-                // modal_content.appendChild(document.createTextNode(dataName));
-                // modal_content.appendChild(arrayOfBreaks[0]);
-                // modal_content.appendChild(document.createTextNode(dataCharge));
-                // modal_content.appendChild(arrayOfBreaks[1]);
-                // modal_content.appendChild(document.createTextNode(dataClosesAt));
-                // modal_content.appendChild(arrayOfBreaks[2]);
-                // modal_content.appendChild(document.createTextNode(dataActiveSlots));
-                // modal_content.appendChild(arrayOfBreaks[3]);
-                // modal_content.appendChild(parkHere);
-
-
-                // // modal_content.style.display = "block";
-                // modal.style.display = "block";
-
-
-                // span.onclick = function() {
-                //     modal.style.display = "none";
-                //     modal_content.innerHTML = '';
-                // }
-
-                // window.onclick = function(event) {
-                //     if (event.target == modal) {
-                //         modal.style.display = "none";
-                //         modal_content.innerHTML = '';
-                //     }
-                // }
-                    
-        // }
-
-    // }
-
-
-
 
 
 });
