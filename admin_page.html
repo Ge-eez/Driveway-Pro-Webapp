@@ -1,58 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Admin</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="./assets/images/icons/icon.png" />
- 
-	<!--===============================================================================================-->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <!-- =========================================================================================== -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/admin.css">
-	<!--===============================================================================================-->
-	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <!--===============================================================================================-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <!-- ====================================================== -->
     <script src="https://kit.fontawesome.com/dec944d78f.js" crossorigin="anonymous"></script>
-	<!--===============================================================================================-->
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
-	<!--===============================================================================================-->
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
-	<!--===============================================================================================-->
-	
+    <!--===============================================================================================-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
+    <!--===============================================================================================-->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
+    <!--===============================================================================================-->
+
 </head>
+
 <body>
 
     <div class=" ">
         <div class="row no-gutters mb-0">
             <header id="company-header" class="col-12 col-md-3 col-xl-2">
-    
-    
+
+
                 <div class="row  pl-2 ">
                     <li class="col-3  col-md-12 col-lg-12  col-xl-12">
-                        <a href="#profile" class="tab-links" onclick="openLink(event, 'profile')" >Profile</a>
+                        <a href="#profile" class="tab-links" onclick="openLink(event, 'profile')">Profile</a>
                     </li>
-                    <li class="col-6 col-md-12  col-lg-12 col-xl-12 "> 
-                        <a href="#companies"  class="tab-links" onclick="openLink(event, 'companies')">Companies</a>
+                    <li class="col-6 col-md-12  col-lg-12 col-xl-12 ">
+                        <a href="#companies" class="tab-links" onclick="openLink(event, 'companies')">Companies</a>
                     </li>
-                    
+
                     <li class=" col-3 col-md-12 col-lg-12 col-xl-12">
-                        <a href="#users"  class="tab-links" onclick="openLink(event, 'users')">Users</a>
+                        <a href="#users" class="tab-links" onclick="openLink(event, 'users')">Users</a>
                     </li>
-                    
+
                 </div>
-                
+
             </header>
-    
+
             <section id="check" class="col-12  col-md-9  col-xl-10 ">
-                
-                <div class="row tab-content" id="profile" >
+
+                <div class="row tab-content" id="profile">
                     <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
                         <h2 id="companyText"></h2>
@@ -66,74 +68,74 @@
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" id="name" placeholder="Username">
-                              </div>
-                              <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <input type="text" class="form-control" id="phone" placeholder="Phone Number">
-                              </div>
-                              <button type="submit" class="login100-form-btn">Update</button>
+                            </div>
+                            <button type="submit" class="login100-form-btn">Update</button>
                         </form>
 
                     </div>
-                    
-    
+
+
                 </div>
-    
-                <div class="" id="companies"> 
-                    
+
+                <div class="" id="companies">
+
                     <h2>Companies</h2>
-                    
+
                     <div id="company-pop-up">
                         <a class=" " href="#">
-                            <i id="company-cancel" class="far fa-times-circle fa-2x" ></i>
+                            <i id="company-cancel" class="far fa-times-circle fa-2x"></i>
                         </a>
-                        
+
 
                         <form action="#" class="form-container">
                             <div class="form-group">
                                 <label for="company-name">Name</label>
                                 <input type="text" class="form-control" id="company-name" placeholder="Name">
-                              </div>
+                            </div>
 
                             <div class="form-group">
                                 <label for="company-email">E-mail</label>
                                 <input type="email" class="form-control" id="company-email" placeholder="email">
                             </div>
-                              <div class="form-row">
+                            <div class="form-row">
                                 <div class="form-group col-md-6">
-                                  <label for="latitude">Latitude</label>
-                                  <input type="text" class="form-control" id="latitude" placeholder="latitude">
+                                    <label for="latitude">Latitude</label>
+                                    <input type="text" class="form-control" id="latitude" placeholder="latitude">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="longtiude">Longtiude</label>
-                                  <input type="text" class="form-control" id="longtiude" placeholder="longtiude">
+                                    <input type="text" class="form-control" id="longtiude" placeholder="longtiude">
                                 </div>
-                              </div>
-                              
-                              <div class="form-group">
+                            </div>
+
+                            <div class="form-group">
                                 <label for="charge">Charge</label>
                                 <input type="text" class="form-control" id="charge" placeholder="charge">
-                              </div>
-                              <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label for="slots">Slots</label>
                                 <input type="text" class="form-control" id="slots" placeholder="slots">
-                              </div>
-                              <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Password">
-                              </div>
+                            </div>
                             <button type="submit" class="login100-form-btn">Add</button>
                         </form>
                     </div>
-                    
-                    
+
+
                     <div id="option" class="d-flex flex-row-reverse pr-2">
                         <button id="company-add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
-                    </div>  
+                    </div>
 
                     <ul id="header" class="list-inline row no-gutters">
                         <li class="col-1 ml-0 pl-5 ">
-                            <input class="input-group" type="checkbox" value="" id="selectAll" />
+                            <input class="input-group" type="checkbox" value="" id="selectAllCompanies" />
                         </li>
                         <li class="col-2 ">
                             <i class="far fa-user mr-3"></i>Name
@@ -147,34 +149,34 @@
                         <li class="col-2 ">
                             <i class="fas fa-layer-group"> </i> </i>Location
                         </li>
-                        
+
                         <li class="col-2">
                             <i class="fas fa-pen mr-3"></i></i>Action
                         </li>
-                        
+
                     </ul>
-                        
+
                     <div class="company-list addScroll">
                         <!-- list added from javascript -->
-                        
-                    </div>
-                </div >
 
-                <div class="" id="users"> 
-                    
+                    </div>
+                </div>
+
+                <div class="" id="users">
+
                     <h2>Users</h2>
-                    
+
                     <div id="user-pop-up">
                         <a class=" " href="#">
-                            <i id="user-cancel" class="far fa-times-circle fa-2x" ></i>
+                            <i id="user-cancel" class="far fa-times-circle fa-2x"></i>
                         </a>
-                        
+
 
                         <form action="#" class="form-container">
                             <div class="form-group">
                                 <label for="user-name">Name</label>
                                 <input type="text" class="form-control" id="user-name" placeholder="Name">
-                              </div>
+                            </div>
 
                             <div class="form-group">
                                 <label for="user-email">E-mail</label>
@@ -184,37 +186,37 @@
                                 <label for="user-role">Role</label>
                                 <input type="text" class="form-control" id="user-role" placeholder="Role">
                             </div>
-                            
-                              
-                              <div class="form-group">
+
+
+                            <div class="form-group">
                                 <label for="user-company">Company</label>
                                 <input type="text" class="form-control" id="user-company" placeholder="Company Email">
-                              </div>
-                              <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label for="user-number">Phone Number</label>
                                 <input type="text" class="form-control" id="user-number" placeholder="Phone Number">
-                              </div>
+                            </div>
 
-                              <div class="form-group">
+                            <div class="form-group">
                                 <label for="user-plate">Plate Number</label>
                                 <input type="text" class="form-control" id="user-plate" placeholder="plate number">
-                              </div>
-                              <div class="form-group">
+                            </div>
+                            <div class="form-group">
                                 <label for="user-password">Password</label>
                                 <input type="password" class="form-control" id="user-password" placeholder="Password">
-                              </div>
+                            </div>
                             <button type="submit" class="login100-form-btn">Add</button>
                         </form>
                     </div>
-                    
-                    
+
+
                     <div id="option" class="d-flex flex-row-reverse pr-2">
                         <button id="user-add-btn" class="btn mr-2"><i class="fas fa-plus fa-sm " style="color:white"></i> Add</button>
-                    </div>  
+                    </div>
 
                     <ul id="header" class="list-inline row no-gutters">
                         <li class="col-1 ml-0 pl-5 ">
-                            <input class="input-group" type="checkbox" value="" id="selectAll" />
+                            <input class="input-group" type="checkbox" value="" id="selectAllUsers" />
                         </li>
                         <li class="col-2 ">
                             <i class="far fa-user mr-3"></i>Name
@@ -228,25 +230,25 @@
                         <li class="col-2 ">
                             <i class="fas fa-layer-group"> </i> </i>Role
                         </li>
-                        
+
                         <li class="col-2">
                             <i class="fas fa-pen mr-3"></i></i>Action
                         </li>
-                        
+
                     </ul>
-                        
+
                     <div class="user-list addScroll">
                         <!-- list added from javascript -->
-                        
+
                     </div>
-                </div >
+                </div>
 
             </section>
 
         </div>
-    
+
     </div>
-    
+
 
     <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white mt-0">
 
@@ -256,10 +258,8 @@
 
                 <div class="col-md-3 col-xl-3 mx-auto mt-3">
                     <h6 class="text-uppercase mb-4 font-weight-bold">Driveway Pro</h6>
-                    <p>Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet,
-                        consectetur
-                        adipisicing elit.</p>
-                </div>                
+                    <p>Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                </div>
 
                 <hr class="w-100 clearfix d-md-none">
 
@@ -326,10 +326,10 @@
     </footer>
 
 
-    
 
-   
-   
+
+
+
     <!--===============================================================================================-->
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -337,14 +337,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
 
-    
-	<!--===============================================================================================-->
-	<script src="./assets/js/admin_page.js"></script>
+
+    <!--===============================================================================================-->
+    <script src="./assets/js/admin_page.js"></script>
 </body>
+
 </html>
