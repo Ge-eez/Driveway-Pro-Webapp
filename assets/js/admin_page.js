@@ -38,37 +38,37 @@ const phoneNumber = document.getElementById('phone')
 
 let DBforUser;
 let DBforCompany;
-document.addEventListener("DOMContentLoaded",()=>{
-    let userDB = indexedDB.open("users",2)
-    userDB.onsuccess = function(){
+document.addEventListener("DOMContentLoaded", () => {
+    let userDB = indexedDB.open("users", 2)
+    userDB.onsuccess = function() {
         DBforUser = userDB.result;
         displayProfile();
         display_users()
-    }    
-    userDB.onupgradeneeded = function(e){
-        
+    }
+    userDB.onupgradeneeded = function(e) {
+
         console.log("created store");
     }
-    let companyDB = indexedDB.open("companies",2)
-    companyDB.onsuccess = function(){
+    let companyDB = indexedDB.open("companies", 2)
+    companyDB.onsuccess = function() {
         DBforCompany = companyDB.result;
         display_companies();
-    }    
-    companyDB.onupgradeneeded = function(e){
-        
+    }
+    companyDB.onupgradeneeded = function(e) {
+
         console.log("created store");
     }
-   
+
 });
 
 
-function openLink(e, id){
-    var i,tab_content,tablinks;
+function openLink(e, id) {
+    var i, tab_content, tablinks;
     tab_content = document.getElementsByClassName("tab-content");
-    for(i = 0; i<tab_content.length; i++){
+    for (i = 0; i < tab_content.length; i++) {
         tab_content[i].style.display = 'none';
     }
-    
+
     tablinks = document.getElementsByClassName("tab-links");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
@@ -77,16 +77,17 @@ function openLink(e, id){
     e.currentTarget.className += " active";
 }
 // profile part
- 
+
 companyForm.addEventListener('submit', add_company)
 userForm.addEventListener('submit', add_user)
 var i = 0;
-function add_company(e){
-    e.preventDefault(); 
-    
-    let poDB = DBforCompany.transaction("companies",'readwrite')
+
+function add_company(e) {
+    e.preventDefault();
+
+    let poDB = DBforCompany.transaction("companies", 'readwrite')
     let objStore = poDB.objectStore('companies');
-    
+
     let poInputs = {
         name: companyName.value,
         email: companyEmail.value,
@@ -101,11 +102,11 @@ function add_company(e){
     }
 
     let result = objStore.add(poInputs);
-    result.onsuccess = ()=>{
+    result.onsuccess = () => {
         console.log("company added successfully")
     }
-    result.onerror = (e)=>{console.log(e)}
-    poDB.oncomplete = ()=>{
+    result.onerror = (e) => { console.log(e) }
+    poDB.oncomplete = () => {
         console.log("new company added");
         companyList.innerHTML = "";
         display_companies();
@@ -113,14 +114,15 @@ function add_company(e){
 
     companyForm.style.display = "none";
     document.getElementById("add-btn").removeAttribute("disabled");
-   
+
 }
-function add_user(e){
-    e.preventDefault(); 
-    
-    let poDB = DBforUser.transaction("users",'readwrite')
+
+function add_user(e) {
+    e.preventDefault();
+
+    let poDB = DBforUser.transaction("users", 'readwrite')
     let objStore = poDB.objectStore('users');
-    
+
     let poInputs = {
         name: userName.value,
         email: companyEmail.value,
@@ -132,11 +134,11 @@ function add_user(e){
     }
 
     let result = objStore.add(poInputs);
-    result.onsuccess = ()=>{
+    result.onsuccess = () => {
         console.log("user added successfully")
     }
-    result.onerror = (e)=>{console.log(e)}
-    poDB.oncomplete = ()=>{
+    result.onerror = (e) => { console.log(e) }
+    poDB.oncomplete = () => {
         console.log("new user added");
         companyList.innerHTML = "";
         display_companies();
@@ -144,14 +146,15 @@ function add_user(e){
 
     companyForm.style.display = "none";
     document.getElementById("user-add-btn").removeAttribute("disabled");
-   
+
 }
-function display_companies(){
-    
+
+function display_companies() {
+
     let store = DBforCompany.transaction(['companies'], 'readwrite').objectStore('companies');
-    store.openCursor().onsuccess = function(e){
+    store.openCursor().onsuccess = function(e) {
         let cursor = e.target.result;
-        if(cursor){
+        if (cursor) {
             let listItem = `
             <ul class="list-inline row list-item">
                 <li class="col-1 ml-0 pl-5 ">
@@ -162,7 +165,7 @@ function display_companies(){
                 <li class="col-3">${cursor.value.charge}</li>
                 <li class="col-2">${cursor.value.latitude}, ${cursor.value.longitude}</li>
                 <li class="col-2 ">
-                    <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="#"><i class="fa fa-edit"></i> </a>
+                    <i class="fa fa-remove mr-2"></i>
                 </li>
             </ul>`;
             companyList.innerHTML += listItem;
@@ -172,13 +175,14 @@ function display_companies(){
 
 }
 
-function display_users(){
-    
+function display_users() {
+
     let store = DBforUser.transaction(['users'], 'readwrite').objectStore('users');
-    store.openCursor().onsuccess = function(e){
+    store.openCursor().onsuccess = function(e) {
         let cursor = e.target.result;
-        if(cursor){
-            let listItem = `
+        if (cursor) {
+            if (cursor.value.email != keyEmail.slice(1, keyEmail.length - 1)) {
+                let listItem = `
             <ul class="list-inline row list-item">
                 <li class="col-1 ml-0 pl-5 ">
                     <input class="input-group" type="checkbox" value="" id="selectAll" />
@@ -188,56 +192,57 @@ function display_users(){
                 <li class="col-3">${cursor.value.phone_no}</li>
                 <li class="col-2">${cursor.value.role}</li>
                 <li class="col-2 ">
-                    <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="#"><i class="fa fa-edit"></i> </a>
+                    <i class="fa fa-remove mr-2"></i>  
                 </li>
             </ul>`;
-            userList.innerHTML += listItem;
+                userList.innerHTML += listItem;
+            }
             cursor.continue();
         }
     }
 
 }
 
-function displayProfile(){
+function displayProfile() {
     let userStore = DBforUser.transaction("users").objectStore("users");
-    userStore.openCursor().onsuccess = function(e){
+    userStore.openCursor().onsuccess = function(e) {
         let cursor = e.target.result;
-        if(cursor){       
-            if( cursor.value.email == keyEmail.slice(1,keyEmail.length-1)){
-               
+        if (cursor) {
+            if (cursor.value.email == keyEmail.slice(1, keyEmail.length - 1)) {
+
                 companyText.appendChild(document.createTextNode(cursor.value.name));
                 emailText.appendChild(document.createTextNode(cursor.value.email));
                 return;
             }
-            
+
             cursor.continue();
         }
-       
+
     }
 }
 
-formUpdate.addEventListener('submit',updateProfile);
+formUpdate.addEventListener('submit', updateProfile);
 
-function updateProfile(){
+function updateProfile() {
     let transaction = DBforUser.transaction(['users'], 'readwrite');
     let objectStore = transaction.objectStore('users');
-    let sliced = keyEmail.slice(1,keyEmail.length-1)
+    let sliced = keyEmail.slice(1, keyEmail.length - 1)
     let request = objectStore.get(sliced);
-    
 
-    request.onsuccess = function(){
+
+    request.onsuccess = function() {
         let updateData = {
             company: "",
             password: request.result.password,
             plate_number: "",
             role: "admin",
-            email: keyEmail.slice(1,keyEmail.length-1),
+            email: keyEmail.slice(1, keyEmail.length - 1),
             name: adminName.value,
             phone_no: phoneNumber.value,
-            
+
         }
         let updateTable = objectStore.put(updateData);
-        updateTable.onsuccess = function(){
+        updateTable.onsuccess = function() {
             console.log("done")
         }
     }
@@ -246,23 +251,23 @@ function updateProfile(){
 
 // parking officer part
 
-companyAddBtn.addEventListener('click',function(btn){
-    
+companyAddBtn.addEventListener('click', function(btn) {
+
     companyForm.style.display = "block";
     btn.currentTarget.disabled = "true"
 
 });
-companyCancelIcon.addEventListener('click',function(){
+companyCancelIcon.addEventListener('click', function() {
     companyForm.style.display = "none";
     document.getElementById("company-add-btn").removeAttribute("disabled");
 });
-userAddBtn.addEventListener('click',function(btn){
-    
+userAddBtn.addEventListener('click', function(btn) {
+
     userForm.style.display = "block";
     btn.currentTarget.disabled = "true"
 
 });
-userCancelIcon.addEventListener('click',function(){
+userCancelIcon.addEventListener('click', function() {
     userForm.style.display = "none";
     document.getElementById("user-add-btn").removeAttribute("disabled");
 });
