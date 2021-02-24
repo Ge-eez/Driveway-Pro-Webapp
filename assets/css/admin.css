@@ -79,13 +79,13 @@ li .active {
 /* parking officer section */
 
 #companies,
-#users {
+#users, #account {
     display: none;
     height: 800px;
 }
 
 #companies h2,
-#users h2 {
+#users h2, #account h2 {
     background-color: #0a1b46;
     color: white;
     padding: 3% 0% 3% 5%;
@@ -93,7 +93,7 @@ li .active {
 }
 
 #companies #option,
-#users #option {
+#users #option, #account #option {
     margin: 0;
     background-color: #061335;
     padding: 1% 0% 1% 0%;
@@ -108,14 +108,14 @@ li .active {
 }
 
 #companies #header,
-#users #header {
+#users #header, #account #header {
     padding-bottom: 1%;
     border-bottom: 2px solid;
     text-align: center;
 }
 
 #companies .list-inline,
-#users .list-inline {
+#users .list-inline, #account .list-inline {
     border-bottom: 1px solid;
     padding-bottom: 1%;
     text-align: center;
@@ -154,7 +154,8 @@ li .active {
 }
 
 #companies ul>li>input,
-#users ul>li>input {
+#users ul>li>input,
+#account ul>li>input {
     width: 20px;
     height: 20px;
 }
@@ -261,6 +262,9 @@ li .active {
         height: 400px;
     }
     #users {
+        height: 400px;
+    }
+    #account{
         height: 400px;
     }
 }
