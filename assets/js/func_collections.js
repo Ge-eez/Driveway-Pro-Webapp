@@ -13,12 +13,16 @@ let plate_input = document.querySelector('#plate_number')
 
 
 let charge_input = document.querySelector("#charge")
-let location_input = document.querySelector('#location')
 let slots_input = document.querySelector('#slots-per-floor')
 
 let spinner = document.querySelector('.fa-spinner')
 
 let validate_form = document.querySelector('.validate-form')
+
+
+let latitudeInput = document.getElementById("latitude");
+let longtiudeInput = document.getElementById("longtiude");
+
 
 function validate(input) {
     if (input.getAttribute('type') == 'email' || input.getAttribute('name') == 'email') {

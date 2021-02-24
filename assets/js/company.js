@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // If a company is signing up
         else if (signingUp && check) {
-            let companylocation  = location_input.value.split(",")
             let data = {
                 charge: charge_input.value,
                 slots: slots_input.value,
@@ -64,8 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: name_input.value,
                 opens_at: "8AM",
                 closes_at: "8PM",
-                latitude: companylocation[0],
-                longitude: companylocation[1],
+                latitude: latitudeInput.value,
+                longitude: longitude.value,
             }
             return signupCompany(data)
         }
@@ -100,6 +99,10 @@ document.addEventListener("DOMContentLoaded", function () {
     signup.addEventListener('click', function () {
         hider(forgotPassword, signup)
         shower(name, charge, location, slots, getBackSU)
+        navigator.geolocation.getCurrentPosition(function(position) {
+            latitudeInput.value = position.coords.latitude;
+            longtiudeInput.value = position.coords.longitude;
+          });
         loginButton.textContent = ("Signup");
         loggingIn = false;
         signingUp = true;
