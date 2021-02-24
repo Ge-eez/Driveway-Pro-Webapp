@@ -10,17 +10,22 @@ const editForm = document.getElementById("edit-form") //The form at the top
  const officerRole = document.getElementById("role");
 
 const urlParams = new URLSearchParams(window.location.search);
-const EMAIL = urlParams.get('email');
+const COMP = urlParams.get("company");
+const EMAIL = urlParams.get("email");
+
 
 //DBUser
 var DBUser;
 
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    console.log(COMP);
+    officerCompany.value = COMP;
+    officerEmail.value = EMAIL;
+    officerRole.value = "parking_officer";
    
 
-    let TasksDBUser = indexedDB.open('users', 1);
+    let TasksDBUser = indexedDB.open('users', 2);
 
 
     TasksDBUser.onerror = function() {

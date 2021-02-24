@@ -34,6 +34,11 @@ const slotsText = document.getElementById("slotsText");
 let DBCompany;
 let DBUser;
 document.addEventListener("DOMContentLoaded", () => {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        latitudeInput.value = position.coords.latitude;
+        longtiudeInput.value = position.coords.longitude;
+      });
+    
     let companyDB = indexedDB.open("companies", 2)
     companyDB.onsuccess = function() {
         DBCompany = companyDB.result;
@@ -90,7 +95,7 @@ function add_parking_officer(e) {
         password: officerPassword.value,
         phone_no: officerPhone.value,
         plate_number: "",
-        role: officerRole.value
+        role: "parking_officer"
     }
 
     let result = objStore.add(poInputs);
@@ -117,15 +122,15 @@ function display_parking_officer() {
             if (cursor.value.company === keyEmail.slice(1, keyEmail.length - 1) && cursor.value.role === "parking_officer") {
                 let listItem = `
                         <ul class="list-inline row list-item mt-0 " myAtr =${cursor.value.email}>
-                            <li class="col-1 pl-lg-5 ">
+                            <li class="col-2 col-md-1 pl-lg-5 ">
                                 <input class="input-group" type="checkbox" onclick="onSelect(event)" value="" name="list" />
                             </li>
-                            <li class="col-2">${cursor.value.name}</li>
+                            <li class="col-2 ">${cursor.value.name}</li>
                             <li class="col-2 ">${cursor.value.phone_no}</li>
-                            <li  class=" col-3">${cursor.value.email}</li>
-                            <li class="col-2">${cursor.value.role}</li>
+                            <li  class="col-2 col-md-3 ">${cursor.value.email}</li>
+                            <li class="col-2 ">${cursor.value.role}</li>
                             <li class="col-2 delete-item">
-                                <i class="fa fa-remove mr-2"></i>  &nbsp;<a href="edit_PO.html?email=${cursor.value.email}"><i class="fa fa-edit"></i> </a>
+                                <i class="fa fa-remove mr-0"></i>  &nbsp;<a href="edit_PO.html?email=${cursor.value.email}&company=${cursor.value.company}"><i class="fa fa-edit"></i> </a>
                             </li>
                         </ul>`;
 
@@ -167,7 +172,8 @@ function updateProfile() {
     let companyStore = DBCompany.transaction(["companies"], "readwrite").objectStore("companies");
     let request = companyStore.get(keyEmail);
 
-
+    
+     
     request.onsuccess = function() {
         let updateData = {
             name: companyInput.value,
@@ -212,12 +218,14 @@ selectAllBox.onclick = function() {
         for (let index = 0; index < checkboxes.length; index++) {
 
             checkboxes[index].checked = true;
-            checkboxes[index].parentElement.parentElement.style.background = "#00bfff";
+            checkboxes[index].parentElement.parentElement.style.background = "#0a1d57";
+            checkboxes[index].parentElement.parentElement.style.color ="#fff";
         }
     } else {
         for (let index = 0; index < checkboxes.length; index++) {
             checkboxes[index].checked = false;
             checkboxes[index].parentElement.parentElement.style.background = "";
+            checkboxes[index].parentElement.parentElement.style.color ="#000";
         }
     }
 
@@ -225,9 +233,11 @@ selectAllBox.onclick = function() {
 
 function onSelect(event) {
     if (event.target.checked) {
-        event.target.parentElement.parentElement.style.background = "#00bfff"
+        event.target.parentElement.parentElement.style.background = "#0a1d57"
+        event.target.parentElement.parentElement.style.color ="#fff";
     } else {
         event.target.parentElement.parentElement.style.background = ""
+        event.target.parentElement.parentElement.style.color ="#000";
     }
 
 }

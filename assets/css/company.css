@@ -125,7 +125,7 @@ li .active {
 }
 
 #parking-officer .list-item li {
-    border-right: 5px solid yellow;
+    border-right: 5px solid rgb(8, 104, 13);
 }
 
 #parking-officer .list-item li:nth-child(1) {
@@ -219,6 +219,7 @@ li .active {
         border-radius: 5%;
         margin-right: 0%;
     }
+   
 }
 
 @media (max-width: 576px) {
@@ -314,6 +315,8 @@ li .active {
     }
     #parking-officer .list-item li {
         border-right: 2px solid yellow;
+        padding: 0px, 10px;
+        text-align: left;
     }
     #parking-officer .list-item li:nth-child(1) {
         border-right: 2px solid red;
@@ -321,7 +324,7 @@ li .active {
     #pop-up {
         position: fixed;
         top: -1%;
-        width: 100%;
+        width: fit-content;
         height: 100%;
         display: none;
         padding: 0% 1% 1% 1%;
@@ -330,7 +333,7 @@ li .active {
     }
     #pop-up .far {
         position: relative;
-        left: 80%;
+        left: 90%;
         top: 3%;
         padding: 0;
         margin-top: 3px;
@@ -338,10 +341,10 @@ li .active {
     }
     .form-container {
         position: relative;
-        left: 20%;
+        left: 10%;
         /* top: 0; */
         background-color: #fefefe;
-        width: 40%;
+        width: 80%;
         border: 1px solid none;
         border-radius: 5%;
         padding: 2% 3%;
