@@ -153,10 +153,13 @@ function displayProfile() {
             if (cursor.value.email == keyEmail.slice(1, keyEmail.length - 1)) {
 
                 companyText.appendChild(document.createTextNode(cursor.value.name));
+                companyInput.value = cursor.value.name
                 emailText.appendChild(document.createTextNode(cursor.value.email));
                 locationText.appendChild(document.createTextNode(cursor.value.latitude + ", " + cursor.value.longitude));
                 chargeText.appendChild(document.createTextNode(cursor.value.charge + " Birr"));
+                chargeInput.value = cursor.value.charge
                 slotsText.appendChild(document.createTextNode(cursor.value.slots));
+                slotsInput.value = cursor.value.slots
                 return;
             }
 
