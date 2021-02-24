@@ -211,7 +211,9 @@ function displayProfile() {
             if (cursor.value.email == keyEmail.slice(1, keyEmail.length - 1)) {
 
                 companyText.appendChild(document.createTextNode(cursor.value.name));
+                adminName.value = cursor.value.name
                 emailText.appendChild(document.createTextNode(cursor.value.email));
+                phoneNumber.value = cursor.value.phone_no
                 return;
             }
 
