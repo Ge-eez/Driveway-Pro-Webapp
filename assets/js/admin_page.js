@@ -38,12 +38,13 @@ const phoneNumber = document.getElementById('phone')
 
 let DBforUser;
 let DBforCompany;
+let DBforAccount;
 document.addEventListener("DOMContentLoaded", () => {
     let userDB = indexedDB.open("users", 2)
     userDB.onsuccess = function() {
         DBforUser = userDB.result;
         displayProfile();
-        display_users()
+        display_users();
     }
     userDB.onupgradeneeded = function(e) {
 
@@ -58,6 +59,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("created store");
     }
+    let accountDB = indexedDB.open("account", 2)
+    accountDB.onsuccess = function() {
+        DBforAccount = accountDB.result;
+        display_account();
+    }
+    accountDB.onupgradeneeded = function(e) {
+
+        console.log("created store");
+    }
+
 
 });
 
@@ -222,7 +233,26 @@ function displayProfile() {
 
     }
 }
+function display_account() {
 
+    let store = DBforAccount.transaction(['account'], 'readwrite').objectStore('account');
+    store.openCursor().onsuccess = function(e) {
+        let cursor = e.target.result;
+        if (cursor) {
+            let listItem = `
+            <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
+                
+                <li class="col-4">${cursor.value.user_email}</li>
+                <li class="col-4 ">${cursor.value.company_email}</li>
+                <li class="col-2">${cursor.value.income} Birr</li>
+            </ul>`;
+                userList.innerHTML += listItem;
+            
+            cursor.continue();
+        }
+    }
+
+}
 formUpdate.addEventListener('submit', updateProfile);
 
 function updateProfile() {
