@@ -103,20 +103,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const link = document.createElement('a');
                     link.className = 'details';
-                    link.innerHTML = '<a style="color: #7CB9E8">more details</a>';
+                    link.innerHTML = '<a style="color: #7CB9E8" class="parkButton">more details</a>';
 
                     const parkHere = document.createElement('div');
                     parkHere.className = 'buttonContainer';
-                    parkHere.innerHTML = '<a class="login100-form-btn button-load text-light">Park Here</a>';
+                    parkHere.innerHTML = '<a class="parkButton login100-form-btn button-load text-light">Park Here</a>';
 
                     const parkContent = document.createElement('div');
                     parkContent.className = 'park_content';
 
                     const ticketContent = document.createElement('div');
                     ticketContent.className = 'ticket_content';
-
-                    const closingContent = document.createElement('div');
-                    closingContent.className = 'closing_content';
                     
                     let lat = position.coords.latitude;
                     let lng = position.coords.longitude;
@@ -182,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {                         
                                 const exit = document.createElement('div');
                                 exit.className = 'exit buttonContainer';
-                                exit.innerHTML = '<a class="login100-form-btn button-load text-light">Done Parking</a>';   
+                                exit.innerHTML = '<a class="parkButton login100-form-btn button-load text-light">Done Parking</a>';   
 
                                 let today = new Date();
                                 let h = today.getHours();
@@ -216,12 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let latitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('latitudeCompany'));
                                 let longitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('longitudeCompany'));
 
-                                // console.log(companyActiveSlots);
-                                // console.log(emailCompany, nameCompany, passwordCompany, chargeCompany, slotsCompany, activeSlotsCompany,
-                                //     opensAtCompany, closesAtCompany, latitudeCompany, longitudeCompany);
-
-                                console.log(activeSlotsCompany);
-
                                 let current = `8:30:04`.match(/\d+/g).map(Number);
                                 let closesAt = companyClosesAt.match(/\d+/g).map(Number);
                                 let closes = 0;
@@ -250,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                     const notifyBtn = document.createElement('div');
                                     notifyBtn.className = 'buttonContainer';
-                                    notifyBtn.innerHTML = '<a class="login100-form-btn button-load text-light">Close</a>';
+                                    notifyBtn.innerHTML = '<a class="parkButton login100-form-btn button-load text-light">Close</a>';
 
                                     modal_content.appendChild(notify);
                                     modal_content.appendChild(arrayOfBreaks[0]);
@@ -300,7 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     let updateTable = slotsUpdate.put(updateData);
                                     updateTable.onsuccess = function() {
                                         console.log("done");
-                                        console.log(companyActiveSlots);
                                     }
                                 }
 
@@ -320,11 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 nearbylists.innerHTML = '';
 
                                 nearbylists.appendChild(parkContent);
-                                // parkContent.style.display = 'flex';
-                                // parkContent.style.flexDirection = 'column';
-                                // parkContent.style.textAlign = 'center';
-                                // parkContent.style.margin = '4rem';
-                                // parkContent.style.fontSize = '1.2rem';
 
                                 parkContent.appendChild(document.createTextNode(companyName));
                                 parkContent.appendChild(arrayOfBreaks[0]);   
@@ -343,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
                                         done.className = 'done buttonContainer';
-                                        done.innerHTML = '<a class="login100-form-btn button-load text-light">Exit</a>';
+                                        done.innerHTML = '<a class="parkButton login100-form-btn button-load text-light">Exit</a>';
                                         
                                         var now = new Date();
                                         var hour = now.getHours();
@@ -369,17 +354,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                         nearbylists.innerHTML = '';
 
                                         nearbylists.appendChild(ticketContent);
-                                        ticketContent.style.display = 'flex';
-                                        ticketContent.style.flexDirection = 'column';
-                                        ticketContent.style.textAlign = 'center';
-                                        ticketContent.style.margin = '4rem';
-                                        ticketContent.style.fontSize = '1.2rem';
 
                                         const infoDone = document.createElement('div');
                                         infoDone.className = 'done';
                                         infoDone.innerHTML = '<p>Please make sure to show this page to the parking officer before exiting :) Thank you for using our service</p>';
 
-                                        // infoDone.style.fontSize = '1.5rem';
                                         timerDemo.style.margin = "0";
 
                                         ticketContent.appendChild(infoDone);
@@ -395,7 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ticketContent.appendChild(endTime);
                                         ticketContent.appendChild(arrayOfBreaks[5]);
                                         ticketContent.appendChild(done);
-
 
                                         done.onclick = function() {   
                                             ticketContent.innerHTML = '';  
@@ -429,6 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                             };
 
                                         }
+
+                                        activeSlotsCompany -= 1;
 
                                     }
                                 }

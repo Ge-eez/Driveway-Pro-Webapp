@@ -37,7 +37,7 @@
 }
 
 #myMap {
-    width: 80%;
+    width: 100%;
     height: 80vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -67,6 +67,10 @@
     display: flex;
     flex-direction: column;
     width: 60%;
+}
+
+.parkButton:hover {
+    cursor: pointer;
 }
 
 /* .parkButton {   
@@ -210,7 +214,7 @@
     cursor: pointer;
 }
 
-.park_content {
+.park_content, .ticket_content {
     display: flex;
     flex-direction: column;
     text-align: center;
