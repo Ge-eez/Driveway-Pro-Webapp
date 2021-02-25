@@ -11,11 +11,13 @@ const page_wrapper = document.querySelector(".page-wrapper");
 
 let DB;
 let db;
+let Db;
 document.addEventListener('DOMContentLoaded', () => {
     let CompanyDB = indexedDB.open("companies", 1);
     CompanyDB.onsuccess = function () {
         console.log('Database Ready');
         DB = CompanyDB.result;
+        Db = CompanyDB.result;
     };
 
     let UserDB = indexedDB.open("users", 1);
@@ -123,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let dLat = (cursor.value.latitude - lat).toRad();
                     let dLon = (cursor.value.longitude - lng).toRad();
                     let lat1 = position.coords.latitude.toRad();
-                    let lat2 = cursor.value.latitude.toRad();
+                    let lat2 = cursor.value.latitude * Math.PI / 180;
 
                     let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                             Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
@@ -145,6 +147,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         li.setAttribute('data-closes_at', `Parking place closes at: ${cursor.value.closes_at}`);
                         li.setAttribute('data-charge', `Charges per hour: ${cursor.value.charge} Birr`);
                         li.setAttribute('data-active_slots', `Current parking slots available: ${cursor.value.active_slots}`);
+
+                        li.setAttribute('emailCompany', cursor.value.email);
+                        li.setAttribute('nameCompany', cursor.value.name);
+                        li.setAttribute('passwordCompany', cursor.value.password);
+                        li.setAttribute('chargeCompany', cursor.value.charge);
+                        li.setAttribute('slotsCompany', cursor.value.slots);
+                        li.setAttribute('activeSlotsCompany', cursor.value.active_slots);
+                        li.setAttribute('opensAtCompany', cursor.value.opens_at);
+                        li.setAttribute('closesAtCompany', cursor.value.closes_at);
+                        li.setAttribute('latitudeCompany', cursor.value.latitude);
+                        li.setAttribute('longitudeCompany', cursor.value.longitude);
+
                         li.appendChild(document.createTextNode(cursor.value.name));
                         li.appendChild(document.createTextNode(cursor.value.email));
 
@@ -164,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         function parkHereTimer(e) {                      
                             if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {                         
                                 const exit = document.createElement('div');
-                                exit.className = 'exit';
+                                exit.className = 'exit parkHereContainer';
                                 exit.innerHTML = '<a class="parkHere" style="font-size: 1.2rem">Done Parking</a>';   
 
                                 let today = new Date();
@@ -187,7 +201,22 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let companyClosesAt = (e.target.parentElement.parentElement.firstChild.getAttribute('data-closes_at'));
                                 let companyCharge = (e.target.parentElement.parentElement.firstChild.getAttribute('data-charge'));
                                 let companyActiveSlots = (e.target.parentElement.parentElement.firstChild.getAttribute('data-active_slots'));
+
+                                let emailCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('emailCompany'));
+                                let nameCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('nameCompany'));
+                                let passwordCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('passwordCompany'));
+                                let chargeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('chargeCompany'));
+                                let slotsCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('slotsCompany'));
+                                let activeSlotsCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('activeSlotsCompany'));
+                                let opensAtCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('opensAtCompany'));
+                                let closesAtCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('closesAtCompany'));
+                                let latitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('latitudeCompany'));
+                                let longitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('longitudeCompany'));
+
                                 // console.log(companyActiveSlots);
+                                console.log(emailCompany, nameCompany, passwordCompany, chargeCompany, slotsCompany, activeSlotsCompany,
+                                    opensAtCompany, closesAtCompany, latitudeCompany, longitudeCompany);
+
                                 let current = `8:30:04`.match(/\d+/g).map(Number);
                                 let closesAt = companyClosesAt.match(/\d+/g).map(Number);
                                 let closes = 0;
@@ -244,17 +273,41 @@ document.addEventListener('DOMContentLoaded', () => {
                                     }
                                 }
 
-                                var transaction = DB.transaction(["companies"], "readwrite");
-                                var slotsChecker = transaction.objectStore("companies");
-                                var req = slotsChecker.openCursor();
-                                req.onerror = function(event) {
+                                let transaction = DB.transaction(["companies"], "readwrite");
+                                let slotsUpdate = transaction.objectStore("companies");
+                                let requestMinus = slotsUpdate.get(companyEmail);
+
+                                requestMinus.onsuccess = function() {
+                                    let updateData = {
+                                        name: nameCompany,
+                                        email: emailCompany,
+                                        password: passwordCompany,
+                                        charge: chargeCompany,
+                                        slots: slotsCompany,
+                                        active_slots: activeSlotsCompany - 1,
+                                        opens_at: opensAtCompany,
+                                        closes_at: closesAtCompany,
+                                        latitude: latitudeCompany,
+                                        longitude: longitudeCompany
+                                    }
+
+                                    let updateTable = slotsUpdate.put(updateData);
+                                    updateTable.onsuccess = function() {
+                                        console.log("done");
+                                        console.log(companyActiveSlots);
+                                    }
+                                }
+
+                                requestMinus.onerror = function() {
                                     console.log("An error occured");
                                 };
 
-                                req.onsuccess = function(event) {
-                                    var cursor = event.target.result;
-                                    if(cursor){
-                                        if(cursor.value.email === companyEmail){//we find by id an user we want to update
+                                // console.log(Number(companyActiveSlots.match(/(\d+)/)[0]));
+
+                                // req.onsuccess = function(event) {
+                                //     var cursor = event.target.result;
+                                //     if(cursor){
+                                //         if(cursor.value.email === companyEmail){//we find by id an user we want to update
                                             // var company = {};
                                             // company.active_slots -= 1;
 
@@ -265,10 +318,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                             // res.onerror = function(e){
                                             //     console.log("update failed!!");
                                             // }
-                                        }
-                                        cursor.continue();
-                                    }
-                                }
+                                //         }
+                                //         cursor.continue();
+                                //     }
+                                // }
                                 // console.log(companyActiveSlots);
 
                                 let arrayOfBreaks = [];
@@ -305,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
                                         done.className = 'done parkHereContainer';
-                                        done.innerHTML = '<a class="parkHere" style="font-size: 1.2rem">Exit</a>';
+                                        done.innerHTML = '<a class="parkHere" style="font-size: 1.2rem" >Exit</a>';
                                         
                                         var now = new Date();
                                         var hour = now.getHours();
@@ -356,19 +409,37 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ticketContent.appendChild(arrayOfBreaks[5]);
                                         ticketContent.appendChild(done);
 
+
                                         done.onclick = function() {   
                                             ticketContent.innerHTML = '';  
-
-                                            const closingInfo = document.createElement('div');
-                                            closingInfo.className = 'done';
-                                            closingInfo.innerHTML = '<p>Drive Way Pro</p>';
-
-                                            closingInfo.style.fontSize = '4rem';
-                                            closingInfo.style.textAlign = 'center';
-                                            closingInfo.style.margin = '1.5rem';
                                             
-                                            nearbylists.appendChild(closingContent);
-                                            closingContent.appendChild(closingInfo);
+                                            let transactionActive = DB.transaction(["companies"], "readwrite");
+                                            let activeSlotsUpdate = transactionActive.objectStore("companies");
+                                            let requestAdd = activeSlotsUpdate.get(companyEmail);
+
+                                            requestAdd.onsuccess = function() {
+                                                let updateData = {
+                                                    name: nameCompany,
+                                                    email: emailCompany,
+                                                    password: passwordCompany,
+                                                    charge: chargeCompany,
+                                                    slots: slotsCompany,
+                                                    active_slots: activeSlotsCompany + 1,
+                                                    opens_at: opensAtCompany,
+                                                    closes_at: closesAtCompany,
+                                                    latitude: latitudeCompany,
+                                                    longitude: longitudeCompany
+                                                }
+
+                                                let updateTable = activeSlotsUpdate.put(updateData);
+                                                updateTable.onsuccess = function() {
+                                                    console.log("done");
+                                                }
+                                            }
+
+                                            requestAdd.onerror = function() {
+                                                console.log("An error occured");
+                                            };
 
                                         }
 
