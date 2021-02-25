@@ -11,13 +11,12 @@ const page_wrapper = document.querySelector(".page-wrapper");
 
 let DB;
 let db;
-let Db;
+// let DBAccount;
 document.addEventListener('DOMContentLoaded', () => {
     let CompanyDB = indexedDB.open("companies", 1);
     CompanyDB.onsuccess = function () {
         console.log('Database Ready');
         DB = CompanyDB.result;
-        Db = CompanyDB.result;
     };
 
     let UserDB = indexedDB.open("users", 1);
@@ -26,6 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
         db = UserDB.result;
 
     };
+
+    // let accountDB = indexedDB.open("account", 1);
+    // accountDB.onsuccess = function () {
+    //     console.log('Database Ready');
+    //     DBAccount = accountDB.result;
+
+    // };
+
+    // accountDB.onupgradeneeded = function(e) {
+
+    // }
 
     if (!localStorage.getItem("user")) {
         console.log(`Login`);
@@ -72,11 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function park(e) {
         let objectStoreUser = db.transaction("users").objectStore("users");
         let userPlate = 0; 
+        let userEmail = '';
         objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
         objectStoreUser.openCursor().onsuccess = function(e) {
             let cursor = e.target.result;
 
             userPlate = cursor.value.plate_number;
+            userEmail = cursor.value.email;
         }
         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
         // where R is earth’s radius (mean radius = 6,371km);
@@ -328,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
                                         done.className = 'done buttonContainer';
-                                        done.innerHTML = '<a class="parkButton login100-form-btn button-load text-light">Exit</a>';
+                                        done.innerHTML = '<a class="parkButton login100-form-btn button-load text-light" href="./index.html">Exit</a>';
                                         
                                         var now = new Date();
                                         var hour = now.getHours();
@@ -337,6 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         let x = companyCharge.match(/\d+/g).map(Number);
                                         let charge = Number(`${x[0]}.${x[1]}`);
                                         let price = ((hour-startHour)*charge) + ((min - startMin)*(charge/60)) + ((sec - startSec)*(charge/3600));
+                                        hour = hour % 12 || 12;
                                         
                                         const endTime = document.createElement('div');
                                         endTime.className = 'endTime';
@@ -374,6 +387,30 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ticketContent.appendChild(endTime);
                                         ticketContent.appendChild(arrayOfBreaks[5]);
                                         ticketContent.appendChild(done);
+
+                                        // let transactionAccount = DBAccount.transaction(["account"], "readwrite");
+                                        // let accountUpdate = transactionAccount.objectStore("account");
+                                        // let accountAdd = accountUpdate.get(companyEmail);
+
+                                        // accountAdd.onsuccess = function() {
+                                        //     let time = new Date();                                            
+                                        //     let accountData = {
+                                        //         date: `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
+                                        //         company_email: companyEmail,
+                                        //         user_email: userEmail,
+                                        //         amount: price.toFixed(2)
+                                        //     }
+
+                                        //     let updateAccount = accountUpdate.add(accountData);
+                                        //     updateAccount.onsuccess = function() {
+                                        //         console.log("done");
+                                        //         console.log(accountData);
+                                        //     }
+                                        // }
+
+                                        // accountAdd.onerror = function() {
+                                        //     console.log("An error occured");
+                                        // };
 
                                         done.onclick = function() {   
                                             ticketContent.innerHTML = '';  
