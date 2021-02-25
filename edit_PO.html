@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Parking Officer</title>
+    <title>Company</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -15,79 +15,69 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
-    <link rel="stylesheet" type="text/css" href="./assets/css/Parking_officer.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/company.css">
 	<!--===============================================================================================-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- ====================================================== -->
+    <script src="https://kit.fontawesome.com/dec944d78f.js" crossorigin="anonymous"></script>
 	<!--===============================================================================================-->
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
 	<!--===============================================================================================-->
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
 	<!--===============================================================================================-->
 	
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        #edit-form{ 
+            margin-top: 2%;
+            width: 80%;
+            margin-left: 0;
+            padding-left: 0;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="container-fluid ml-0 mr-0">
-        <div class="row ">
-
-            <header id="company-header" class="col-12 col-md-4 col-xl-2 ">
-    
-    
-                <div class="row  pl-2 ">
-                    <li class="col-3 col-lg-12 col-xl-12">
-                        <a href="#park" class="tab-links" onclick="openLink(event, 'park')" >Park</a>
-                    </li>
-                    <li class="col-6 col-lg-12 col-xl-12 "> 
-                        <a href="#parking-officer"  class="tab-links" onclick="openLink(event, 'parking-officer')">Acitve Tickets</a>
-                    </li>
-                    
-                    <li class=" col-3 col-lg-12 col-xl-12">
-                        <a href="#Exit-user"  class="tab-links" onclick="openLink(event, 'Exit-user')">Exit User</a>
-                    </li>
-
-                    <li class="col-6 col-lg-12 col-xl-12 "> 
-                        <a href="#Clear-Stack"  class="tab-links" onclick="openLink(event, 'Clear-Stack')">Clear Stack</a>
-                    </li>
-                    
-                </div>
-                
-            </header>
-    
-            <section id="check" class="container col-12 col-md-8 col-xl-10 ">
-                
-                <div class="row tab-content" id="park" >
-    
-                    
-    
-                </div>
-    
-                <div class="row tab-content" id="parking-officer"> 
-                    
-                   
-                </div >
-
-                <div class="row tab-content" id="Clear-Stack"> 
-                    
-                   
-                </div >
-
-                <div class="row tab-content " id="Exit-user">
-                   
-                </div>
-            </section>
-
+    <form action="#" id="edit-form" class="form-container" >
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="fName">First Name</label>
+                <input type="text" class="form-control" id="officer-fName" placeholder="First name">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="fName">Last Name</label>
+                <input type="text" class="form-control" id="officer-lName" placeholder="Last Name">
+            </div>
         </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="text" class="form-control" id="officer-phone" placeholder="+251">
+        </div>
+        <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" class="form-control" id="officer-company" placeholder="email" readonly>
+        </div>
+        <div class="form-group">
+            <label for="inputEamil">E-mail</label>
+            <input type="email" class="form-control" id="officer-Email" placeholder="email" readonly>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="officer-pass" placeholder="password">
+        </div>
+        <div class="form-group">
+            <label for="role">Role</label>
+            <input type="text" class="form-control" id="role" placeholder="role" readonly>
+        </div>
+        <button type="submit" class="login100-form-btn">Update</button>
+    </form>
     
-    </div>
-    
     
 
-
-    
-
-
-
-    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white">
+    <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white mt-0">
 
         <div class="container text-center text-md-left">
 
@@ -169,15 +159,21 @@
 
    
    
-    	<!--===============================================================================================-->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--===============================================================================================-->
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
 
+    
 	<!--===============================================================================================-->
-	<script src="./assets/js/company_page.js"></script>
+	<script src="./assets/js/edit_po.js"></script>
 </body>
 </html>
