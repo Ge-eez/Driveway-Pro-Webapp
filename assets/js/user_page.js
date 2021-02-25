@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const br = document.createElement('p');
             br.className = 'detailsBreak';
             br.innerHTML = '<br>';
+            br.style.maxHeight = '0.5rem';
             arrayOfBreaks.push(br);                    
         }
 
@@ -42,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         info.innerHTML = '<p>You must first login to access this page :) Thank you</p>';
 
         const infoBtn = document.createElement('div');
-        infoBtn.className = 'parkHereContainer';
-        infoBtn.innerHTML = '<a class="parkHere">Log in</a>';
+        infoBtn.className = 'buttonContainer';
+        infoBtn.innerHTML = '<a class="login100-form-btn button-load text-light" href="./user_login.html">Log in</a>';
 
         modal_content.appendChild(info);
         modal_content.appendChild(arrayOfBreaks[0]);
@@ -105,9 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     link.innerHTML = '<a style="color: #7CB9E8">more details</a>';
 
                     const parkHere = document.createElement('div');
-                    parkHere.className = 'parkHereContainer';
-                    parkHere.innerHTML = '<a class="parkHere">Park Here</a>';
-
+                    parkHere.className = 'buttonContainer';
+                    parkHere.innerHTML = '<a class="login100-form-btn button-load text-light">Park Here</a>';
 
                     const parkContent = document.createElement('div');
                     parkContent.className = 'park_content';
@@ -122,9 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     let lng = position.coords.longitude;
 
                     let R = 6371; // km
-                    let dLat = (cursor.value.latitude - lat).toRad();
-                    let dLon = (cursor.value.longitude - lng).toRad();
-                    let lat1 = position.coords.latitude.toRad();
+                    let dLat = (cursor.value.latitude - lat)* Math.PI / 180;
+                    let dLon = (cursor.value.longitude - lng)* Math.PI / 180;
+                    let lat1 = position.coords.latitude* Math.PI / 180;
                     let lat2 = cursor.value.latitude * Math.PI / 180;
 
                     let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -159,8 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         li.setAttribute('latitudeCompany', cursor.value.latitude);
                         li.setAttribute('longitudeCompany', cursor.value.longitude);
 
-                        li.appendChild(document.createTextNode(cursor.value.name));
-                        li.appendChild(document.createTextNode(cursor.value.email));
+                        li.appendChild(document.createTextNode(`Company: ${cursor.value.name}`));
+                        li.appendChild(document.createElement('br'));
+                        li.appendChild(document.createTextNode(`Contact: ${cursor.value.email}`));
+
+                        link.style.fontSize = '0.8rem';
 
                         written_content.appendChild(li);       
                         li.appendChild(link);
@@ -172,14 +175,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         map.style.display = 'none';
                         parkBtn.style.display = 'none';
-                        getdir.style.padding = '0';            
+                        getdir.style.padding = '0';   
 
                         parkHere.addEventListener('click', parkHereTimer); 
                         function parkHereTimer(e) {                      
                             if (e.target.parentElement.parentElement.firstChild.classList.contains('nearby_collections')) {                         
                                 const exit = document.createElement('div');
-                                exit.className = 'exit parkHereContainer';
-                                exit.innerHTML = '<a class="parkHere" style="font-size: 1.2rem">Done Parking</a>';   
+                                exit.className = 'exit buttonContainer';
+                                exit.innerHTML = '<a class="login100-form-btn button-load text-light">Done Parking</a>';   
 
                                 let today = new Date();
                                 let h = today.getHours();
@@ -214,8 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let longitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('longitudeCompany'));
 
                                 // console.log(companyActiveSlots);
-                                console.log(emailCompany, nameCompany, passwordCompany, chargeCompany, slotsCompany, activeSlotsCompany,
-                                    opensAtCompany, closesAtCompany, latitudeCompany, longitudeCompany);
+                                // console.log(emailCompany, nameCompany, passwordCompany, chargeCompany, slotsCompany, activeSlotsCompany,
+                                //     opensAtCompany, closesAtCompany, latitudeCompany, longitudeCompany);
+
+                                console.log(activeSlotsCompany);
 
                                 let current = `8:30:04`.match(/\d+/g).map(Number);
                                 let closesAt = companyClosesAt.match(/\d+/g).map(Number);
@@ -236,15 +241,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                         const br = document.createElement('p');
                                         br.className = 'detailsBreak';
                                         br.innerHTML = '<br>';
+                                        br.style.maxHeight = '0.5rem';
                                         arrayOfBreaks.push(br);                    
                                     }
                                     const notify = document.createElement('a');
                                     notify.className = 'details';
-                                    notify.innerHTML = '<p>You have less than 30 minutes to unpark your vehicle please respect the companys closing hour</p>';
+                                    notify.innerHTML = `<p>You have less than 30 minutes to move your vehicle. Please respect the company's closing hour. Thank you</p>`;
 
                                     const notifyBtn = document.createElement('div');
-                                    notifyBtn.className = 'parkHereContainer';
-                                    notifyBtn.innerHTML = '<a class="parkHere">Log in</a>';
+                                    notifyBtn.className = 'buttonContainer';
+                                    notifyBtn.innerHTML = '<a class="login100-form-btn button-load text-light">Close</a>';
 
                                     modal_content.appendChild(notify);
                                     modal_content.appendChild(arrayOfBreaks[0]);
@@ -284,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         password: passwordCompany,
                                         charge: chargeCompany,
                                         slots: slotsCompany,
-                                        active_slots: activeSlotsCompany - 1,
+                                        active_slots: Number(Number(activeSlotsCompany) - 1),
                                         opens_at: opensAtCompany,
                                         closes_at: closesAtCompany,
                                         latitude: latitudeCompany,
@@ -302,47 +308,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                     console.log("An error occured");
                                 };
 
-                                // console.log(Number(companyActiveSlots.match(/(\d+)/)[0]));
-
-                                // req.onsuccess = function(event) {
-                                //     var cursor = event.target.result;
-                                //     if(cursor){
-                                //         if(cursor.value.email === companyEmail){//we find by id an user we want to update
-                                            // var company = {};
-                                            // company.active_slots -= 1;
-
-                                            // var res = cursor.update(company);
-                                            // res.onsuccess = function(e){
-                                            //     console.log("update success!!");
-                                            // }
-                                            // res.onerror = function(e){
-                                            //     console.log("update failed!!");
-                                            // }
-                                //         }
-                                //         cursor.continue();
-                                //     }
-                                // }
-                                // console.log(companyActiveSlots);
-
                                 let arrayOfBreaks = [];
                                 for (let index = 0; index < 5; index++) {
                                     const br = document.createElement('p');
                                     br.className = 'detailsBreak';
                                     br.innerHTML = '<br>';
+                                    br.style.maxHeight = '0.5rem';
                                     arrayOfBreaks.push(br);                    
                                 }
 
                                 nearbylists.innerHTML = '';
 
                                 nearbylists.appendChild(parkContent);
-                                parkContent.style.display = 'flex';
-                                parkContent.style.flexDirection = 'column';
-                                parkContent.style.textAlign = 'center';
-                                parkContent.style.margin = '4rem';
-                                parkContent.style.fontSize = '1.2rem';
+                                // parkContent.style.display = 'flex';
+                                // parkContent.style.flexDirection = 'column';
+                                // parkContent.style.textAlign = 'center';
+                                // parkContent.style.margin = '4rem';
+                                // parkContent.style.fontSize = '1.2rem';
 
                                 parkContent.appendChild(document.createTextNode(companyName));
-                                parkContent.appendChild(arrayOfBreaks[0]);
+                                parkContent.appendChild(arrayOfBreaks[0]);   
                                 parkContent.appendChild(document.createTextNode(`Your plate Number: ${userPlate}`));
                                 parkContent.appendChild(arrayOfBreaks[1]);                                    
                                 parkContent.appendChild(document.createTextNode(companyCharge));
@@ -357,8 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 function userTicket(e) {
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
-                                        done.className = 'done parkHereContainer';
-                                        done.innerHTML = '<a class="parkHere" style="font-size: 1.2rem" >Exit</a>';
+                                        done.className = 'done buttonContainer';
+                                        done.innerHTML = '<a class="login100-form-btn button-load text-light">Exit</a>';
                                         
                                         var now = new Date();
                                         var hour = now.getHours();
@@ -377,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             const br = document.createElement('p');
                                             br.className = 'detailsBreak';
                                             br.innerHTML = '<br>';
+                                            br.style.maxHeight = '0.5rem';
                                             arrayOfBreaks.push(br);                    
                                         }
 
@@ -391,9 +377,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                         const infoDone = document.createElement('div');
                                         infoDone.className = 'done';
-                                        infoDone.innerHTML = '<p>Please make sure to show this page to the parking officer :) Thank you for using our service</p>';
+                                        infoDone.innerHTML = '<p>Please make sure to show this page to the parking officer before exiting :) Thank you for using our service</p>';
 
-                                        infoDone.style.fontSize = '1.5rem';
+                                        // infoDone.style.fontSize = '1.5rem';
+                                        timerDemo.style.margin = "0";
 
                                         ticketContent.appendChild(infoDone);
                                         ticketContent.appendChild(arrayOfBreaks[0]);
@@ -424,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                     password: passwordCompany,
                                                     charge: chargeCompany,
                                                     slots: slotsCompany,
-                                                    active_slots: activeSlotsCompany + 1,
+                                                    active_slots: Number(Number(activeSlotsCompany) + 1),
                                                     opens_at: opensAtCompany,
                                                     closes_at: closesAtCompany,
                                                     latitude: latitudeCompany,
@@ -469,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const br = document.createElement('p');
                     br.className = 'detailsBreak';
                     br.innerHTML = '<br>';
+                    br.style.maxHeight = '0.5rem';
                     arrayOfBreaks.push(br);                    
                 }  
 

@@ -4,7 +4,7 @@
     <title></title>
     <meta charset="utf-8" />
 	
-    <link rel="stylesheet" href="./assets/css/style.css">
+    
     <link rel="icon" type="image/png" href="./assets/images/icons/icon.png" />
 
     <!--===============================================================================================-->
@@ -16,6 +16,7 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/Parking_officer.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <!--===============================================================================================-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <!-- ====================================================== -->
@@ -27,23 +28,38 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <div id="myMap"></div>
-        <div class="getdir">
-            <a class="parkButton">Nearby parking places</a>
-        </div>
-        <div class="display">
-            <ul class="nearbylists"></ul>
-        </div>
-        
-        <div id="myModal" class="modal">
+        <div class="row tab-content" id="content-wrapper">
+            <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-            <!-- Modal content -->
-            <div class="modal-content">
-              <span class="close">&times; <br/> </span>
-              <div class="content"></div>
+                <h2>Driveway Pro</h2>
+                <h5><i class="fas fa-ticket-alt"></i></i>Browse nearby parking places</h5>
+                <h5><i class="fas fa-ticket-alt"></i></i>Park on your spot of preference</h5>
+                <h5><i class="fas fa-ticket-alt"></i></i>Get accurate information</h5>
+
+
             </div>
-          
+        
+            <div class="col-11 col-md-6 col-lg-7 col-xl-7 p-0 mt-2 mb-3">
+            <div id="myMap"></div>
+            <div class="getdir">
+                <a class="parkButton login100-form-btn button-load text-light">Nearby parking places</a>
+            </div>
+            <div class="display">
+                <ul class="nearbylists"></ul>
+            </div>
+            
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                <span class="close">&times; <br/> </span>
+                <div class="content"></div>
+                </div>
+            
+            </div>
+            </div>
         </div>
+
     </div>
 
     <footer class="page-footer font-small mdb-color pt-4 bg-dark text-white mt-0">

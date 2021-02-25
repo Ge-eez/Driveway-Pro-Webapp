@@ -5,12 +5,39 @@
 .page-wrapper {
     background-image: linear-gradient(#051C55, #E76900);
     width: 100%;
-    /* height: 100%;     */
-    /* overflow: auto; */
+}
+
+#content-wrapper {
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+#content-wrapper>div:nth-child(1){
+    border: 1px solid;
+    border-bottom-right-radius: 30%;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    color: #fff;
+    background-color:#E76900;
+}
+#content-wrapper>div:nth-child(1)>h5{
+    text-align: left;
+    margin: 5% 0% 5% 4%;
+}
+#content-wrapper>div:nth-child(1)>h5>i{
+    margin-right: 8%;
+}
+#content-wrapper>div:nth-child(2){
+    border: 1px solid;
+    border-radius: 5%;
+    margin-left: 2%;
+    padding: 5% 1%;
+    text-align: center;
 }
 
 #myMap {
-    width: 60%;
+    width: 80%;
     height: 80vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -31,7 +58,7 @@
 .written_content {
     display: flex;
     justify-content: space-between;
-    border: 0.2px solid black;
+    border: 0.001rem solid #aaaaaa;
     border-right: 0;
     border-left: 0;
 }
@@ -42,7 +69,7 @@
     width: 60%;
 }
 
-.parkButton {   
+/* .parkButton {   
 	background-color:#051C55;
 	border-radius:28px;
 	border:1px solid #051C55;
@@ -91,7 +118,7 @@
 	top:1px;
     background-color: #E76900;
     color:#ffffff;
-}
+} */
 
 .nearby_collections, .park_content {
     text-align: center;
@@ -104,10 +131,15 @@
 
 .display {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    width: 50%;
+    width: 100%;
     background-color: white;
     /* height: 200vh; */
     overflow-y: auto;
+    /* border: 1px solid; */
+    border-radius: 3%;
+    /* margin-left: 2%;
+    padding: 5% 1%; */
+    /* text-align: center; */
     /* display: flex; */
     /* display: inline-block; */
 
@@ -148,35 +180,43 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal-content {
+}
+
+/* Modal Content */
+.modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 60%;
-  }
+    width: 50%;
+}
 
-  .modal-content .content {
-      display: block;
-  }
-  
-  /* The Close Button */
-  .close {
+.modal-content .content {
+    display: block;
+}
+
+/* The Close Button */
+.close {
     color: #aaaaaa;
-    float: right;
+    margin-left: 95%;
     font-size: 28px;
     font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
+}
+
+.close:hover,
+.close:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
-  }
+}
+
+.park_content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 4rem;
+    font-size: 1.2rem;
+}
 
 
 
