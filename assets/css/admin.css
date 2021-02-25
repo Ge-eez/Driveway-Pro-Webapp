@@ -159,7 +159,9 @@ li .active {
     width: 20px;
     height: 20px;
 }
-
+#users .list-item li, #companies .list-item li, #account .list-item li {
+    border-right: 5px solid rgb(8, 104, 13);
+}
 
 /* Responsive */
 
