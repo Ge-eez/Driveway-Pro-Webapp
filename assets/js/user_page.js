@@ -83,13 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let objectStoreUser = db.transaction("users").objectStore("users");
         let userPlate = 0; 
         let userEmail = '';
-        objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
-        objectStoreUser.openCursor().onsuccess = function(e) {
-            let cursor = e.target.result;
-
-            userPlate = cursor.value.plate_number;
-            userEmail = cursor.value.email;
+        let email_id_LS = (localStorage.getItem("user"))
+        let email_id= email_id_LS.slice(1, email_id_LS.length - 1)
+        let request = objectStoreUser.get(email_id);
+        request.onsuccess = function(e) {
+            let result = (request.result);
+            userPlate = result.plate_number;
+            userEmail = result.email;
         }
+        // objectStoreUser.openCursor().onsuccess = function(e) {
+        //     let cursor = e.target.result;
+
+        //     userPlate = cursor.value.plate_number;
+        //     userEmail = cursor.value.email;
+        // }
         // Latitude/longitude spherical geodesy formulae & scripts (c) Chris Veness 2002-2011                   - www.movable-type.co.uk/scripts/latlong.html 
         // where R is earth’s radius (mean radius = 6,371km);
         // note that angles need to be in radians to pass to trig functions!
