@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     };
 
-    // let ticketsDB = indexedDB.open("Tickets", 1);
+    // let ticketsDB = indexedDB.open("Tickets", 2);
     // ticketsDB.onsuccess = function () {
     //     console.log('Database Ready');
     //     DBTicket = ticketsDB.result;
@@ -92,14 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let objectStoreUser = db.transaction("users").objectStore("users");
         let userPlate = 0; 
         let userEmail = '';
-        objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
-        objectStoreUser.openCursor().onsuccess = function(e) {
-            let cursor = e.target.result;
-
-            userPlate = cursor.value.plate_number;
-            userEmail = cursor.value.email;
+        let email_id_LS = (localStorage.getItem("user"))
+        let email_id= email_id_LS.slice(1, email_id_LS.length - 1)
+        let request = objectStoreUser.get(email_id);
+        request.onsuccess = function(e) {
+            let result = (request.result);
+            userPlate = result.plate_number;
+            userEmail = result.email;
         }
-        
         navigator.geolocation.getCurrentPosition(locationHandler);
         
         function locationHandler(position){
