@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     };
 
-    // let ticketsDB = indexedDB.open("Tickets", 2);
+    // let ticketsDB = indexedDB.open("Tickets", 1);
     // ticketsDB.onsuccess = function () {
     //     console.log('Database Ready');
     //     DBTicket = ticketsDB.result;
@@ -92,14 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let objectStoreUser = db.transaction("users").objectStore("users");
         let userPlate = 0; 
         let userEmail = '';
-        let email_id_LS = (localStorage.getItem("user"))
-        let email_id= email_id_LS.slice(1, email_id_LS.length - 1)
-        let request = objectStoreUser.get(email_id);
-        request.onsuccess = function(e) {
-            let result = (request.result);
-            userPlate = result.plate_number;
-            userEmail = result.email;
+        objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
+        objectStoreUser.openCursor().onsuccess = function(e) {
+            let cursor = e.target.result;
+
+            userPlate = cursor.value.plate_number;
+            userEmail = cursor.value.email;
         }
+        
         navigator.geolocation.getCurrentPosition(locationHandler);
         
         function locationHandler(position){
@@ -155,9 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     let hoursNow = new Date();
                     let hourNow = hoursNow.getHours();
 
-                    let closingHour = cursor.value.closes_at.includes('PM') || cursor.value.closes_at.includes('pm') || cursor.value.closes_at.includes('Pm') || cursor.value.closes_at.includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
+                    let closingHour = String(cursor.value.closes_at).includes('PM') || String(cursor.value.closes_at).includes('pm') || String(cursor.value.closes_at).includes('Pm') || String(cursor.value.closes_at).includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
 
-                    let openingHour = cursor.value.opens_at.includes('AM') || cursor.value.opens_at.includes('am') || cursor.value.opens_at.includes('Am') || cursor.value.opens_at.includes('aM') ? cursor.value.opens_at.match(/\d+/g).map(Number)[0] : cursor.value.opens_at.match(/\d+/g).map(Number)[0];
+                    let openingHour = String(cursor.value.opens_at).includes('AM') || String(cursor.value.opens_at).includes('am') || String(cursor.value.opens_at).includes('Am') || String(cursor.value.opens_at).includes('aM') ? cursor.value.opens_at.match(/\d+/g).map(Number)[0] : cursor.value.opens_at.match(/\d+/g).map(Number)[0];
 
                     // Display nearby parking places within a distance of 5kms, avaiable parking spots and working hours
                     if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1) && ((hourNow - openingHour) >= 0)) {
