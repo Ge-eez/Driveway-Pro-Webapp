@@ -13,7 +13,7 @@ var count = false;
 let DB;
 
 document.addEventListener("DOMContentLoaded", () => {
-    let TicketDB = indexedDB.open("Tickets", 1)
+    let TicketDB = indexedDB.open("Tickets", 2)
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
     strtTimeDis.innerHTML = currentTime()
