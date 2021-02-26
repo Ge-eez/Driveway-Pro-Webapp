@@ -13,20 +13,20 @@ let DB;
 let db;
 // let DBAccount;
 document.addEventListener('DOMContentLoaded', () => {
-    let CompanyDB = indexedDB.open("companies", 1);
+    let CompanyDB = indexedDB.open("companies", 2);
     CompanyDB.onsuccess = function () {
         console.log('Database Ready');
         DB = CompanyDB.result;
     };
 
-    let UserDB = indexedDB.open("users", 1);
+    let UserDB = indexedDB.open("users", 2);
     UserDB.onsuccess = function () {
         console.log('Database Ready');
         db = UserDB.result;
 
     };
 
-    // let accountDB = indexedDB.open("account", 1);
+    // let accountDB = indexedDB.open("account", 2);
     // accountDB.onsuccess = function () {
     //     console.log('Database Ready');
     //     DBAccount = accountDB.result;
