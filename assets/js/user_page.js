@@ -155,9 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     let hoursNow = new Date();
                     let hourNow = hoursNow.getHours();
 
-                    let closingHour = cursor.value.closes_at.includes('PM') || cursor.value.closes_at.includes('pm') || cursor.value.closes_at.includes('Pm') || cursor.value.closes_at.includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
+                    let closingHour = String(cursor.value.closes_at).includes('PM') || String(cursor.value.closes_at).includes('pm') || String(cursor.value.closes_at).includes('Pm') || String(cursor.value.closes_at).includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
 
-                    let openingHour = cursor.value.opens_at.includes('AM') || cursor.value.opens_at.includes('am') || cursor.value.opens_at.includes('Am') || cursor.value.opens_at.includes('aM') ? cursor.value.opens_at.match(/\d+/g).map(Number)[0] : cursor.value.opens_at.match(/\d+/g).map(Number)[0];
+                    let openingHour = String(cursor.value.opens_at).includes('AM') || String(cursor.value.opens_at).includes('am') || String(cursor.value.opens_at).includes('Am') || String(cursor.value.opens_at).includes('aM') ? cursor.value.opens_at.match(/\d+/g).map(Number)[0] : cursor.value.opens_at.match(/\d+/g).map(Number)[0];
 
                     // Display nearby parking places within a distance of 5kms, avaiable parking spots and working hours
                     if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1) && ((hourNow - openingHour) >= 0)) {
