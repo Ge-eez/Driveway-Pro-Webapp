@@ -44,7 +44,7 @@ let companyDB = () => {
 }
 let accountDB = () => {
     return new Promise(function(resolve, reject){
-        let AccountDB = indexedDB.open("account", version);
+        let AccountDB = indexedDB.open("account", 2);
         AccountDB.onsuccess = function (event) {
             console.log('Database Ready');
             resolve(AccountDB.result);

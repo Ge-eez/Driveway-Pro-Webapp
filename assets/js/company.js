@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 opens_at: "8AM",
                 closes_at: "8PM",
                 latitude: latitudeInput.value,
-                longitude: longitude.value,
+                longitude: longitudeInput.value,
             }
             return signupCompany(data)
         }

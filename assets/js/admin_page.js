@@ -40,35 +40,20 @@ let DBforUser;
 let DBforCompany;
 let DBforAccount;
 document.addEventListener("DOMContentLoaded", () => {
-    let userDB = indexedDB.open("users", 2)
-    userDB.onsuccess = function() {
-        DBforUser = userDB.result;
+    userDB().then(function(result){
+        DBforUser = result;
         displayProfile();
         display_users();
-    }
-    userDB.onupgradeneeded = function(e) {
-
-        console.log("created store");
-    }
-    let companyDB = indexedDB.open("companies", 2)
-    companyDB.onsuccess = function() {
-        DBforCompany = companyDB.result;
+    })
+    
+    companyDB().then(function(result){
+        DBforCompany = result;
         display_companies();
-    }
-    companyDB.onupgradeneeded = function(e) {
-
-        console.log("created store");
-    }
-    let accountDB = indexedDB.open("account", 2)
-    accountDB.onsuccess = function() {
-        DBforAccount = accountDB.result;
+    })
+    accountDB().then(function(result){
+        DBforAccount = result;
         display_account();
-    }
-    accountDB.onupgradeneeded = function(e) {
-
-        console.log("created store");
-    }
-
+    })
 
 });
 
