@@ -30,21 +30,21 @@ let DBAccount;
 let DBTicket;
 document.addEventListener('DOMContentLoaded', () => {
     // Open working databases
-
     userDB().then(function(result){
         DBUser = result
-    })
+    });
+
     companyDB().then(function(result){
         DBCompany = result
-    })
+    });
+
     ticketDB().then(function(result){
         DBTicket = result
-    })
+    });
 
     accountDB().then(function(result){
         DBAccount = result
-    })
-    
+    });    
 
     // Check for user login before user accessing page
     if (!localStorage.getItem("user")) {
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let am_pm = h > 12 ? 'PM' : 'AM';
                                 // Convert the hour to 12 format 
                                 h = h % 12 || 12;
-                                let start = `${h} : ${m} : ${s} ${am_pm }`;
+                                let start = `${h} : ${m}`;
 
                                 // Assign starting time to the UI
                                 timerStart.innerHTML = `Start time: ${start}`;                                
@@ -237,10 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let longitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('longitudeCompany'));
 
                                 // Keep track of current time to notify user on the company's closing hour
-                                // let timeCurrent = new Date();
-                                // let hourCurrent = timeCurrent.getHours();
-                                // hourCurrent = hourCurrent % 12 || 12;
-
                                 let current = `${h}:${m}:${s}`.match(/\d+/g).map(Number);
                                 let closesAt = String(companyClosesAt).match(/\d+/g).map(Number);
                                 let closes = 0;
@@ -317,27 +313,19 @@ document.addEventListener('DOMContentLoaded', () => {
                                     console.log("An error occured");
                                 };
 
-                                let ticketsTransaction = DBTicket.transaction(["Tickets"], "readwrite");
-                                let ticketsUpdate = ticketsTransaction.objectStore("Tickets");
-                                let ticketAdd = ticketsUpdate.get(companyEmail);
-
-                                ticketAdd.onsuccess = function() {                                           
-                                    let ticketData = {
-                                        active: "true",
-                                        plate_Number: userPlate,
-                                        StartTime: start,
-                                        endTime: "--:--",
-                                        price: "$$.$$"
-                                    }                                    
-
-                                    let updateTickets = ticketsUpdate.add(ticketData);
-                                    updateTickets.onsuccess = function() {
-                                        console.log("done tickets added");
-                                    }
+                                // Add basic information to the Tickets database
+                                let dataTicket = {
+                                    active: "true",
+                                    plate_Number: userPlate,
+                                    StartTime: start, 
+                                    endTime: `--:--`, 
+                                    price: `$$.$$`
                                 }
-
-                                ticketAdd.onerror = function() {
-                                    console.log("An error occured");
+                                let ticketsTransaction = DBTicket.transaction("Tickets", "readwrite").objectStore("Tickets");
+                                ticketsTransaction.transaction.oncomplete = function (e) {
+                                    let objectStore = DBTicket.transaction("Tickets", "readwrite").objectStore("Tickets");
+                                    objectStore.add(dataTicket);
+                                    console.log(`Updated ticket`);
                                 };
 
                                 nearbylists.innerHTML = '';
@@ -363,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
                                         done.className = 'done buttonContainer';
-                                        done.innerHTML = '<a class="parkButton singleButton login100-form-btn button-load text-light" href="./index.html">Exit</a>';
+                                        done.innerHTML = '<a class="parkButton singleButton login100-form-btn button-load text-light" >Exit</a>';
                                         
                                         // Keep track of the ended time
                                         var now = new Date();
@@ -376,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         let charge = Number(`${x[0]}.${x[1]}`);
                                         let price = ((hour-startHour)*charge) + ((min - startMin)*(charge/60)) + ((sec - startSec)*(charge/3600));
                                         hour = hour % 12 || 12;
-                                        let end = `${hour} : ${min} : ${sec} ${am_pm }`;
+                                        let end = `${hour} : ${min}`;
                                         
                                         const endTime = document.createElement('div');
                                         endTime.className = 'endTime';
@@ -406,6 +394,23 @@ document.addEventListener('DOMContentLoaded', () => {
                                         ticketContent.appendChild(endTime);
                                         ticketContent.appendChild(arrayOfBreaks[5]);
                                         ticketContent.appendChild(done);
+
+                                        // Update Tickets database appending the end time and price
+                                        let ticketsUpdated = DBTicket.transaction("Tickets", "readwrite").objectStore('Tickets');
+                                        ticketsUpdated.openCursor().onsuccess = function (event) {
+                                            var cursor = event.target.result;
+                                            if (cursor) {
+                                                const updateData = cursor.value;
+                                                updateData.active = "false";
+                                                updateData.endTime = end;
+                                                updateData.price = price.toFixed(2);
+                                                const request = cursor.update(updateData);
+                                                request.onsuccess = function(){
+                                                    console.log(`Successfully updated ticket`); 
+                                                }
+                                                cursor.continue();
+                                            }
+                                        };
 
                                         // Update account database
                                         let transactionAccount = DBAccount.transaction(["account"], "readwrite");
@@ -464,31 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                             requestAdd.onerror = function() {
                                                 console.log("An error occured");
-                                            };
-
-                                            let transactionTicketsUpdate = DBTicket.transaction(["Tickets"], "readwrite");
-                                            let ticketsUpdated = transactionTicketsUpdate.objectStore("Tickets");
-                                            let ticketUpdate = ticketsUpdated.get(companyEmail);
-
-                                            ticketUpdate.onsuccess = function() {                                           
-                                                let ticketDataUpdate = {
-                                                    active: "false",
-                                                    plate_Number: userPlate,
-                                                    StartTime: start,
-                                                    endTime: end,
-                                                    price: price.toFixed(2)
-                                                }
-                                                
-                                                let updatedTickets = ticketsUpdated.put(ticketDataUpdate);
-                                                console.log(updatedTickets);
-                                                updatedTickets.onsuccess = function() {
-                                                    console.log("done ticket updated");
-                                                }
-                                            }
-
-                                            ticketUpdate.onerror = function() {
-                                                console.log("An error occured");
-                                            };
+                                            };                                           
 
                                         }   
 
