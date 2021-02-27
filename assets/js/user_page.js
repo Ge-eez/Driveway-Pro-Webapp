@@ -44,59 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     accountDB().then(function(result){
         DBAccount = result
     })
-
-    ticketsDB.onupgradeneeded = function (e) {
-        let db = e.target.result;
-
-        let objectStore = db.createObjectStore("Tickets", { keyPath: 'id', autoIncrement: true })
-
-        objectStore.createIndex('active', 'active', { unique: false });
-        objectStore.createIndex('plate_Number', 'plate_Number', { unique: true });
-        objectStore.createIndex('StartTime', 'StartTime', { unique: false });
-        objectStore.createIndex('endTime', 'endTime', { unique: false });
-        objectStore.createIndex('price', 'price', { unique: false });
-
-        // objectStore.transaction.oncomplete = function (e) {
-        //     // Store values in the newly created objectStore.
-        //     let objectStore = db.transaction("Tickets", "readwrite").objectStore("Tickets");
-        //     ticketData.forEach(function (company) {
-        //         objectStore.add(company);
-        //     });
-        // };
-        console.log(`Database ready and fields created!`);
-
-    }
-    
-    UserDB.onupgradeneeded = function(e) {
-        let db = e.target.result;
-
-        let objectStore = db.createObjectStore('users', { keyPath: 'email' });
-
-        objectStore.createIndex('users', ['name', 'email'], { unique: true });
-
-        console.log('Database ready and fields created!');
-    }
-
-    CompanyDB.onupgradeneeded = function (e) {
-        let DB = e.target.result;
-
-        let objectStore = DB.createObjectStore('companies', { keyPath: 'email' });
-
-        objectStore.createIndex('companies', ['name', 'email'], { unique: true });
-
-        console.log('Database ready and fields created!');
-    }
-
-    accountDB.onupgradeneeded = function (e) {
-        let DB = e.target.result;
-
-        let objectStore = DB.createObjectStore('account', { keyPath: 'date' });
-
-        objectStore.createIndex('account', ['company_email', 'user_email'], { unique: false });
-
-        console.log('Database ready and fields created!');
-    }
-
     
 
     // Check for user login before user accessing page
