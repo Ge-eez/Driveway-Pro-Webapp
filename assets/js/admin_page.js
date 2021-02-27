@@ -1,5 +1,6 @@
 const companyList = document.querySelector(".company-list");
 const userList = document.querySelector(".user-list");
+const accountList = document.querySelector('.account-list')
 const companyAddBtn = document.getElementById("company-add-btn");
 const userAddBtn = document.getElementById("user-add-btn");
 const companyCancelIcon = document.getElementById("company-cancel");
@@ -227,11 +228,12 @@ function display_account() {
             let listItem = `
             <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
                 
-                <li class="col-4">${cursor.value.user_email}</li>
-                <li class="col-4 ">${cursor.value.company_email}</li>
-                <li class="col-2">${cursor.value.income} Birr</li>
+                <li class="col-3">${cursor.value.user_email}</li>
+                <li class="col-3">${cursor.value.company_email}</li>
+                <li class="col-3">${cursor.value.amount} Birr</li>
+                <li class="col-3">${cursor.value.date} </li>
             </ul>`;
-                userList.innerHTML += listItem;
+                accountList.innerHTML += listItem;
             
             cursor.continue();
         }
