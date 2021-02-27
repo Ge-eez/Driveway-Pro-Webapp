@@ -3,26 +3,11 @@ document.addEventListener("DOMContentLoaded", function() {
     /*==================================================================
     [ DB ]*/
 
-    let UserDB = indexedDB.open("users", version);
-    UserDB.onsuccess = function(event) {
-        console.log('Database Ready');
-        DB = UserDB.result;
-        // display
-
-    };
-    UserDB.onerror = function(event) {
-        console.log('There was an error');
-    };
-    UserDB.onupgradeneeded = function(e) {
-        let db = e.target.result;
-
-        let objectStore = db.createObjectStore('users', { keyPath: 'email' });
-
-        objectStore.createIndex('users', ['name', 'email'], { unique: true });
-
-        console.log('Database ready and fields created!');
-    }
-
+    // DB = userDB()
+    // console.log(DB)
+    userDB().then(function(result){
+        DB = result
+    })
     /*==================================================================
     [ Validate ]*/
 
