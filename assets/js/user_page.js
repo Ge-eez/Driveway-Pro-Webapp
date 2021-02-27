@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let start = `${h} : ${m}`;
 
                                 // Assign starting time to the UI
-                                timerStart.innerHTML = `Start time: ${start}`;                                
+                                timerStart.innerHTML = `Start time: ${h} : ${m} : ${s} ${am_pm}`;                                
                                 
                                 // Target and keep tracj of the company's information from the database
                                 let companyEmail = (e.target.parentElement.parentElement.firstChild.getAttribute('data-email'));
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (e.target.parentElement.parentElement.parentElement.classList.contains('nearbylists')) { 
                                         const done = document.createElement('div');
                                         done.className = 'done buttonContainer';
-                                        done.innerHTML = '<a class="parkButton singleButton login100-form-btn button-load text-light" >Exit</a>';
+                                        done.innerHTML = '<a class="parkButton singleButton login100-form-btn button-load text-light" href="./index.html">Exit</a>';
                                         
                                         // Keep track of the ended time
                                         var now = new Date();
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         
                                         const endTime = document.createElement('div');
                                         endTime.className = 'endTime';
-                                        endTime.innerHTML = `End time: ${end}`; 
+                                        endTime.innerHTML = `End time: ${hour} : ${min} : ${sec} ${am_pm}`; 
 
                                         nearbylists.innerHTML = '';
 
