@@ -9,38 +9,25 @@ const modal_content = document.querySelector(".content");
 const page_wrapper = document.querySelector(".page-wrapper");
 
 
-let DB;
-let db;
+let DBUser;
+let DBCompany;
 let DBAccount;
-// let DBTicket;
+let DBTicket;
 document.addEventListener('DOMContentLoaded', () => {
     // Open working databases
-    let CompanyDB = indexedDB.open("companies", 2);
-    CompanyDB.onsuccess = function () {
-        console.log('Database Ready');
-        DB = CompanyDB.result;
-    };
+    userDB().then(function(result){
+        DBUser = result
+    })
+    companyDB().then(function(result){
+        DBCompany = result
+    })
+    ticketDB().then(function(result){
+        DBTicket = result
+    })
 
-    let UserDB = indexedDB.open("users", 2);
-    UserDB.onsuccess = function () {
-        console.log('Database Ready');
-        db = UserDB.result;
-
-    };
-
-    // let ticketsDB = indexedDB.open("Tickets", 1);
-    // ticketsDB.onsuccess = function () {
-    //     console.log('Database Ready');
-    //     DBTicket = ticketsDB.result;
-
-    // };
-
-    let accountDB = indexedDB.open("account", 2);
-    accountDB.onsuccess = function () {
-        console.log('Database Ready');
-        DBAccount = accountDB.result;
-
-    };
+    accountDB().then(function(result){
+        DBAccount = result
+    })
 
     // Check for user login before user accessing page
     if (!localStorage.getItem("user")) {
@@ -89,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     parkBtn.addEventListener("click", park);
     function park(e) {
         // Work on users database to track basic user's information
-        let objectStoreUser = db.transaction("users").objectStore("users");
+        let objectStoreUser = DBUser.transaction("users").objectStore("users");
         let userPlate = 0; 
         let userEmail = '';
         objectStoreUser.get(localStorage.getItem("user")).onsuccess = function() { }
@@ -105,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function locationHandler(position){
             while(nearbylists.firstChild) { nearbylists.removeChild(nearbylists.firstChild) }
 
-            let objectStore = DB.transaction("companies").objectStore("companies");
+            let objectStore = DBCompany.transaction("companies").objectStore("companies");
             
             objectStore.openCursor().onsuccess = function(e) {  
                 let cursor = e.target.result;                
@@ -311,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
 
                                 // Update compaines database to alter the active slots of the company
-                                let transaction = DB.transaction(["companies"], "readwrite");
+                                let transaction = DBCompany.transaction(["companies"], "readwrite");
                                 let slotsUpdate = transaction.objectStore("companies");
                                 let requestMinus = slotsUpdate.get(companyEmail);
 
@@ -340,28 +327,28 @@ document.addEventListener('DOMContentLoaded', () => {
                                     console.log("An error occured");
                                 };
 
-                                // let ticketsTransaction = DBTicket.transaction(["Tickets"], "readwrite");
-                                // let ticketsUpdate = ticketsTransaction.objectStore("Tickets");
-                                // let ticketAdd = ticketsUpdate.get(companyEmail);
+                                let ticketsTransaction = DBTicket.transaction(["Tickets"], "readwrite");
+                                let ticketsUpdate = ticketsTransaction.objectStore("Tickets");
+                                let ticketAdd = ticketsUpdate.get(companyEmail);
 
-                                // ticketAdd.onsuccess = function() {                                           
-                                //     let ticketData = {
-                                //         active: "true",
-                                //         plate_Number: userPlate,
-                                //         StartTime: start,
-                                //         endTime: "--:--",
-                                //         price: "$$.$$"
-                                //     }                                    
+                                ticketAdd.onsuccess = function() {                                           
+                                    let ticketData = {
+                                        active: "true",
+                                        plate_Number: userPlate,
+                                        StartTime: start,
+                                        endTime: "--:--",
+                                        price: "$$.$$"
+                                    }                                    
 
-                                //     let updateTickets = ticketsUpdate.add(ticketData);
-                                //     updateTickets.onsuccess = function() {
-                                //         console.log("done tickets added");
-                                //     }
-                                // }
+                                    let updateTickets = ticketsUpdate.add(ticketData);
+                                    updateTickets.onsuccess = function() {
+                                        console.log("done tickets added");
+                                    }
+                                }
 
-                                // ticketAdd.onerror = function() {
-                                //     console.log("An error occured");
-                                // };
+                                ticketAdd.onerror = function() {
+                                    console.log("An error occured");
+                                };
 
                                 let arrayOfBreaks = [];
                                 for (let index = 0; index < 5; index++) {
@@ -478,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             ticketContent.innerHTML = '';  
                                             
                                             // Update company's database of active slots
-                                            let transactionActive = DB.transaction(["companies"], "readwrite");
+                                            let transactionActive = DBCompany.transaction(["companies"], "readwrite");
                                             let activeSlotsUpdate = transactionActive.objectStore("companies");
                                             let requestAdd = activeSlotsUpdate.get(companyEmail);
 
@@ -507,29 +494,29 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 console.log("An error occured");
                                             };
 
-                                            // let transactionTicketsUpdate = ticketDB.transaction(["Tickets"], "readwrite");
-                                            // let ticketsUpdated = transactionTicketsUpdate.objectStore("Tickets");
-                                            // let ticketUpdate = ticketsUpdated.get(companyEmail);
+                                            let transactionTicketsUpdate = DBTicket.transaction(["Tickets"], "readwrite");
+                                            let ticketsUpdated = transactionTicketsUpdate.objectStore("Tickets");
+                                            let ticketUpdate = ticketsUpdated.get(companyEmail);
 
-                                            // ticketUpdate.onsuccess = function() {                                           
-                                            //     let ticketDataUpdate = {
-                                            //         active: "false",
-                                            //         plate_Number: userPlate,
-                                            //         StartTime: start,
-                                            //         endTime: end,
-                                            //         price: price.toFixed(2)
-                                            //     }
+                                            ticketUpdate.onsuccess = function() {                                           
+                                                let ticketDataUpdate = {
+                                                    active: "false",
+                                                    plate_Number: userPlate,
+                                                    StartTime: start,
+                                                    endTime: end,
+                                                    price: price.toFixed(2)
+                                                }
                                                 
-                                            //     let updatedTickets = ticketsUpdated.put(ticketDataUpdate);
-                                            //     console.log(updatedTickets);
-                                            //     updatedTickets.onsuccess = function() {
-                                            //         console.log("done ticket updated");
-                                            //     }
-                                            // }
+                                                let updatedTickets = ticketsUpdated.put(ticketDataUpdate);
+                                                console.log(updatedTickets);
+                                                updatedTickets.onsuccess = function() {
+                                                    console.log("done ticket updated");
+                                                }
+                                            }
 
-                                            // ticketUpdate.onerror = function() {
-                                            //     console.log("An error occured");
-                                            // };
+                                            ticketUpdate.onerror = function() {
+                                                console.log("An error occured");
+                                            };
 
                                         }   
 

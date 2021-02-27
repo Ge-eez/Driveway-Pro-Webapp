@@ -39,23 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
         longtiudeInput.value = position.coords.longitude;
       });
     
-    let companyDB = indexedDB.open("companies", 2)
-    companyDB.onsuccess = function() {
-        DBCompany = companyDB.result;
-        displayProfile();
-
-    }
-    companyDB.onupgradeneeded = function(e) {
-
-
-    }
-
-    let userDB = indexedDB.open("users");
-    userDB.onsuccess = function() {
-        DBUser = userDB.result;
-        display_parking_officer();
-    }
-
+      userDB().then(function(result){
+        DBUser = result
+        display_parking_officer()
+    })
+    companyDB().then(function(result){
+        DBCompany = result
+        displayProfile()
+    })
 });
 
 
