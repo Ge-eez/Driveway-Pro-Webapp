@@ -8,6 +8,21 @@ const span = document.getElementsByClassName("close")[0];
 const modal_content = document.querySelector(".content");
 const page_wrapper = document.querySelector(".page-wrapper");
 
+let arrayOfBreaks = [];
+for (let index = 0; index < 7; index++) {
+    const br = document.createElement('p');
+    br.className = 'detailsBreak';
+    br.innerHTML = '<br>';
+    br.style.maxHeight = '0.5rem';
+    arrayOfBreaks.push(br);                    
+}
+
+// Close the modal when x button is clicked
+span.onclick = function() {
+    modal.style.display = "none";
+    modal_content.innerHTML = '';
+    window.history.back();
+}
 
 let DBUser;
 let DBCompany;
@@ -15,6 +30,7 @@ let DBAccount;
 let DBTicket;
 document.addEventListener('DOMContentLoaded', () => {
     // Open working databases
+
     userDB().then(function(result){
         DBUser = result
     })
@@ -29,18 +45,63 @@ document.addEventListener('DOMContentLoaded', () => {
         DBAccount = result
     })
 
+    ticketsDB.onupgradeneeded = function (e) {
+        let db = e.target.result;
+
+        let objectStore = db.createObjectStore("Tickets", { keyPath: 'id', autoIncrement: true })
+
+        objectStore.createIndex('active', 'active', { unique: false });
+        objectStore.createIndex('plate_Number', 'plate_Number', { unique: true });
+        objectStore.createIndex('StartTime', 'StartTime', { unique: false });
+        objectStore.createIndex('endTime', 'endTime', { unique: false });
+        objectStore.createIndex('price', 'price', { unique: false });
+
+        // objectStore.transaction.oncomplete = function (e) {
+        //     // Store values in the newly created objectStore.
+        //     let objectStore = db.transaction("Tickets", "readwrite").objectStore("Tickets");
+        //     ticketData.forEach(function (company) {
+        //         objectStore.add(company);
+        //     });
+        // };
+        console.log(`Database ready and fields created!`);
+
+    }
+    
+    UserDB.onupgradeneeded = function(e) {
+        let db = e.target.result;
+
+        let objectStore = db.createObjectStore('users', { keyPath: 'email' });
+
+        objectStore.createIndex('users', ['name', 'email'], { unique: true });
+
+        console.log('Database ready and fields created!');
+    }
+
+    CompanyDB.onupgradeneeded = function (e) {
+        let DB = e.target.result;
+
+        let objectStore = DB.createObjectStore('companies', { keyPath: 'email' });
+
+        objectStore.createIndex('companies', ['name', 'email'], { unique: true });
+
+        console.log('Database ready and fields created!');
+    }
+
+    accountDB.onupgradeneeded = function (e) {
+        let DB = e.target.result;
+
+        let objectStore = DB.createObjectStore('account', { keyPath: 'date' });
+
+        objectStore.createIndex('account', ['company_email', 'user_email'], { unique: false });
+
+        console.log('Database ready and fields created!');
+    }
+
+    
+
     // Check for user login before user accessing page
     if (!localStorage.getItem("user")) {
         console.log(`Login`);
-        let arrayOfBreaks = [];
-        for (let index = 0; index < 2; index++) {
-            const br = document.createElement('p');
-            br.className = 'detailsBreak';
-            br.innerHTML = '<br>';
-            br.style.maxHeight = '0.5rem';
-            arrayOfBreaks.push(br);                    
-        }
-
         // Display a modal with message for user to login and direct to user login page
         const info = document.createElement('a');
         info.className = 'details';
@@ -58,12 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = "block";
         modal.style.position = "absolute";
         modal.style.zIndex = "1000";
-
-        span.onclick = function() {
-            modal.style.display = "none";
-            modal_content.innerHTML = '';
-            window.history.back();
-        }
 
         infoBtn.onclick = function() {
             modal.style.display = "none";
@@ -142,9 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let hoursNow = new Date();
                     let hourNow = hoursNow.getHours();
 
-                    let closingHour = String(cursor.value.closes_at).includes('PM') || String(cursor.value.closes_at).includes('pm') || String(cursor.value.closes_at).includes('Pm') || String(cursor.value.closes_at).includes('pM') ? cursor.value.closes_at.match(/\d+/g).map(Number)[0] + 12 : cursor.value.closes_at.match(/\d+/g).map(Number)[0];
+                    let closingHour = String(cursor.value.closes_at).includes('PM') || String(cursor.value.closes_at).includes('pm') || String(cursor.value.closes_at).includes('Pm') || String(cursor.value.closes_at).includes('pM') ? String(cursor.value.closes_at).match(/\d+/g).map(Number)[0] + 12 : String(cursor.value.closes_at).match(/\d+/g).map(Number)[0];
 
-                    let openingHour = String(cursor.value.opens_at).includes('AM') || String(cursor.value.opens_at).includes('am') || String(cursor.value.opens_at).includes('Am') || String(cursor.value.opens_at).includes('aM') ? cursor.value.opens_at.match(/\d+/g).map(Number)[0] : cursor.value.opens_at.match(/\d+/g).map(Number)[0];
+                    let openingHour = String(cursor.value.opens_at).includes('AM') || String(cursor.value.opens_at).includes('am') || String(cursor.value.opens_at).includes('Am') || String(cursor.value.opens_at).includes('aM') ? String(cursor.value.opens_at).match(/\d+/g).map(Number)[0] : String(cursor.value.opens_at).match(/\d+/g).map(Number)[0];
+
 
                     // Display nearby parking places within a distance of 5kms, avaiable parking spots and working hours
                     if (distance <= 5 && (cursor.value.active_slots > 0) && ((closingHour - hourNow) >= 1) && ((hourNow - openingHour) >= 0)) {
@@ -234,12 +290,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let longitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('longitudeCompany'));
 
                                 // Keep track of current time to notify user on the company's closing hour
-                                let timeCurrent = new Date();
-                                let hourCurrent = timeCurrent.getHours();
-                                hourCurrent = hourCurrent % 12 || 12;
+                                // let timeCurrent = new Date();
+                                // let hourCurrent = timeCurrent.getHours();
+                                // hourCurrent = hourCurrent % 12 || 12;
 
-                                let current = `${hourCurrent}:${timeCurrent.getMinutes()}:${timeCurrent.getSeconds()}`.match(/\d+/g).map(Number);
-                                let closesAt = companyClosesAt.match(/\d+/g).map(Number);
+                                let current = `${h}:${m}:${s}`.match(/\d+/g).map(Number);
+                                let closesAt = String(companyClosesAt).match(/\d+/g).map(Number);
                                 let closes = 0;
 
                                 if (closesAt.length === 1) {
@@ -253,14 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 // If there is 30 minutes or less time for company's clsoing hour notify user
                                 if (closes - currently <= 0.30) {
-                                    let arrayOfBreaks = [];
-                                    for (let index = 0; index < 2; index++) {
-                                        const br = document.createElement('p');
-                                        br.className = 'detailsBreak';
-                                        br.innerHTML = '<br>';
-                                        br.style.maxHeight = '0.5rem';
-                                        arrayOfBreaks.push(br);                    
-                                    }
                                     // Display a modal to notify user, to move their vehicle within 30 minutes
                                     const notify = document.createElement('a');
                                     notify.className = 'details';
@@ -278,11 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     modal.style.display = "block";
                                     modal.style.position = "absolute";
                                     modal.style.zIndex = "1000";
-
-                                    span.onclick = function() {
-                                        modal.style.display = "none";
-                                        modal_content.innerHTML = '';
-                                    }
 
                                     notifyBtn.onclick = function() {
                                         modal.style.display = "none";
@@ -350,15 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     console.log("An error occured");
                                 };
 
-                                let arrayOfBreaks = [];
-                                for (let index = 0; index < 5; index++) {
-                                    const br = document.createElement('p');
-                                    br.className = 'detailsBreak';
-                                    br.innerHTML = '<br>';
-                                    br.style.maxHeight = '0.5rem';
-                                    arrayOfBreaks.push(br);                    
-                                }
-
                                 nearbylists.innerHTML = '';
 
                                 nearbylists.appendChild(parkContent);
@@ -391,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         var sec = now.getSeconds();
 
                                         // Calculate the price based on the time and company's charge per hour
-                                        let x = companyCharge.match(/\d+/g).map(Number);
+                                        let x = String(companyCharge).match(/\d+/g).map(Number);
                                         let charge = Number(`${x[0]}.${x[1]}`);
                                         let price = ((hour-startHour)*charge) + ((min - startMin)*(charge/60)) + ((sec - startSec)*(charge/3600));
                                         hour = hour % 12 || 12;
@@ -400,15 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                         const endTime = document.createElement('div');
                                         endTime.className = 'endTime';
                                         endTime.innerHTML = `End time: ${end}`; 
-
-                                        let arrayOfBreaks = [];
-                                        for (let index = 0; index < 7; index++) {
-                                            const br = document.createElement('p');
-                                            br.className = 'detailsBreak';
-                                            br.innerHTML = '<br>';
-                                            br.style.maxHeight = '0.5rem';
-                                            arrayOfBreaks.push(br);                    
-                                        }
 
                                         nearbylists.innerHTML = '';
 
@@ -530,14 +555,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         // If there are no nearby places to display notify user
                         if (count === 0) {
-                            let arrayOfBreaks = [];
-                            for (let index = 0; index < 2; index++) {
-                                const br = document.createElement('p');
-                                br.className = 'detailsBreak';
-                                br.innerHTML = '<br>';
-                                br.style.maxHeight = '0.5rem';
-                                arrayOfBreaks.push(br);                    
-                            }
                             // Display a modal with content notifying user couldn't display nearby places currently
                             const info = document.createElement('a');
                             info.className = 'details';
@@ -555,11 +572,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             modal.style.display = "block";
                             modal.style.position = "absolute";
                             modal.style.zIndex = "1000";
-
-                            span.onclick = function() {
-                                modal.style.display = "none";
-                                modal_content.innerHTML = '';
-                            }
 
                             infoBtn.onclick = function() {
                                 modal.style.display = "none";
@@ -581,15 +593,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // more details functioanlity
     function details(e) {
         if (e.target.parentElement.classList.contains('details')) {
-                let arrayOfBreaks = [];
-                for (let index = 0; index < 4; index++) {
-                    const br = document.createElement('p');
-                    br.className = 'detailsBreak';
-                    br.innerHTML = '<br>';
-                    br.style.maxHeight = '0.5rem';
-                    arrayOfBreaks.push(br);                    
-                }  
-
                 let dataName = (e.target.parentElement.parentElement.getAttribute('data-name'));
                 let dataCharge = (e.target.parentElement.parentElement.getAttribute('data-charge'));
                 let dataClosesAt = (e.target.parentElement.parentElement.getAttribute('data-closes_at'));
@@ -606,12 +609,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal_content.appendChild(arrayOfBreaks[3]);
 
                 modal.style.display = "block";
-
-                // Close the modal when x button is clicked
-                span.onclick = function() {
-                    modal.style.display = "none";
-                    modal_content.innerHTML = '';
-                }
 
                 // Close the modal when the area surrounding it is clicked
                 window.onclick = function(event) {
