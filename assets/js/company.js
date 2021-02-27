@@ -2,26 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
     [ DB ]*/
 
-    let CompanyDB = indexedDB.open("companies", version);
-    CompanyDB.onsuccess = function (event) {
-        console.log('Database Ready');
-        DB = CompanyDB.result;
-        // display
-
-    };
-    CompanyDB.onerror = function (event) {
-        console.log('There was an error, please upgrade the version of your indexdb in the code');
-    };
-    CompanyDB.onupgradeneeded = function (e) {
-        let db = e.target.result;
-
-        let objectStore = db.createObjectStore('companies', { keyPath: 'email' });
-
-        objectStore.createIndex('companies', ['name', 'email'], { unique: true });
-
-        console.log('Database ready and fields created!');
-    }
-
+    companyDB().then(function(result){
+        DB = result
+    })
 
     /*==================================================================
     [ Validate ]*/

@@ -1,26 +1,9 @@
-
 document.addEventListener("DOMContentLoaded", function () {
 
     // Money case
-    let AccountDB = indexedDB.open("account", version);
-    AccountDB.onsuccess = function (event) {
-        console.log('Database Ready');
-        DB = AccountDB.result;
-        // display
-
-    };
-    AccountDB.onerror = function (event) {
-        console.log('There was an error, please upgrade the version of your indexdb in the code');
-    };
-    AccountDB.onupgradeneeded = function (e) {
-        let db = e.target.result;
-
-        let objectStore = db.createObjectStore('account', { keyPath: 'date' });
-
-        objectStore.createIndex('account', ['company_email', 'user_email'], { unique: false });
-
-        console.log('Database ready and fields created!');
-    }
+    accountDB().then(function(result){
+        DB = result
+    })
 
 
 
