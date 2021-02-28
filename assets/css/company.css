@@ -173,7 +173,32 @@ li .active {
     height: 20px;
 }
 
+#account ul>li>input {
+    width: 20px;
+    height: 20px;
+}
+#account {
+    display: none;
+    height: 800px;
+}
 
+#account h2 {
+    background-color: #0a1b46;
+    color: white;
+    padding: 3% 0% 3% 5%;
+    margin: 0%;
+}
+#account #option {
+    margin: 0;
+    background-color: #061335;
+    padding: 1% 0% 1% 0%;
+    margin-bottom: 2%;
+}
+#account #header {
+    padding-bottom: 1%;
+    border-bottom: 2px solid;
+    text-align: center;
+}
 /* Responsive */
 
 @media(max-width:1200px) {
@@ -356,5 +381,8 @@ li .active {
     #parking-officer ul>li>input {
         width: 20px;
         height: 20px;
+    }
+    #account{
+        height: 400px;
     }
 }

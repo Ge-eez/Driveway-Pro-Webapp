@@ -70,6 +70,10 @@ function openLink(e, id) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
+    if (id === "profile") {
+        document.getElementById(id).style.display = "flex";
+        return;
+    }
     document.getElementById(id).style.display = "block";
     e.currentTarget.className += " active";
 }
@@ -308,23 +312,26 @@ function selection(e) {
         for (let index = 0; index < checkboxes.length; index++) {
 
             checkboxes[index].checked = true;
-            checkboxes[index].parentElement.parentElement.style.background = "#00bfff";
+            checkboxes[index].parentElement.parentElement.style.background = "#0a1d57";
+            checkboxes[index].parentElement.parentElement.style.color ="#fff";
         }
     } else {
         for (let index = 0; index < checkboxes.length; index++) {
             checkboxes[index].checked = false;
             checkboxes[index].parentElement.parentElement.style.background = "";
+            checkboxes[index].parentElement.parentElement.style.color ="#000";
         }
     }
 }
 
 function onSelect(event) {
     if (event.target.checked) {
-        event.target.parentElement.parentElement.style.background = "#00bfff"
+        event.target.parentElement.parentElement.style.background = "#0a1d57"
+        event.target.parentElement.parentElement.style.color ="#fff";
     } else {
         event.target.parentElement.parentElement.style.background = ""
+        event.target.parentElement.parentElement.style.color ="#000";
     }
-
 }
 
 
