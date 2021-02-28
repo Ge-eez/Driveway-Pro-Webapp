@@ -33,6 +33,7 @@ const slotsText = document.getElementById("slotsText");
 
 let DBCompany;
 let DBUser;
+let DBforAccount;
 document.addEventListener("DOMContentLoaded", () => {
     navigator.geolocation.getCurrentPosition(function(position) {
         latitudeInput.value = position.coords.latitude;
@@ -46,6 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     companyDB().then(function(result){
         DBCompany = result
         displayProfile()
+    })
+    accountDB().then(function(result){
+        DBforAccount = result;
+        display_account();
     })
 });
 
@@ -160,6 +165,7 @@ function displayProfile() {
     }
 }
 
+
 formUpdate.addEventListener('submit', updateProfile);
 
 function updateProfile() {
@@ -190,6 +196,27 @@ function updateProfile() {
     }
 }
 
+function display_account() {
+
+    let store = DBforAccount.transaction(['account'], 'readwrite').objectStore('account');
+    store.openCursor().onsuccess = function(e) {
+        let cursor = e.target.result;
+        if (cursor) {
+            let listItem = `
+            <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
+                
+                <li class="col-3">${cursor.value.user_email}</li>
+                <li class="col-3">${cursor.value.company_email}</li>
+                <li class="col-3">${cursor.value.amount} Birr</li>
+                <li class="col-3">${cursor.value.date} </li>
+            </ul>`;
+                accountList.innerHTML += listItem;
+            
+            cursor.continue();
+        }
+    }
+
+}
 //parking officer create form
 addBtn.addEventListener('click', function(btn) {
 
