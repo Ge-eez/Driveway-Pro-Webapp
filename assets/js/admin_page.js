@@ -70,6 +70,10 @@ function openLink(e, id) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
+    if (id === "profile") {
+        document.getElementById(id).style.display = "flex";
+        return;
+    }
     document.getElementById(id).style.display = "block";
     e.currentTarget.className += " active";
 }
