@@ -9,11 +9,14 @@ const strtTimeDis = document.querySelector("#strTime")
 const exitPlateInput = document.querySelector("#ExitPlateInput")
 const exitUserBtn = document.querySelector("#ExitUserBtn")
 const xbtn = document.querySelector(".remove-item")
+var timeControl = document.querySelector('input[type="time"]');
+
 var count = false;
 
 let DB;
 
 document.addEventListener("DOMContentLoaded", () => {
+
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
 
@@ -29,6 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function parkUser() {
+        var timein = document.querySelector("#hour")
+        var timeinmin = document.querySelector("#minute")
+        var endtime = timein.value + ":" + timeinmin.value
         var regex = /^([A-Z a-z][0-9]{5})+$/;
         var OK = regex.exec(plateInput.value);
         if (!OK) {
@@ -43,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alterModal("#prkModal", plateInput.value, currentTime());
         plateInput.style.borderColor = "";
         newTicket = {
-            active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: "--:--", price: "$$.$$"
+            active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: endtime, price: "$$.$$"
         }
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
 
@@ -88,6 +94,19 @@ document.addEventListener("DOMContentLoaded", () => {
         ticketDis.innerHTML = ""
         displayData()
     }
+    document.querySelectorAll('input[type=number]')
+        .forEach(e => e.oninput = () => {
+            // Always 2 digits
+            if (e.value.length >= 2) e.value = e.value.slice(0, 2);
+            // 0 on the left (doesn't work on FF)
+            if (e.value.length === 1) e.value = '0' + e.value;
+            // Avoiding letters on FF
+            if (!e.value) e.value = '00';
+
+            return e
+        });
+       
+
     function displayTickets(plateNum) {
 
         const li = document.createElement("li");
