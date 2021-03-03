@@ -100,18 +100,16 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.classList.add("btn", "btn-primary")
         const span = document.createElement("span")
         span.innerHTML = plateNum
+        const innerspan = document.createElement("span")
+        innerspan.innerHTML = '<a href="#Active_tickets" onclick="openLink(event, \'Exit\')"><i class="fa fa-remove"></i></a>'
         span.classList.add("span")
-        // Create new element for the link
-        const link = document.createElement("a");
-        
-        // Add class and the x marker for a
-        link.className = "remove-item";
-        link.innerHTML = '<i class="fa fa-remove"><a href="#Active_tickets" onclick="openLink(event, \'Exit\')"></a></i>';
+
 
         li.appendChild(document.createTextNode("Plate Number: "))
+        span.appendChild(innerspan)
         li.appendChild(span)
         li.appendChild(btn);
-        li.appendChild(link);
+
         ticketDis.appendChild(li)
         ticketDis.appendChild(document.createElement("br"))
         function ticketDetail(e) {
@@ -136,8 +134,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ticketDis.addEventListener("click", xUserBtn);
         function xUserBtn(e) {
-            if (e.target.parentElement.classList.contains("remove-item")) {
-                console.log("exited")    
+            if (e.target.classList.contains("btn")) {
+                console.log(e.target.parentElement.children[0].innerText)
+                var a = e.target.parentElement.children[0].innerText;
+                var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
+
+                objectStore.openCursor().onsuccess = async function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        if (cursor.value.plate_Number == a) {
+                            alterModal("#try", a, cursor.value.StartTime)
+                            $('#activeTicketsModal').modal('show');
+                        } else {
+                            cursor.continue();
+                        }
+                    }
+
+                };
+
+
+            }
+
+
+            if (e.target.parentElement.parentElement.parentElement.classList.contains("span")) {
+                //console.log(e.target.parentElement.parentElement.parentElement.firstChild)
+                var str = e.target.parentElement.parentElement.parentElement.innerText
+                exitPlateInput.value = str
+                console.log(str)
             }
         }
 
