@@ -386,3 +386,40 @@ li .active {
         height: 400px;
     }
 }
+/* Validation */
+.alert-validate::before {
+    content: attr(data-validate);
+    position: inherit;
+    max-width: 70%;
+    background-color: white;
+    border: 1px solid #c80000;
+    border-radius: 13px;
+    padding: 4px 25px 4px 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 8px;
+    pointer-events: none;
+  
+    font-family: 'Poppins', sans-serif;;
+    color: #c80000;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
+  
+    visibility: hidden;
+    opacity: 0;
+  
+    transition: opacity 0.4s;
+  }
+  
+  .alert-validate:hover:before {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  @media (max-width: 992px) {
+    .alert-validate::before {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
