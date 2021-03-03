@@ -84,11 +84,12 @@ function add_company(e) {
 
     let poDB = DBforCompany.transaction("companies", 'readwrite')
     let objStore = poDB.objectStore('companies');
-
+    let encrypted = CryptoJS.AES.encrypt(companyPassword.value, "Secret").toString();
+            
     let poInputs = {
         name: companyName.value,
         email: companyEmail.value,
-        password: companyPassword.value,
+        password: encrypted,
         charge: chargeInput.value,
         slots: slotsInput.value,
         active_slots: slotsInput.value,
@@ -119,11 +120,11 @@ function add_user(e) {
 
     let poDB = DBforUser.transaction("users", 'readwrite')
     let objStore = poDB.objectStore('users');
-
+    let encrypted = CryptoJS.AES.encrypt(userPassword.value, "Secret").toString();
     let poInputs = {
         name: userName.value,
         email: companyEmail.value,
-        password: userPassword.value,
+        password: encrypted,
         company: userCompany.value,
         plate_number: userPlate.value,
         role: userRole.value,

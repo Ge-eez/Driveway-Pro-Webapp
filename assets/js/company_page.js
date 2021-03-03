@@ -79,11 +79,12 @@ function add_parking_officer(e) {
 
     let poDB = DBUser.transaction(["users"], 'readwrite')
     let objStore = poDB.objectStore('users');
+    let encrypted = CryptoJS.AES.encrypt(officerPassword.value, "Secret").toString();
     let poInputs = {
         company: keyEmail.slice(1, keyEmail.length - 1),
         email: officerEmail.value,
         name: officerFName.value + " " + officerLName.value,
-        password: officerPassword.value,
+        password: encrypted,
         phone_no: officerPhone.value,
         plate_number: "",
         role: "parking_officer"
