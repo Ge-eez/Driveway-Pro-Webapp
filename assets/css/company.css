@@ -100,7 +100,6 @@ li .active {
 }
 
 #parking-officer #add-btn {
-    background-color: #cc088b;
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
@@ -314,9 +313,8 @@ li .active {
         margin-bottom: 1%;
     }
     #parking-officer #add-btn {
-        background-color: #cc088b;
         color: white;
-        font-size: 0.5rem;
+        font-size: 1.2rem;
         font-weight: bold;
     }
     #parking-officer #header {
