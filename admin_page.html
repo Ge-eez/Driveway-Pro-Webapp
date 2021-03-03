@@ -95,36 +95,36 @@
                         </a>
 
 
-                        <form action="#" class="form-container">
-                            <div class="form-group">
+                        <form action="#" class="form-container validate-company-form">
+                            <div class="form-group" data-validate="Name is required">
                                 <label for="company-name">Name</label>
                                 <input type="text" class="form-control" id="company-name" placeholder="Name">
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" data-validate="Valid email is required: ex@abc.xyz">
                                 <label for="company-email">E-mail</label>
                                 <input type="email" class="form-control" id="company-email" placeholder="email">
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6" data-validate="Latitude is required">
                                     <label for="latitude">Latitude</label>
                                     <input type="text" class="form-control" id="latitude" placeholder="latitude">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6"  data-validate="Longitude is required">
                                     <label for="longtiude">Longtiude</label>
                                     <input type="text" class="form-control" id="longtiude" placeholder="longtiude">
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group"  data-validate="Charge is required">
                                 <label for="charge">Charge</label>
                                 <input type="text" class="form-control" id="charge" placeholder="charge">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group"  data-validate="Slots is required">
                                 <label for="slots">Slots</label>
                                 <input type="text" class="form-control" id="slots" placeholder="slots">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group"  data-validate="Password is required">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Password">
                             </div>
@@ -177,39 +177,47 @@
                         </a>
 
 
-                        <form action="#" class="form-container">
-                            <div class="form-group">
+                        <form action="#" class="form-container validate-user-form">
+                            <div class="form-group" data-validate="Name is required">
                                 <label for="user-name">Name</label>
                                 <input type="text" class="form-control" id="user-name" placeholder="Name">
                             </div>
 
+                            <div class="form-group"  data-validate="Role is required">
+                                <label for="user-role">Role</label><br>
+                                <input type="radio"  id="admin" name="role" value="admin">
+                                <label for="admin">Admin</label>
+                                <input type="radio"  id="user" name="role" value="user">
+                                <label for="user">User</label>
+                                <input type="radio" id="parking_officer" name="role" value="parking_officer">
+                                <label for="parking_officer">Parking Officer</label>
+                                
+                            </div>
+
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6" data-validate="Valid email is required: ex@abc.xyz">
                                     <label for="user-email">E-mail</label>
-                                    <input type="email" class="form-control" id="user-email" placeholder="email">
+                                    <input type="email" class="form-control" id="user-email" placeholder="User Email">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="user-company">Company</label>
-                                    <input type="text" class="form-control" id="user-company" placeholder="Company Email">
+                                    <label for="user-company">Company Email</label>
+                                    <input type="text" class="form-control" id="user-company" placeholder="Enter 0 for user or admin">
                                 </div>
                             </div>
 
                             
 
-                            <div class="form-group">
-                                <label for="user-role">Role</label>
-                                <input type="text" class="form-control" id="user-role" placeholder="Role">
-                            </div>
-                            <div class="form-group">
+                            
+                            <div class="form-group" data-validate="Phone number is required">
                                 <label for="user-number">Phone Number</label>
                                 <input type="text" class="form-control" id="user-number" placeholder="Phone Number">
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group"  data-validate="Plate number is required">
                                 <label for="user-plate">Plate Number</label>
-                                <input type="text" class="form-control" id="user-plate" placeholder="plate number">
+                                <input type="text" class="form-control" id="user-plate" placeholder="plate number, Enter 0 for parking officer">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" data-validate="Password is required">
                                 <label for="user-password">Password</label>
                                 <input type="password" class="form-control" id="user-password" placeholder="Password">
                             </div>
@@ -387,7 +395,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/latest/js/all.js"></script>
 
-
+<script src="./assets/js/adding_by_super.js"></script>
     <!--===============================================================================================-->
     <script src="./assets/js/admin_page.js"></script>
 </body>
