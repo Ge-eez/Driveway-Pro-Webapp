@@ -203,15 +203,18 @@ function display_account() {
     store.openCursor().onsuccess = function(e) {
         let cursor = e.target.result;
         if (cursor) {
-            let listItem = `
-            <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
-                
-                <li class="col-3">${cursor.value.user_email}</li>
-                <li class="col-3">${cursor.value.company_email}</li>
-                <li class="col-3">${cursor.value.amount} Birr</li>
-                <li class="col-3">${cursor.value.date} </li>
-            </ul>`;
-                accountList.innerHTML += listItem;
+            if(cursor.value.user_email === keyEmail.slice(1, keyEmail.length - 1)){
+                let listItem = `
+                <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
+                    
+                    <li class="col-3">${cursor.value.user_email}</li>
+                    <li class="col-3">${cursor.value.company_email}</li>
+                    <li class="col-3">${cursor.value.amount} Birr</li>
+                    <li class="col-3">${cursor.value.date} </li>
+                </ul>`;
+                    accountList.innerHTML += listItem;
+            }
+            
             
             cursor.continue();
         }
