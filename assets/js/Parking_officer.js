@@ -91,16 +91,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center")
 
-        var btn = document.createElement("BUTTON");   // Create a <button> element
+        let btn = document.createElement("BUTTON");   // Create a <button> element
         btn.innerHTML = "details";                   // Insert text
         btn.addEventListener("click", ticketDetail)
         btn.classList.add("btn", "btn-primary")
+        let exitBtn = document.createElement("BUTTON");   // Create a <button> element
+        exitBtn.innerHTML = "X";                   // Insert text
+        exitBtn.addEventListener("click", function(e){
+            exitPlateInput.value = plateNum
+            openLink(e, 'Exit')
+        })
+        exitBtn.classList.add("btn", "btn-danger")
         const span = document.createElement("span")
         span.innerHTML = plateNum
         span.classList.add("span")
         li.appendChild(document.createTextNode("Plate Number: "))
         li.appendChild(span)
         li.appendChild(btn);
+        li.appendChild(exitBtn)
         ticketDis.appendChild(li)
         ticketDis.appendChild(document.createElement("br"))
         function ticketDetail(e) {
@@ -131,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
         objectStore.openCursor().onsuccess = function (event) {
             var cursor = event.target.result;
             if (cursor) {
-                if (cursor.value.plate_Number === exitPlateInput.value) {
+                if (cursor.value.plate_Number === exitPlateInput.value && cursor.value.active == 'true') {
                     const updateData = cursor.value;
 
                     updateData.active = "false";
