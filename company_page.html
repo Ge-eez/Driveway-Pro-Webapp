@@ -107,27 +107,27 @@
                         </a>
                         
                         
-                        <form action="#" class="form-container">
+                        <form action="#" class="form-container  validate-user-form">
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6" data-validate="First name is required">
                                     <label for="fName">First Name</label>
                                     <input type="text" class="form-control" id="officer-fName" placeholder="First name">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6" data-validate="Last name is required">
                                     <label for="fName">Last Name</label>
                                     <input type="text" class="form-control" id="officer-lName" placeholder="Last Name">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" data-validate="Phone number is required">
                                 <label for="phone">Phone Number</label>
-                                <input type="text" class="form-control" id="officer-phone" placeholder="+251">
+                                <input type="tel" class="form-control" id="officer-phone" placeholder="+251">
                             </div>
                         
-                            <div class="form-group">
+                            <div class="form-group" data-validate="Valid email is required: ex@abc.xyz">
                                 <label for="inputEamil">E-mail</label>
                                 <input type="email" class="form-control" id="officer-Email" placeholder="email">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" data-validate="Password is required">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="officer-pass" placeholder="password">
                             </div>
@@ -308,6 +308,8 @@
     
 	<!--===============================================================================================-->
 	<script src="./assets/js/db.js" ></script>
+    <script src="./assets/js/adding_by_super.js"></script>
+    <!--===============================================================================================-->
     <script src="./assets/js/company_page.js" ></script>
 </body>
 </html>

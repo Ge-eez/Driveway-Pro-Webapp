@@ -28,7 +28,7 @@ const locationText = document.getElementById("locationText");
 const chargeText = document.getElementById("chargeText");
 const slotsText = document.getElementById("slotsText");
 
-
+const userInput = document.querySelectorAll('.validate-user-form .form-group .form-control');
 
 
 let DBCompany;
@@ -76,9 +76,21 @@ function openLink(e, id) {
 }
 // parking officer
 
-form.addEventListener('submit', add_parking_officer)
-var i = 0;
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let check = true;
 
+    for (var i = 0; i < userInput.length; i++) {
+        if (validate(userInput[i]) == false) {
+            showValidate(userInput[i]);
+            check = false;
+        }
+    }
+    if (check) {
+        add_parking_officer(e)
+    }
+    else console.log("Edit your input")
+});
 function add_parking_officer(e) {
     e.preventDefault();
 
