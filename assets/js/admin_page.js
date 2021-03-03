@@ -27,7 +27,6 @@ const userPhone = document.getElementById('user-number');
 const userPlate = document.getElementById('user-plate');
 const userPassword = document.getElementById('user-password');
 const userRole = document.getElementsByName('role');
-const userCompany = document.getElementById('user-company');
 
 
 //company profil data text
@@ -166,8 +165,8 @@ function add_user(e, getRole) {
         name: userName.value,
         email: userEmail.value,
         password: encrypted,
-        company: getRole == 'user' ? "" : userCompany.value,
-        plate_number: getRole == 'user' ? userPlate.value : "",
+        company: "",
+        plate_number: userPlate.value,
         role: getRole,
         phone_no: userPhone.value
     }
