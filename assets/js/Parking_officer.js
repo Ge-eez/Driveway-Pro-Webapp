@@ -8,6 +8,7 @@ const ticketDis = document.querySelector("#displayTickets")
 const strtTimeDis = document.querySelector("#strTime")
 const exitPlateInput = document.querySelector("#ExitPlateInput")
 const exitUserBtn = document.querySelector("#ExitUserBtn")
+const xbtn = document.querySelector(".remove-item")
 var count = false;
 
 let DB;
@@ -15,29 +16,31 @@ let DB;
 document.addEventListener("DOMContentLoaded", () => {
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
+
+
     strtTimeDis.innerHTML = currentTime()
     exitUserBtn.addEventListener("click", exitUser)
 
 
-    ticketDB().then(function(result){
+    ticketDB().then(function (result) {
         DB = result
     })
 
-    
+
 
     function parkUser() {
         var regex = /^([A-Z a-z][0-9]{5})+$/;
         var OK = regex.exec(plateInput.value);
         if (!OK) {
             console.error(plateInput.value + 'Proper plate number');
-        } 
+        }
         if (plateInput.value === "" || !OK) {
 
             plateInput.style.borderColor = "red";
 
             return;
         }
-        alterModal("#prkModal", plateInput.value ,currentTime());
+        alterModal("#prkModal", plateInput.value, currentTime());
         plateInput.style.borderColor = "";
         newTicket = {
             active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: "--:--", price: "$$.$$"
@@ -98,9 +101,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const span = document.createElement("span")
         span.innerHTML = plateNum
         span.classList.add("span")
+        // Create new element for the link
+        const link = document.createElement("a");
+        
+        // Add class and the x marker for a
+        link.className = "remove-item";
+        link.innerHTML = '<i class="fa fa-remove"><a href="#Active_tickets" onclick="openLink(event, \'Exit\')"></a></i>';
+
         li.appendChild(document.createTextNode("Plate Number: "))
         li.appendChild(span)
         li.appendChild(btn);
+        li.appendChild(link);
         ticketDis.appendChild(li)
         ticketDis.appendChild(document.createElement("br"))
         function ticketDetail(e) {
@@ -122,10 +133,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         }
+
+        ticketDis.addEventListener("click", xUserBtn);
+        function xUserBtn(e) {
+            if (e.target.parentElement.classList.contains("remove-item")) {
+                console.log("exited")    
+            }
+        }
+
     }
 
 
-    function exitUser(){
+    function exitUser() {
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore('Tickets');
         price()
         objectStore.openCursor().onsuccess = function (event) {
@@ -138,17 +157,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     updateData.endTime = currentTime();
                     updateData.price = price(cursor.value.StartTime, cursor.value.endTime) + " Br";
                     const request = cursor.update(updateData);
-                    request.onsuccess = function(){
+                    request.onsuccess = function () {
                         alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime, cursor.value.price)
-                        $('#exitModal').modal('show');    
+                        $('#exitModal').modal('show');
                     }
-                    
-                    
+
+
                     //displayTickets(cursor.value.plate_Number)
                     //console.log(cursor.value.plate_Number)
                     cursor.continue();
-                }else {
-                    
+                } else {
+
                     cursor.continue();
                 }
             }
@@ -161,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function alterModal(a, b, c , d = "--:--", f = "$$.$$") {
+function alterModal(a, b, c, d = "--:--", f = "$$.$$") {
     document.querySelector(a).innerHTML = ""
     const ticketDetails = document.createElement("li")
     ticketDetails.appendChild(document.createTextNode("plate number :" + " " + b))
@@ -199,11 +218,11 @@ function currentTime() {
         minute;
     return (dateText);
 }
-function price(strTi = "21:53",endTi = "23:02"){
-       a = strTi.replace(":" , ".")
-       b = endTi.replace(":" , ".")
-       return(((b - a).toFixed(2) * 10.0).toFixed(2));
-        
+function price(strTi = "21:53", endTi = "23:02") {
+    a = strTi.replace(":", ".")
+    b = endTi.replace(":", ".")
+    return (((b - a).toFixed(2) * 10.0).toFixed(2));
+
 
 
 
