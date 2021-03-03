@@ -8,6 +8,7 @@ const ticketDis = document.querySelector("#displayTickets")
 const strtTimeDis = document.querySelector("#strTime")
 const exitPlateInput = document.querySelector("#ExitPlateInput")
 const exitUserBtn = document.querySelector("#ExitUserBtn")
+const clearSt = document.querySelector("#clearStack")
 const xbtn = document.querySelector(".remove-item")
 
 
@@ -19,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
-
+    clearSt.addEventListener("click", clearStack);
 
     strtTimeDis.innerHTML = currentTime()
     exitUserBtn.addEventListener("click", exitUser)
@@ -223,23 +224,17 @@ document.addEventListener("DOMContentLoaded", () => {
         objectStore.openCursor().onsuccess = function (event) {
             var cursor = event.target.result;
             if (cursor) {
-                if (cursor.value.plate_Number === exitPlateInput.value) {
+                if (cursor.value.active = "true") {
                     const updateData = cursor.value;
-
                     updateData.active = "false";
-                    updateData.endTime = currentTime();
-                    updateData.price = price(cursor.value.StartTime, cursor.value.endTime) + " Br";
+                    
                     const request = cursor.update(updateData);
-                    request.onsuccess = function () {
-                        alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime, cursor.value.price)
-                        $('#exitModal').modal('show');
+                    request.onsuccess = function() {
+
+                        console.log("Stack cleared")
                     }
-
-
-                    //displayTickets(cursor.value.plate_Number)
-                    //console.log(cursor.value.plate_Number)
                     cursor.continue();
-                } else {
+                }else {
 
                     cursor.continue();
                 }
