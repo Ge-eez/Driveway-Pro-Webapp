@@ -45,21 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
 
 
+        let result = objectStore.add(newTicket)
+        result.onsuccess = () => {
 
-        objectStore.transaction.oncomplete = function (e) {
-            // Store values in the newly created objectStore.
-            var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
-            objectStore.add(newTicket);
-            /* newTicket.forEach(function(company) {
-              objectStore.add(company);
-            }); */
             plateInput.value = "";
             $('#parkModal').modal('show');
-
-        };
-
-
-
+        }
+        result.onerror = (e) => { console.log(e) }
     }
     function actTab() {
 
@@ -147,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     updateData.price = price(cursor.value.StartTime, cursor.value.endTime) + " Br";
                     const request = cursor.update(updateData);
                     request.onsuccess = function(){
+                        exitPlateInput.value = ""
                         alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime, cursor.value.price)
                         $('#exitModal').modal('show');    
                     }
