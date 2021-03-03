@@ -123,7 +123,7 @@ function add_user(e) {
     let encrypted = CryptoJS.AES.encrypt(userPassword.value, "Secret").toString();
     let poInputs = {
         name: userName.value,
-        email: companyEmail.value,
+        email: userEmail.value,
         password: encrypted,
         company: userCompany.value,
         plate_number: userPlate.value,
