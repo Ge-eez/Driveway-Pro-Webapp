@@ -37,6 +37,9 @@ const emailText = document.getElementById("emailText");
 const adminName = document.getElementById('name')
 const phoneNumber = document.getElementById('phone')
 
+const userInput = document.querySelectorAll('.validate-user-form .form-group .form-control');
+const companyInput = document.querySelectorAll('.validate-company-form .form-group .form-control');
+
 let DBforUser;
 let DBforCompany;
 let DBforAccount;
@@ -83,8 +86,6 @@ companyForm.addEventListener('submit', function (e) {
     e.preventDefault();
     let check = true;
 
-    let companyInput = document.querySelectorAll('.validate-company-form .form-group .form-control');
-
     for (var i = 0; i < companyInput.length; i++) {
         if (validate(companyInput[i]) == false) {
             showValidate(companyInput[i]);
@@ -97,8 +98,6 @@ companyForm.addEventListener('submit', function (e) {
 userForm.addEventListener('submit', function (e) {
     e.preventDefault();
     let check = true;
-
-    let userInput = document.querySelectorAll('.validate-user-form .form-group .form-control');
 
     for (var i = 0; i < userInput.length; i++) {
         if (validate(userInput[i]) == false) {
@@ -143,6 +142,7 @@ function add_company(e) {
     let result = objStore.add(poInputs);
     result.onsuccess = () => {
         console.log("company added successfully")
+        clearForm(...companyInput)
     }
     result.onerror = (e) => { console.log(e) }
     poDB.oncomplete = () => {
@@ -174,8 +174,9 @@ function add_user(e, getRole) {
     let result = objStore.add(poInputs);
     result.onsuccess = () => {
         console.log("user added successfully")
+        clearForm(...userInput)
     }
-    result.onerror = (e) => { console.log(e) }
+    result.onerror = (e) => { alert(e.target.error) }
     poDB.oncomplete = () => {
         console.log("new user added");
         companyList.innerHTML = "";
