@@ -38,10 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
         var endtime = timein.value + ":" + timeinmin.value
         var regex = /^([A-Z a-z][0-9]{5})+$/;
         var OK = regex.exec(plateInput.value);
+        
         if (!OK) {
             console.error(plateInput.value + 'Proper plate number');
         }
-        if (plateInput.value === "" || !OK) {
+        if (plateInput.value === "" || !OK ) {
 
             plateInput.style.borderColor = "red";
 
@@ -243,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
     }
-
+    
 
 
 });
