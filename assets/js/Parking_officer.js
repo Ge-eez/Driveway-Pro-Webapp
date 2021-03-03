@@ -291,11 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         adjustCompanyDB(+1)
                         adjustIncome(entered, updateData.price)
                     }
-
-
-                    //displayTickets(cursor.value.plate_Number)
-                    //console.log(cursor.value.plate_Number)
-                    cursor.continue();
+                    
+                    request.onerror = (e) => {
+                        console.log(e)
+                    }
                 } else {
 
                     cursor.continue();
@@ -318,8 +317,6 @@ function alterModal(a, b, c, d = "--:--", f = "$$.$$") {
     ticketDetails.appendChild(document.createTextNode("Starting Time :" + " " + c))
     ticketDetails.appendChild(document.createElement("br"))
     ticketDetails.appendChild(document.createTextNode("ending Time :" + " " + d))
-    ticketDetails.appendChild(document.createElement("br"))
-    ticketDetails.appendChild(document.createTextNode("Spot : " + " " + "5"))
     ticketDetails.appendChild(document.createElement("br"))
     ticketDetails.appendChild(document.createTextNode("Price : " + " " + f))
     ticketDetails.appendChild(document.createElement("br"))
