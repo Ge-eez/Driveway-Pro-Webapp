@@ -45,9 +45,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         // If a user is signing up
         else if (signingUp && check) {
+            let encrypted = CryptoJS.AES.encrypt(password_input.value, "Secret").toString();
             let data = {
                 email: email_input.value,
-                password: password_input.value,
+                password: encrypted,
                 name: name_input.value,
                 phone_no: phone_input.value,
                 plate_number: plate_input.value
@@ -216,7 +217,8 @@ async function loginUser(data) {
         myPromiseDB.then(function(result) {
             console.log("Finished looking up in the db")
             if (result) {
-                if (match(data.password, result.password)) {
+                let password = (CryptoJS.AES.decrypt(result.password, "Secret")).toString(CryptoJS.enc.Utf8);
+                if (match(data.password, password)) {
                     // login user
                     console.log("Login")
                     loggedIn(result)
@@ -271,6 +273,7 @@ function readJSON(data) {
                     console.log("file found")
                     let toBeAdded = user
                     if (match(toBeAdded.password, data.password)) {
+                        toBeAdded.password = CryptoJS.AES.encrypt(password_input.value, "Secret").toString();
                         addNewUser(toBeAdded)
                     } else {
                         invalidLogin()
