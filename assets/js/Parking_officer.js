@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alterModal("#prkModal", plateInput.value, currentTime());
                 plateInput.style.borderColor = "";
                 newTicket = {
-                    active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: "--:--", price: "$$.$$"
+                    active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: "--:--", price: "$$.$$", company: companyKeyEmail
                 }
                 var objectStore = DBTicket.transaction("Tickets", "readwrite").objectStore("Tickets");
         
@@ -338,11 +338,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function clearStack(){
 
-        var objectStore = DB.transaction("Tickets", "readwrite").objectStore('Tickets');
+        var objectStore = DBTicket.transaction("Tickets", "readwrite").objectStore('Tickets');
         objectStore.openCursor().onsuccess = function (event) {
             var cursor = event.target.result;
             if (cursor) {
-                if (cursor.value.active = "true") {
+                if (cursor.value.active = "true" && cursor.value.company == companyKeyEmail) {
                     const updateData = cursor.value;
                     updateData.active = "false";
                     

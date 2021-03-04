@@ -319,7 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     plate_Number: userPlate,
                                     StartTime: start, 
                                     endTime: `--:--`, 
-                                    price: `$$.$$`
+                                    price: `$$.$$`,
+                                    company: companyEmail
                                 }
                                 let ticketsTransaction = DBTicket.transaction("Tickets", "readwrite").objectStore("Tickets");
                                 ticketsTransaction.transaction.oncomplete = function (e) {
