@@ -502,7 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                             var cursor = event.target.result;
                                             if (cursor) {
                                                 const updateData = cursor.value;
-                                                updateData.active = "false";
                                                 updateData.endTime = end;
                                                 updateData.price = priceCalc(companyCharge, startHour, startMin, startSec).toFixed(2);
                                                 const request = cursor.update(updateData);
