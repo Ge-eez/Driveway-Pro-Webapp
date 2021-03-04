@@ -6,6 +6,7 @@ const keyEmail = localStorage.getItem('company');
 const email = "contact@tk.com";
 const formUpdate = document.getElementById("update-profile");
 
+const accountList = document.querySelector('.account-list')
 //form inputs
 const companyInput = document.getElementById("company");
 const emailInput = document.getElementById("inputEmail");
@@ -215,7 +216,7 @@ function display_account() {
     store.openCursor().onsuccess = function(e) {
         let cursor = e.target.result;
         if (cursor) {
-            if(cursor.value.user_email === keyEmail.slice(1, keyEmail.length - 1)){
+            if(cursor.value.company_email === keyEmail.slice(1, keyEmail.length - 1)){
                 let listItem = `
                 <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
                     
