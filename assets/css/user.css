@@ -8,10 +8,11 @@
 }
 
 #content-wrapper {
-    height: auto;
+    /* height: auto; */
     margin: 0;
     padding: 0;
 }
+
 #content-wrapper>div:nth-child(1){
     border: 1px solid;
     border-bottom-right-radius: 30%;
@@ -21,19 +22,27 @@
     color: #fff;
     background-color:#E76900;
 }
+
 #content-wrapper>div:nth-child(1)>h5{
     text-align: left;
     margin: 5% 0% 5% 4%;
 }
+
 #content-wrapper>div:nth-child(1)>h5>i{
     margin-right: 8%;
 }
+
 #content-wrapper>div:nth-child(2){
     border: 1px solid;
     border-radius: 5%;
     margin-left: 2%;
     padding: 5% 1%;
     text-align: center;
+}
+
+.resizeBtn {
+    text-align: center;
+    min-width: 13rem;
 }
 
 #myMap {
@@ -55,6 +64,7 @@
     text-align: end;
     padding: 2rem;
 }
+
 .written_content {
     display: flex;
     justify-content: space-between;
@@ -111,11 +121,6 @@
     border-radius: 10px;
     background: rgba(255,255,255); 
 }
-/* ::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(0,0,0,0.4); 
-} */
-
-
 
 /* The Modal (background) */
 .modal {

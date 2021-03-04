@@ -52,6 +52,19 @@
 
     },
     {
+        "name": "Ambasel",
+        "email": "contact@ambasel.com",
+        "password": "Testingit1",
+        "charge": 12.4,
+        "slots": 13,
+        "active_slots": 13,
+        "opens_at": "8AM",
+        "closes_at": "11PM",
+        "latitude": 9.0504813,
+        "longitude": 38.7378983
+
+    },
+    {
         "name": "Getu commercial",
         "email": "contact@getu.com",
         "password": "Testingit1",
