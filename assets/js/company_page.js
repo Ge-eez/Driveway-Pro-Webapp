@@ -6,6 +6,7 @@ const keyEmail = localStorage.getItem('company');
 const email = "contact@tk.com";
 const formUpdate = document.getElementById("update-profile");
 
+const accountList = document.querySelector('.account-list')
 //form inputs
 const companyInput = document.getElementById("company");
 const emailInput = document.getElementById("inputEmail");
@@ -28,11 +29,12 @@ const locationText = document.getElementById("locationText");
 const chargeText = document.getElementById("chargeText");
 const slotsText = document.getElementById("slotsText");
 
-
+const userInput = document.querySelectorAll('.validate-user-form .form-group .form-control');
 
 
 let DBCompany;
 let DBUser;
+let DBforAccount;
 document.addEventListener("DOMContentLoaded", () => {
     navigator.geolocation.getCurrentPosition(function(position) {
         latitudeInput.value = position.coords.latitude;
@@ -46,6 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
     companyDB().then(function(result){
         DBCompany = result
         displayProfile()
+    })
+    accountDB().then(function(result){
+        DBforAccount = result;
+        display_account();
     })
 });
 
@@ -71,19 +77,32 @@ function openLink(e, id) {
 }
 // parking officer
 
-form.addEventListener('submit', add_parking_officer)
-var i = 0;
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let check = true;
 
+    for (var i = 0; i < userInput.length; i++) {
+        if (validate(userInput[i]) == false) {
+            showValidate(userInput[i]);
+            check = false;
+        }
+    }
+    if (check) {
+        add_parking_officer(e)
+    }
+    else console.log("Edit your input")
+});
 function add_parking_officer(e) {
     e.preventDefault();
 
     let poDB = DBUser.transaction(["users"], 'readwrite')
     let objStore = poDB.objectStore('users');
+    let encrypted = CryptoJS.AES.encrypt(officerPassword.value, "Secret").toString();
     let poInputs = {
         company: keyEmail.slice(1, keyEmail.length - 1),
         email: officerEmail.value,
         name: officerFName.value + " " + officerLName.value,
-        password: officerPassword.value,
+        password: encrypted,
         phone_no: officerPhone.value,
         plate_number: "",
         role: "parking_officer"
@@ -160,6 +179,7 @@ function displayProfile() {
     }
 }
 
+
 formUpdate.addEventListener('submit', updateProfile);
 
 function updateProfile() {
@@ -190,6 +210,30 @@ function updateProfile() {
     }
 }
 
+function display_account() {
+
+    let store = DBforAccount.transaction(['account'], 'readwrite').objectStore('account');
+    store.openCursor().onsuccess = function(e) {
+        let cursor = e.target.result;
+        if (cursor) {
+            if(cursor.value.company_email === keyEmail.slice(1, keyEmail.length - 1)){
+                let listItem = `
+                <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
+                    
+                    <li class="col-3">${cursor.value.user_email}</li>
+                    <li class="col-3">${cursor.value.company_email}</li>
+                    <li class="col-3">${cursor.value.amount} Birr</li>
+                    <li class="col-3">${cursor.value.date} </li>
+                </ul>`;
+                    accountList.innerHTML += listItem;
+            }
+            
+            
+            cursor.continue();
+        }
+    }
+
+}
 //parking officer create form
 addBtn.addEventListener('click', function(btn) {
 

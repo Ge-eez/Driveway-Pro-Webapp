@@ -19,6 +19,9 @@
     <link rel="stylesheet" type="text/css" href="./assets/css/Parking_officer.css">
     <!--===============================================================================================-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
     <!-- ====================================================== -->
     <script src="https://kit.fontawesome.com/dec944d78f.js" crossorigin="anonymous"></script>
     <!--===============================================================================================-->
@@ -43,7 +46,8 @@
                     </li>
 
                     <li class="col-3  col-md-12 col-lg-12  col-xl-12">
-                        <a href="#Active_tickets" class="tab-links" id="activeTicketsTab" onclick="openLink(event, 'Active_tickets')">
+                        <a href="#Active_tickets" class="tab-links" id="activeTicketsTab"
+                            onclick="openLink(event, 'Active_tickets')">
                             Tickets</a>
                     </li>
 
@@ -63,9 +67,11 @@
                 <div class="row tab-content" id="park">
                     <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-                        <h2>Eliana Mall</h2>
+                        <h2>Hello <span id="po-name4"></span></h2>
+                        <h3 id="comp-name4"></h3>
                         <h5><i class="fas fa-ticket-alt"></i></i>Park a new user</h5>
-                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: <span id="slot-desc4"></span></h5>
+
 
 
                     </div>
@@ -79,7 +85,12 @@
                         <br>
                         <span>Start Time : <div id="strTime"></div></span>
                         <br>
-                        <span>End Time : <div>-- : -- </div></span>
+                        <span>End Time :
+                            <div id="timein">
+                                <input type="number" min="0" max="23" placeholder="23" id="hour">:
+                                <input type="number" min="0" max="59" placeholder="00" id="minute">
+                            </div>
+                        </span>
                         <div class="div" style="margin-top: 5%; margin-left: 45%;"><button type="button" id="parkbtn"
                                 class="btn btn-primary" data-toggle="modal">
                                 Park
@@ -108,9 +119,10 @@
                 <div class="row tab-content" id="Active_tickets">
                     <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-                        <h2>Eliana Mall</h2>
+                        <h2>Hello <span id="po-name"></span></h2>
+                        <h3 id="comp-name"></h3>
                         <h5><i class="fas fa-ticket-alt"></i></i>Active Tickets</h5>
-                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: <span id="slot-desc"></span></h5>
 
 
                     </div>
@@ -119,29 +131,29 @@
                         <h1>Active Tickets!</h1>
                         <br>
                         <ul class="list-group overflow-auto" style="height: 500px;" id="displayTickets">
-                            
-                            
 
-                            
+
+
+
 
                         </ul>
                         <div class="modal fade" id="activeTicketsModal" tabindex="-1" role="dialog"
-                                aria-labelledby="activeTicketsModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="activeTicketsModalLongTitle">Ticket Details</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body" id="try">
-                                            
-                                        </div>
+                            aria-labelledby="activeTicketsModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="activeTicketsModalLongTitle">Ticket Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="try">
 
                                     </div>
+
                                 </div>
                             </div>
+                        </div>
                     </div>
 
 
@@ -152,9 +164,10 @@
                 <div class="row tab-content " id="Exit">
                     <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-                        <h2>Eliana Mall</h2>
+                        <h2>Hello <span id="po-name2"></span></h2>
+                        <h3 id="comp-name2"></h3>
                         <h5><i class="fas fa-ticket-alt"></i></i>Exit a user</h5>
-                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: <span id="slot-desc2"></span></h5>
 
 
                     </div>
@@ -163,8 +176,8 @@
                         <h1>Exit user!</h1>
                         <br>
                         <span>Plate number :<input type="text" class="form-control shadow-sm" aria-label="Default"
-                                aria-describedby="inputGroup-sizing-default"
-                                style="margin-left: 25%; width: 50%;" id="ExitPlateInput"></span>
+                                aria-describedby="inputGroup-sizing-default" style="margin-left: 25%; width: 50%;"
+                                id="ExitPlateInput"></span>
                         <br>
 
                         <div class="div" style="margin-top: 5%; margin-left: 45%;"><button type="button"
@@ -183,7 +196,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body" id="extModal">
-                                        
+
                                     </div>
 
                                 </div>
@@ -195,9 +208,10 @@
                 <div class="row tab-content " id="stack">
                     <div class="col-10 col-md-5 col-lg-4 col-xl-4 ml-0 mr-lg-4 mt-0 pt-3">
 
-                        <h2>Eliana Mall</h2>
+                        <h2>Hello <span id="po-name3"></span></h2>
+                        <h3 id="comp-name3"></h3>
                         <h5><i class="fas fa-ticket-alt"></i></i>Clear stack</h5>
-                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: 2/5</h5>
+                        <h5><i class="fas fa-ticket-alt"></i></i>total spots available: <span id="slot-desc3"></span></h5>
 
 
                     </div>
@@ -216,25 +230,17 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Thank you for choosing us!
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Another Day is over!Good job
                                         </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="clearStack">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            All Spots cleared!
+                                            All Spots cleared!Have A good day Officer
                                         </div>
-                                        <div class="row">
-                                            Closed Time: 2:53AM
-                                        </div>
-                                        <div class="row">
-                                            total cars parked today: 52
-                                        </div>
-                                        <div class="row">
-                                            daily income: 2600
-                                        </div>
+                                        
                                     </div>
 
                                 </div>
@@ -331,7 +337,7 @@
 
 
 
-	<script src="./assets/js/db.js"></script>
+    <script src="./assets/js/db.js"></script>
     <!--===============================================================================================-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--===============================================================================================-->

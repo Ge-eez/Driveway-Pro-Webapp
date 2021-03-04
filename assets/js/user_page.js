@@ -456,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Add basic information to the Tickets database
                                 addTicketData(userPlate, start);
 
+
                                 nearbylists.innerHTML = '';
 
                                 nearbylists.appendChild(parkContent);

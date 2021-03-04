@@ -100,38 +100,31 @@ li .active {
 }
 
 #parking-officer #add-btn {
-    background-color: #cc088b;
     color: white;
     font-size: 1.2rem;
     font-weight: bold;
 }
 
-#parking-officer #header {
+#parking-officer #header, #account #header {
     padding-bottom: 1%;
     border-bottom: 2px solid;
     text-align: center;
 }
 
-#parking-officer .list-inline {
+#parking-officer .list-inline, #account .list-inline {
     border-bottom: 1px solid;
     padding-bottom: 1%;
     margin-bottom: 0px;
     text-align: center;
 }
 
-#parking-officer .list-item {
+#parking-officer .list-item, #account .list-item {
     padding: 1% 0%;
     margin: 0;
 }
-
-#parking-officer .list-item li {
+#parking-officer .list-item li, #account .list-item li {
     border-right: 5px solid rgb(8, 104, 13);
 }
-
-#parking-officer .list-item li:nth-child(1) {
-    border-right: 5px solid red;
-}
-
 #pop-up {
     position: fixed;
     top: -1%;
@@ -173,7 +166,32 @@ li .active {
     height: 20px;
 }
 
+#account ul>li>input {
+    width: 20px;
+    height: 20px;
+}
+#account {
+    display: none;
+    height: 800px;
+}
 
+#account h2 {
+    background-color: #0a1b46;
+    color: white;
+    padding: 3% 0% 3% 5%;
+    margin: 0%;
+}
+#account #option {
+    margin: 0;
+    background-color: #061335;
+    padding: 1% 0% 1% 0%;
+    margin-bottom: 2%;
+}
+#account #header {
+    padding-bottom: 1%;
+    border-bottom: 2px solid;
+    text-align: center;
+}
 /* Responsive */
 
 @media(max-width:1200px) {
@@ -289,9 +307,8 @@ li .active {
         margin-bottom: 1%;
     }
     #parking-officer #add-btn {
-        background-color: #cc088b;
         color: white;
-        font-size: 0.5rem;
+        font-size: 1.2rem;
         font-weight: bold;
     }
     #parking-officer #header {
@@ -317,9 +334,6 @@ li .active {
         border-right: 2px solid yellow;
         padding: 0px, 10px;
         text-align: left;
-    }
-    #parking-officer .list-item li:nth-child(1) {
-        border-right: 2px solid red;
     }
     #pop-up {
         position: fixed;
@@ -357,4 +371,44 @@ li .active {
         width: 20px;
         height: 20px;
     }
+    #account{
+        height: 400px;
+    }
 }
+/* Validation */
+.alert-validate::before {
+    content: attr(data-validate);
+    position: inherit;
+    max-width: 70%;
+    background-color: white;
+    border: 1px solid #c80000;
+    border-radius: 13px;
+    padding: 4px 25px 4px 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 8px;
+    pointer-events: none;
+  
+    font-family: 'Poppins', sans-serif;;
+    color: #c80000;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: center;
+  
+    visibility: hidden;
+    opacity: 0;
+  
+    transition: opacity 0.4s;
+  }
+  
+  .alert-validate:hover:before {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  @media (max-width: 992px) {
+    .alert-validate::before {
+      visibility: visible;
+      opacity: 1;
+    }
+  }

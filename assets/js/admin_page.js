@@ -1,5 +1,6 @@
 const companyList = document.querySelector(".company-list");
 const userList = document.querySelector(".user-list");
+const accountList = document.querySelector('.account-list')
 const companyAddBtn = document.getElementById("company-add-btn");
 const userAddBtn = document.getElementById("user-add-btn");
 const companyCancelIcon = document.getElementById("company-cancel");
@@ -25,8 +26,7 @@ const userEmail = document.getElementById('user-email');
 const userPhone = document.getElementById('user-number');
 const userPlate = document.getElementById('user-plate');
 const userPassword = document.getElementById('user-password');
-const userRole = document.getElementById('user-role');
-const userCompany = document.getElementById('user-company');
+const userRole = document.getElementsByName('role');
 
 
 //company profil data text
@@ -36,21 +36,24 @@ const emailText = document.getElementById("emailText");
 const adminName = document.getElementById('name')
 const phoneNumber = document.getElementById('phone')
 
+const userInput = document.querySelectorAll('.validate-user-form .form-group .form-control');
+const companyInput = document.querySelectorAll('.validate-company-form .form-group .form-control');
+
 let DBforUser;
 let DBforCompany;
 let DBforAccount;
 document.addEventListener("DOMContentLoaded", () => {
-    userDB().then(function(result){
+    userDB().then(function (result) {
         DBforUser = result;
         displayProfile();
         display_users();
     })
-    
-    companyDB().then(function(result){
+
+    companyDB().then(function (result) {
         DBforCompany = result;
         display_companies();
     })
-    accountDB().then(function(result){
+    accountDB().then(function (result) {
         DBforAccount = result;
         display_account();
     })
@@ -69,25 +72,63 @@ function openLink(e, id) {
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
+    if (id === "profile") {
+        document.getElementById(id).style.display = "flex";
+        return;
+    }
     document.getElementById(id).style.display = "block";
     e.currentTarget.className += " active";
 }
 // profile part
 
-companyForm.addEventListener('submit', add_company)
-userForm.addEventListener('submit', add_user)
-var i = 0;
+companyForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let check = true;
+
+    for (var i = 0; i < companyInput.length; i++) {
+        if (validate(companyInput[i]) == false) {
+            showValidate(companyInput[i]);
+            check = false;
+        }
+    }
+    if (check) add_company()
+    else console.log("Edit your input")
+});
+userForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let check = true;
+
+    for (var i = 0; i < userInput.length; i++) {
+        if (validate(userInput[i]) == false) {
+            showValidate(userInput[i]);
+            check = false;
+        }
+    }
+    if (check) {
+        let getRole;
+        for (var i = 0, length = userRole.length; i < length; i++) {
+            if (userRole[i].checked) {
+                getRole = (userRole[i].value);
+                if (getRole) add_user(e, getRole)
+                break;
+            }
+        }
+        if(i == userRole.length && !getRole) alert("please choose role")
+    }
+    else console.log("Edit your input")
+});
 
 function add_company(e) {
     e.preventDefault();
 
     let poDB = DBforCompany.transaction("companies", 'readwrite')
     let objStore = poDB.objectStore('companies');
+    let encrypted = CryptoJS.AES.encrypt(companyPassword.value, "Secret").toString();
 
     let poInputs = {
         name: companyName.value,
         email: companyEmail.value,
-        password: companyPassword.value,
+        password: encrypted,
         charge: chargeInput.value,
         slots: slotsInput.value,
         active_slots: slotsInput.value,
@@ -100,6 +141,7 @@ function add_company(e) {
     let result = objStore.add(poInputs);
     result.onsuccess = () => {
         console.log("company added successfully")
+        clearForm(...companyInput)
     }
     result.onerror = (e) => { console.log(e) }
     poDB.oncomplete = () => {
@@ -113,27 +155,27 @@ function add_company(e) {
 
 }
 
-function add_user(e) {
+function add_user(e, getRole) {
     e.preventDefault();
 
     let poDB = DBforUser.transaction("users", 'readwrite')
     let objStore = poDB.objectStore('users');
-
+    let encrypted = CryptoJS.AES.encrypt(userPassword.value, "Secret").toString();
     let poInputs = {
         name: userName.value,
-        email: companyEmail.value,
-        password: userPassword.value,
-        company: userCompany.value,
+        email: userEmail.value,
+        password: encrypted,
+        company: "",
         plate_number: userPlate.value,
-        role: userRole.value,
+        role: getRole,
         phone_no: userPhone.value
     }
-
     let result = objStore.add(poInputs);
     result.onsuccess = () => {
         console.log("user added successfully")
+        clearForm(...userInput)
     }
-    result.onerror = (e) => { console.log(e) }
+    result.onerror = (e) => { alert(e.target.error) }
     poDB.oncomplete = () => {
         console.log("new user added");
         companyList.innerHTML = "";
@@ -148,7 +190,7 @@ function add_user(e) {
 function display_companies() {
 
     let store = DBforCompany.transaction(['companies'], 'readwrite').objectStore('companies');
-    store.openCursor().onsuccess = function(e) {
+    store.openCursor().onsuccess = function (e) {
         let cursor = e.target.result;
         if (cursor) {
             let listItem = `
@@ -174,7 +216,7 @@ function display_companies() {
 function display_users() {
 
     let store = DBforUser.transaction(['users'], 'readwrite').objectStore('users');
-    store.openCursor().onsuccess = function(e) {
+    store.openCursor().onsuccess = function (e) {
         let cursor = e.target.result;
         if (cursor) {
             if (cursor.value.email != keyEmail.slice(1, keyEmail.length - 1)) {
@@ -201,7 +243,7 @@ function display_users() {
 
 function displayProfile() {
     let userStore = DBforUser.transaction("users").objectStore("users");
-    userStore.openCursor().onsuccess = function(e) {
+    userStore.openCursor().onsuccess = function (e) {
         let cursor = e.target.result;
         if (cursor) {
             if (cursor.value.email == keyEmail.slice(1, keyEmail.length - 1)) {
@@ -221,18 +263,19 @@ function displayProfile() {
 function display_account() {
 
     let store = DBforAccount.transaction(['account'], 'readwrite').objectStore('account');
-    store.openCursor().onsuccess = function(e) {
+    store.openCursor().onsuccess = function (e) {
         let cursor = e.target.result;
         if (cursor) {
             let listItem = `
             <ul  class="list-inline row list-item mt-0 " myAtr =${cursor.value.date}>
                 
-                <li class="col-4">${cursor.value.user_email}</li>
-                <li class="col-4 ">${cursor.value.company_email}</li>
-                <li class="col-2">${cursor.value.income} Birr</li>
+                <li class="col-3">${cursor.value.user_email}</li>
+                <li class="col-3">${cursor.value.company_email}</li>
+                <li class="col-3">${cursor.value.amount} Birr</li>
+                <li class="col-3">${cursor.value.date} </li>
             </ul>`;
-                userList.innerHTML += listItem;
-            
+            accountList.innerHTML += listItem;
+
             cursor.continue();
         }
     }
@@ -247,7 +290,7 @@ function updateProfile() {
     let request = objectStore.get(sliced);
 
 
-    request.onsuccess = function() {
+    request.onsuccess = function () {
         let updateData = {
             company: "",
             password: request.result.password,
@@ -259,7 +302,7 @@ function updateProfile() {
 
         }
         let updateTable = objectStore.put(updateData);
-        updateTable.onsuccess = function() {
+        updateTable.onsuccess = function () {
             console.log("done")
         }
     }
@@ -268,23 +311,23 @@ function updateProfile() {
 
 // parking officer part
 
-companyAddBtn.addEventListener('click', function(btn) {
+companyAddBtn.addEventListener('click', function (btn) {
 
     companyForm.style.display = "block";
     btn.currentTarget.disabled = "true"
 
 });
-companyCancelIcon.addEventListener('click', function() {
+companyCancelIcon.addEventListener('click', function () {
     companyForm.style.display = "none";
     document.getElementById("company-add-btn").removeAttribute("disabled");
 });
-userAddBtn.addEventListener('click', function(btn) {
+userAddBtn.addEventListener('click', function (btn) {
 
     userForm.style.display = "block";
     btn.currentTarget.disabled = "true"
 
 });
-userCancelIcon.addEventListener('click', function() {
+userCancelIcon.addEventListener('click', function () {
     userForm.style.display = "none";
     document.getElementById("user-add-btn").removeAttribute("disabled");
 });
@@ -306,23 +349,26 @@ function selection(e) {
         for (let index = 0; index < checkboxes.length; index++) {
 
             checkboxes[index].checked = true;
-            checkboxes[index].parentElement.parentElement.style.background = "#00bfff";
+            checkboxes[index].parentElement.parentElement.style.background = "#0a1d57";
+            checkboxes[index].parentElement.parentElement.style.color = "#fff";
         }
     } else {
         for (let index = 0; index < checkboxes.length; index++) {
             checkboxes[index].checked = false;
             checkboxes[index].parentElement.parentElement.style.background = "";
+            checkboxes[index].parentElement.parentElement.style.color = "#000";
         }
     }
 }
 
 function onSelect(event) {
     if (event.target.checked) {
-        event.target.parentElement.parentElement.style.background = "#00bfff"
+        event.target.parentElement.parentElement.style.background = "#0a1d57"
+        event.target.parentElement.parentElement.style.color = "#fff";
     } else {
         event.target.parentElement.parentElement.style.background = ""
+        event.target.parentElement.parentElement.style.color = "#000";
     }
-
 }
 
 
