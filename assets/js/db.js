@@ -13,6 +13,8 @@ let userDB = () => {
             objectStore.createIndex('users', ['name', 'email'], { unique: true });
     
             console.log('Database ready and fields created!');
+            
+            migrateData();
         }
         
     UserDB.onerror = function(event) {

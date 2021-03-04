@@ -1,12 +1,13 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     /*==================================================================
     [ DB ]*/
 
     // DB = userDB()
     // console.log(DB)
-    userDB().then(function(result){
+    userDB().then(function (result) {
         DB = result
+        if(DB) migrateData()
     })
     /*==================================================================
     [ Validate ]*/
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let loggingIn = true;
     let signingUp = true;
 
-    validate_form.addEventListener('submit', function(e) {
+    validate_form.addEventListener('submit', function (e) {
         e.preventDefault();
         let check = true;
 
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let loginButton = document.querySelector('.login100-form-btn')
     let signup = document.querySelector('.sign-up')
 
-    forgot.addEventListener('click', function() {
+    forgot.addEventListener('click', function () {
         hider(name, phone_number, plate_number, password, forgotPassword, getBackSU, signup)
         shower(getBackLI)
         loginButton.textContent = ("Verify");
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function() {
         signingUp = false;
     });
 
-    signup.addEventListener('click', function() {
+    signup.addEventListener('click', function () {
         hider(forgotPassword, signup)
         shower(name, phone_number, plate_number, getBackSU)
         loginButton.textContent = ("Signup");
@@ -96,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
         clearForm(...input)
     });
 
-    getBackLI.addEventListener('click', function() {
+    getBackLI.addEventListener('click', function () {
         hider(name, phone_number, plate_number, getBackLI)
         shower(password, forgotPassword, signup)
         loginButton.textContent = ("Login");
@@ -104,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
         signingUp = false;
         clearForm(...input)
     })
-    getBackSU.addEventListener('click', function() {
+    getBackSU.addEventListener('click', function () {
         hider(name, phone_number, plate_number, getBackSU)
         shower(password, forgotPassword, signup)
         loginButton.textContent = ("Login");
@@ -132,9 +133,9 @@ async function addNewUser(data) {
 
     let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no, company)
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let request = objectStore.add(res);
-        request.onsuccess = function() {
+        request.onsuccess = function () {
             clearForm(...input)
             resolve(request.result);
         }
@@ -152,17 +153,16 @@ async function addNewUser(data) {
 }
 async function addUserToJSON(data) {
     console.log("adding user to JSON")
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         function checker() {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', './assets/js/jsonData/user.json', true);
-            xhr.onload = function(e) {
+            xhr.onload = function (e) {
                 if (this.status == 200) {
                     const users = JSON.parse(this.responseText);
                     users.forEach(user => {
                         if (user.email == data.email) {
                             console.log("file found")
-                            alert("User already created globally")
                             return false
                         }
                     })
@@ -197,24 +197,27 @@ async function lookupUserInDB(data) {
     console.log("looking for the user in the DB")
     let email_id = data.email;
     let objectStore = DB.transaction('users').objectStore('users');
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         let request = objectStore.get(email_id);
-        request.onsuccess = function() {
+        request.onsuccess = function () {
             resolve(request.result);
         }
     });
 }
 async function lookupUserInJSON(data) {
     console.log("looking for the user in the JSON")
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         resolve(readJSON(data))
     });
 
 }
+function migrateData() {
+    readAllJSON()
+}
 async function loginUser(data) {
     let myPromiseDB = lookupUserInDB(data)
     try {
-        myPromiseDB.then(function(result) {
+        myPromiseDB.then(function (result) {
             console.log("Finished looking up in the db")
             if (result) {
                 let password = (CryptoJS.AES.decrypt(result.password, "Secret")).toString(CryptoJS.enc.Utf8);
@@ -265,7 +268,7 @@ function loggedIn(res) {
 function readJSON(data) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', './assets/js/jsonData/user.json', true);
-    xhr.onload = function(e) {
+    xhr.onload = function (e) {
         if (this.status == 200) {
             const users = JSON.parse(this.responseText);
             users.forEach(user => {
@@ -283,4 +286,53 @@ function readJSON(data) {
         }
     }
     xhr.send();
+}
+async function addUsers(data) {
+
+    // Insert the object into the database 
+    let transaction = DB.transaction(['users'], 'readwrite');
+    let objectStore = transaction.objectStore('users');
+    let role;
+    let company;
+    if (!data.role) role = "user"
+    else role = data.role
+    if (!data.company) company = ""
+    else company = data.company
+
+    let res = UserModel(data.name, data.email, data.plate_number, role, data.password, data.phone_no, company)
+
+    return new Promise(function (resolve, reject) {
+        let request = objectStore.add(res);
+        request.onsuccess = function () {
+            clearForm(...input)
+            resolve(request.result);
+        }
+        transaction.oncomplete = () => {
+            console.log('New user added');
+        }
+        transaction.onerror = () => { console.log('There was an error, try again!'); }
+    });
+
+
+
+}
+function readAllJSON() {
+    if (DB) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', './assets/js/jsonData/user.json', true);
+        xhr.onload = function (e) {
+            if (this.status == 200) {
+                const users = JSON.parse(this.responseText);
+                users.forEach(user => {
+                    console.log(`${user.email} found`)
+                    let toBeAdded = user
+                    toBeAdded.password = CryptoJS.AES.encrypt(password_input.value, "Secret").toString();
+                    addUsers(toBeAdded)
+
+                }
+                )
+            }
+        }
+        xhr.send();
+    }
 }
