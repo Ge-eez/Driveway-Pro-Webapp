@@ -1,5 +1,7 @@
 # Driveway-Pro-Webapp
 
+PS: Please refer to helper.md file in the root directory if you need an assistance using the system
+
 This is a webapp connecting parking service providers and drivers. It has originated from our Android class project. And it's for Web Developemnt I final project. 
 
 Well, we know it has so many bugs and issues but we're doing our best to fix them and finish ASAP. 
