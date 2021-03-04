@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // console.log(DB)
     userDB().then(function (result) {
         DB = result
-        if(DB) migrateData()
+        // if(DB) migrateData()
     })
     /*==================================================================
     [ Validate ]*/

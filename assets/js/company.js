@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     companyDB().then(function (result) {
         DB = result
-        if (DB) migrateData()
+        // if (DB) migrateData()
     })
 
     /*==================================================================
