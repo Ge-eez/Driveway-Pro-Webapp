@@ -118,14 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function closingTimeChecker(companyClosesAt, timeCurrent) {
         let current = timeCurrent.match(/\d+/g).map(Number);
         let closesAt = String(companyClosesAt).match(/\d+/g).map(Number);
+        let closingHour = String(companyClosesAt).toLowerCase().includes('pm') ? Number(closesAt[0]) + 12 : Number(closesAt[0]);
+        
         let closes = 0;
 
         if (closesAt.length === 1) {
-            closes = Number(`${closesAt[0]}.${0}`);
+            closes = Number(`${closingHour}.${0}`);
         } else {
-            closes = Number(`${closesAt[0]}.${closesAt[1]}`);
+            closes = Number(`${closingHour}.${closesAt[1]}`);
         } 
         let currently = Number(`${current[0]}.${current[1]}`);
+        
         return closes - currently;
     }
 
@@ -426,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 let longitudeCompany = (e.target.parentElement.parentElement.firstChild.getAttribute('longitudeCompany'));
 
                                 // If there is 30 minutes or less time for company's clsoing hour notify user
-                                if (closingTimeChecker(companyClosesAt, currentTime()[1]) <= 0.30) {
+                                if (closingTimeChecker(companyClosesAt, currentTime()[0]) <= 0.30) {
                                     // Display a modal to notify user, to move their vehicle within 30 minutes
                                     const notify = document.createElement('a');
                                     notify.className = 'details';
