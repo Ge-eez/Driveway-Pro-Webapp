@@ -2,8 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     /*==================================================================
     [ DB ]*/
 
-    companyDB().then(function(result){
+    companyDB().then(function (result) {
         DB = result
+        if (DB) migrateData()
     })
 
     /*==================================================================
@@ -83,10 +84,10 @@ document.addEventListener("DOMContentLoaded", function () {
     signup.addEventListener('click', function () {
         hider(forgotPassword, signup)
         shower(name, charge, location, slots, getBackSU)
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             latitudeInput.value = position.coords.latitude;
             longtiudeInput.value = position.coords.longitude;
-          });
+        });
         loginButton.textContent = ("Signup");
         loggingIn = false;
         signingUp = true;
@@ -156,11 +157,11 @@ async function addCompanyToJSON(data) {
                 if (this.status == 200) {
                     const companies = JSON.parse(this.responseText);
                     companies.forEach(company => {
-                        if (company.email == data.email ) {
+                        if (company.email == data.email) {
                             console.log("file found")
                             let toBeAdded = company
                             alert("Company already created globally")
-                                return false
+                            return false
                         }
                     })
                 }
@@ -258,17 +259,64 @@ function readJSON(data) {
         if (this.status == 200) {
             const companies = JSON.parse(this.responseText);
             companies.forEach(company => {
-                if (company.email == data.email ) {
+                if (company.email == data.email) {
                     console.log("file found")
                     let toBeAdded = company
                     if (match(toBeAdded.password, data.password)) {
                         toBeAdded.password = CryptoJS.AES.encrypt(password_input.value, "Secret").toString();
                         addNewCompany(toBeAdded)
                     }
-                    else{
+                    else {
                         invalidLogin()
                     }
                 }
+            })
+        }
+    }
+    xhr.send();
+}
+function migrateData() {
+    readAllJSON()
+}
+async function addCompanies(data) {
+
+    // Insert the object into the database 
+    let transaction = DB.transaction(['companies'], 'readwrite');
+    let objectStore = transaction.objectStore('companies');
+
+    let res = CompanyModel(data.name, data.email, data.password, data.opens_at,
+        data.closes_at,
+        data.charge,
+        data.slots,
+        data.longitude,
+        data.latitude
+    )
+    return new Promise(function (resolve, reject) {
+        let request = objectStore.add(res);
+        request.onsuccess = function () {
+            clearForm(...input)
+            resolve(request.result);
+        }
+        transaction.oncomplete = () => {
+            console.log('New company added');
+        }
+        transaction.onerror = () => { console.log('There was an error, try again!'); }
+    });
+
+
+
+}
+function readAllJSON(data) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', './assets/js/jsonData/company.json', true);
+    xhr.onload = function (e) {
+        if (this.status == 200) {
+            const companies = JSON.parse(this.responseText);
+            companies.forEach(company => {
+                let toBeAdded = company
+                toBeAdded.password = CryptoJS.AES.encrypt(password_input.value, "Secret").toString();
+                addCompanies(toBeAdded)
+
             })
         }
     }
