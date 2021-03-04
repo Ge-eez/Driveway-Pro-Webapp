@@ -8,39 +8,50 @@ const ticketDis = document.querySelector("#displayTickets")
 const strtTimeDis = document.querySelector("#strTime")
 const exitPlateInput = document.querySelector("#ExitPlateInput")
 const exitUserBtn = document.querySelector("#ExitUserBtn")
+const clearSt = document.querySelector("#clearStack")
+const xbtn = document.querySelector(".remove-item")
+
+
 var count = false;
 
 let DB;
 
 document.addEventListener("DOMContentLoaded", () => {
+
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
+    clearSt.addEventListener("click", clearStack);
+
     strtTimeDis.innerHTML = currentTime()
     exitUserBtn.addEventListener("click", exitUser)
 
 
-    ticketDB().then(function(result){
+    ticketDB().then(function (result) {
         DB = result
     })
 
-    
+
 
     function parkUser() {
+        var timein = document.querySelector("#hour")
+        var timeinmin = document.querySelector("#minute")
+        var endtime = timein.value + ":" + timeinmin.value
         var regex = /^([A-Z a-z][0-9]{5})+$/;
         var OK = regex.exec(plateInput.value);
+        
         if (!OK) {
             console.error(plateInput.value + 'Proper plate number');
-        } 
-        if (plateInput.value === "" || !OK) {
+        }
+        if (plateInput.value === "" || !OK ) {
 
             plateInput.style.borderColor = "red";
 
             return;
         }
-        alterModal("#prkModal", plateInput.value ,currentTime());
+        alterModal("#prkModal", plateInput.value, currentTime(),endtime);
         plateInput.style.borderColor = "";
         newTicket = {
-            active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: "--:--", price: "$$.$$"
+            active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: endtime, price: "$$.$$"
         }
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
 
@@ -85,6 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
         ticketDis.innerHTML = ""
         displayData()
     }
+    document.querySelectorAll('input[type=number]')
+        .forEach(e => e.oninput = () => {
+            // Always 2 digits
+            if (e.value.length >= 2) e.value = e.value.slice(0, 2);
+            // 0 on the left (doesn't work on FF)
+            if (e.value.length === 1) e.value = '0' + e.value;
+            // Avoiding letters on FF
+            if (!e.value) e.value = '00';
+
+            return e
+        });
+       
+
     function displayTickets(plateNum) {
 
         const li = document.createElement("li");
@@ -97,10 +121,16 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.classList.add("btn", "btn-primary")
         const span = document.createElement("span")
         span.innerHTML = plateNum
+        const innerspan = document.createElement("span")
+        innerspan.innerHTML = '<a href="#Active_tickets" onclick="openLink(event, \'Exit\')"><i class="fa fa-remove"></i></a>'
         span.classList.add("span")
+
+
         li.appendChild(document.createTextNode("Plate Number: "))
+        span.appendChild(innerspan)
         li.appendChild(span)
         li.appendChild(btn);
+
         ticketDis.appendChild(li)
         ticketDis.appendChild(document.createElement("br"))
         function ticketDetail(e) {
@@ -111,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 var cursor = event.target.result;
                 if (cursor) {
                     if (cursor.value.plate_Number == a) {
-                        alterModal("#try", a, cursor.value.StartTime)
+                        alterModal("#try", a, cursor.value.StartTime,cursor.value.endTime)
                         $('#activeTicketsModal').modal('show');
                     } else {
                         cursor.continue();
@@ -122,10 +152,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         }
+
+        ticketDis.addEventListener("click", xUserBtn);
+        function xUserBtn(e) {
+            if (e.target.classList.contains("btn")) {
+                console.log(e.target.parentElement.children[0].innerText)
+                var a = e.target.parentElement.children[0].innerText;
+                var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
+
+                objectStore.openCursor().onsuccess = async function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        if (cursor.value.plate_Number == a) {
+                            alterModal("#try", a, cursor.value.StartTime, cursor.value.endTime)
+                            $('#activeTicketsModal').modal('show');
+                        } else {
+                            cursor.continue();
+                        }
+                    }
+
+                };
+
+
+            }
+
+
+            if (e.target.parentElement.parentElement.parentElement.classList.contains("span")) {
+                //console.log(e.target.parentElement.parentElement.parentElement.firstChild)
+                var str = e.target.parentElement.parentElement.parentElement.innerText
+                exitPlateInput.value = str
+                console.log(str)
+            }
+        }
+
     }
 
 
-    function exitUser(){
+    function exitUser() {
         var objectStore = DB.transaction("Tickets", "readwrite").objectStore('Tickets');
         price()
         objectStore.openCursor().onsuccess = function (event) {
@@ -138,17 +201,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     updateData.endTime = currentTime();
                     updateData.price = price(cursor.value.StartTime, cursor.value.endTime) + " Br";
                     const request = cursor.update(updateData);
-                    request.onsuccess = function(){
+                    request.onsuccess = function () {
                         alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime, cursor.value.price)
-                        $('#exitModal').modal('show');    
+                        $('#exitModal').modal('show');
                     }
-                    
-                    
+
+
                     //displayTickets(cursor.value.plate_Number)
                     //console.log(cursor.value.plate_Number)
                     cursor.continue();
-                }else {
-                    
+                } else {
+
                     cursor.continue();
                 }
             }
@@ -156,12 +219,37 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
+    function clearStack(){
 
+        var objectStore = DB.transaction("Tickets", "readwrite").objectStore('Tickets');
+        objectStore.openCursor().onsuccess = function (event) {
+            var cursor = event.target.result;
+            if (cursor) {
+                if (cursor.value.active = "true") {
+                    const updateData = cursor.value;
+                    updateData.active = "false";
+                    
+                    const request = cursor.update(updateData);
+                    request.onsuccess = function() {
+
+                        console.log("Stack cleared")
+                    }
+                    cursor.continue();
+                }else {
+
+                    cursor.continue();
+                }
+            }
+
+        };
+
+    }
+    
 
 
 });
 
-function alterModal(a, b, c , d = "--:--", f = "$$.$$") {
+function alterModal(a, b, c, d = "--:--", f = "$$.$$") {
     document.querySelector(a).innerHTML = ""
     const ticketDetails = document.createElement("li")
     ticketDetails.appendChild(document.createTextNode("plate number :" + " " + b))
@@ -199,11 +287,11 @@ function currentTime() {
         minute;
     return (dateText);
 }
-function price(strTi = "21:53",endTi = "23:02"){
-       a = strTi.replace(":" , ".")
-       b = endTi.replace(":" , ".")
-       return(((b - a).toFixed(2) * 10.0).toFixed(2));
-        
+function price(strTi = "21:53", endTi = "23:02") {
+    a = strTi.replace(":", ".")
+    b = endTi.replace(":", ".")
+    return (((b - a).toFixed(2) * 10.0).toFixed(2));
+
 
 
 
