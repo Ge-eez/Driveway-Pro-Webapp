@@ -10,7 +10,6 @@ const exitPlateInput = document.querySelector("#ExitPlateInput")
 const exitUserBtn = document.querySelector("#ExitUserBtn")
 
 const clearSt = document.querySelector("#clearStack")
-const xbtn = document.querySelector(".remove-item")
 
 
 var count = false;
@@ -234,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", ticketDetail)
         btn.classList.add("btn", "btn-primary")
         let exitBtn = document.createElement("BUTTON");   // Create a <button> element
-        exitBtn.innerHTML = "X";                   // Insert text
+        exitBtn.innerHTML = `<i class="fa fa-remove"></i>`;                   // Insert text
         exitBtn.addEventListener("click", function (e) {
             exitPlateInput.value = plateNum
             openLink(e, 'Exit')
@@ -242,13 +241,10 @@ document.addEventListener("DOMContentLoaded", () => {
         exitBtn.classList.add("btn", "btn-danger")
         const span = document.createElement("span")
         span.innerHTML = plateNum
-        const innerspan = document.createElement("span")
-        innerspan.innerHTML = '<a href="#Active_tickets" onclick="openLink(event, \'Exit\')"><i class="fa fa-remove"></i></a>'
         span.classList.add("span")
 
 
         li.appendChild(document.createTextNode("Plate Number: "))
-        span.appendChild(innerspan)
         li.appendChild(span)
         li.appendChild(btn);
 
@@ -275,37 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
 
-        ticketDis.addEventListener("click", xUserBtn);
-        function xUserBtn(e) {
-            if (e.target.classList.contains("btn")) {
-                console.log(e.target.parentElement.children[0].innerText)
-                var a = e.target.parentElement.children[0].innerText;
-                var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
-
-                objectStore.openCursor().onsuccess = async function (event) {
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        if (cursor.value.plate_Number == a) {
-                            alterModal("#try", a, cursor.value.StartTime, cursor.value.endTime)
-                            $('#activeTicketsModal').modal('show');
-                        } else {
-                            cursor.continue();
-                        }
-                    }
-
-                };
-
-
-            }
-
-
-            if (e.target.parentElement.parentElement.parentElement.classList.contains("span")) {
-                //console.log(e.target.parentElement.parentElement.parentElement.firstChild)
-                var str = e.target.parentElement.parentElement.parentElement.innerText
-                exitPlateInput.value = str
-                console.log(str)
-            }
-        }
 
     }
     function adjustIncome(plate, priced){
