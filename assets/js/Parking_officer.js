@@ -8,16 +8,54 @@ const ticketDis = document.querySelector("#displayTickets")
 const strtTimeDis = document.querySelector("#strTime")
 const exitPlateInput = document.querySelector("#ExitPlateInput")
 const exitUserBtn = document.querySelector("#ExitUserBtn")
+
 const clearSt = document.querySelector("#clearStack")
 const xbtn = document.querySelector(".remove-item")
 
 
 var count = false;
 
-let DB;
+const companyName = document.querySelector('#comp-name')
+const slotDesc = document.querySelector('#slot-desc')
+const poName = document.querySelector('#po-name')
 
+const companyName2 = document.querySelector('#comp-name2')
+const slotDesc2 = document.querySelector('#slot-desc2')
+const poName2 = document.querySelector('#po-name2')
+
+const companyName3 = document.querySelector('#comp-name3')
+const slotDesc3 = document.querySelector('#slot-desc3')
+const poName3 = document.querySelector('#po-name3')
+
+const companyName4 = document.querySelector('#comp-name4')
+const slotDesc4 = document.querySelector('#slot-desc4')
+const poName4 = document.querySelector('#po-name4')
+
+let poKeyEmail = localStorage.getItem('parking_officer');
+let companyKeyEmail;
+var count = false;
+
+let DBTicket;
+let DBUser;
+let DBCompany;
+let DBAccount;
 document.addEventListener("DOMContentLoaded", () => {
+    userDB().then(function (result) {
+        DBUser = result
+        displayName()
+    });
 
+    ticketDB().then(function (result) {
+        DBTicket = result
+    });
+
+    accountDB().then(function (result) {
+        DBAccount = result
+    });
+    if (!poKeyEmail) {
+        alert("Login first")
+        window.history.back();
+    }
     act_tab.addEventListener("click", actTab);
     parkBtn.addEventListener("click", parkUser);
     clearSt.addEventListener("click", clearStack);
@@ -26,10 +64,47 @@ document.addEventListener("DOMContentLoaded", () => {
     exitUserBtn.addEventListener("click", exitUser)
 
 
-    ticketDB().then(function (result) {
-        DB = result
-    })
+    function displayName() {
 
+        poKeyEmail = poKeyEmail.slice(1, poKeyEmail.length - 1)
+        let transaction = DBUser.transaction(['users'], 'readwrite');
+        let objectStore = transaction.objectStore('users');
+        let request = objectStore.get(poKeyEmail);
+        request.onsuccess = function () {
+            companyKeyEmail = request.result.company
+            poName.textContent = request.result.name
+            poName2.textContent = request.result.name
+            poName3.textContent = request.result.name
+            poName4.textContent = request.result.name
+
+            companyDB().then(function (result) {
+                DBCompany = result
+                displayCompany()
+            });
+        }
+        request.onerror = () => {
+            alert("Login first")
+            window.history.back()
+        }
+    }
+    function displayCompany() {
+        let transaction = DBCompany.transaction(['companies'], 'readwrite');
+        let objectStore = transaction.objectStore('companies');
+        let request = objectStore.get(companyKeyEmail);
+        request.onsuccess = function () {
+            companyName.textContent = (request.result.name)
+            companyName2.textContent = (request.result.name)
+            companyName3.textContent = (request.result.name)
+            companyName4.textContent = (request.result.name)
+            slotDesc.textContent = `${request.result.active_slots}/${request.result.slots}`
+            slotDesc2.textContent = `${request.result.active_slots}/${request.result.slots}`
+            slotDesc3.textContent = `${request.result.active_slots}/${request.result.slots}`
+            slotDesc4.textContent = `${request.result.active_slots}/${request.result.slots}`
+        }
+        request.onerror = (e) => {
+            console.log(e)
+        }
+    }
 
 
     function parkUser() {
@@ -48,34 +123,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return;
         }
-        alterModal("#prkModal", plateInput.value, currentTime(),endtime);
-        plateInput.style.borderColor = "";
-        newTicket = {
-            active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: endtime, price: "$$.$$"
+
+        let transaction = DBCompany.transaction(["companies"], "readwrite");
+        let slotsUpdate = transaction.objectStore("companies");
+        let requestMinus = slotsUpdate.get(companyKeyEmail);
+        requestMinus.onsuccess = function() {
+            let active_slots= requestMinus.result.active_slots
+            if(active_slots>0){
+
+                alterModal("#prkModal", plateInput.value, currentTime());
+                plateInput.style.borderColor = "";
+                newTicket = {
+                    active: "true", plate_Number: plateInput.value, StartTime: currentTime(), endTime: "--:--", price: "$$.$$"
+                }
+                var objectStore = DBTicket.transaction("Tickets", "readwrite").objectStore("Tickets");
+        
+        
+                let result = objectStore.add(newTicket)
+                result.onsuccess = () => {
+        
+                    plateInput.value = "";
+                    $('#parkModal').modal('show');
+                    adjustCompanyDB(-1)
+                    
+        
+                }
+                result.onerror = (e) => { console.log(e) }
+            }
+            else{
+                
+                alert("No space")
+
+                return;
+            }
         }
-        var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
+    }
+    function adjustCompanyDB(tag){
+        let transaction = DBCompany.transaction(["companies"], "readwrite");
+            let slotsUpdate = transaction.objectStore("companies");
+            let requestMinus = slotsUpdate.get(companyKeyEmail);
+            requestMinus.onsuccess = function() {
+                let updateData = {
+                    name: requestMinus.result.name,
+                    email: requestMinus.result.email,
+                    password: requestMinus.result.password,
+                    charge: requestMinus.result.charge,
+                    slots: requestMinus.result.slots,
+                    active_slots: Number(Number(requestMinus.result.active_slots) + tag),
+                    opens_at: requestMinus.result.opens_at,
+                    closes_at: requestMinus.result.closes_at,
+                    latitude: requestMinus.result.latitude,
+                    longitude: requestMinus.result.longitude
+                }
 
+                let updateTable = slotsUpdate.put(updateData);
+                updateTable.onsuccess = function() {
+                    console.log("done active slots decreased");
+                }
+            }
 
-
-        objectStore.transaction.oncomplete = function (e) {
-            // Store values in the newly created objectStore.
-            var objectStore = DB.transaction("Tickets", "readwrite").objectStore("Tickets");
-            objectStore.add(newTicket);
-            /* newTicket.forEach(function(company) {
-              objectStore.add(company);
-            }); */
-            plateInput.value = "";
-            $('#parkModal').modal('show');
-
-        };
-
-
-
+            requestMinus.onerror = function() {
+                console.log("An error occured");
+            };
     }
     function actTab() {
 
         function displayData() {
-            var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
+            var objectStore = DBTicket.transaction("Tickets", "readonly").objectStore('Tickets');
 
             objectStore.openCursor().onsuccess = function (event) {
                 var cursor = event.target.result;
@@ -115,10 +229,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center")
 
-        var btn = document.createElement("BUTTON");   // Create a <button> element
+        let btn = document.createElement("BUTTON");   // Create a <button> element
         btn.innerHTML = "details";                   // Insert text
         btn.addEventListener("click", ticketDetail)
         btn.classList.add("btn", "btn-primary")
+        let exitBtn = document.createElement("BUTTON");   // Create a <button> element
+        exitBtn.innerHTML = "X";                   // Insert text
+        exitBtn.addEventListener("click", function (e) {
+            exitPlateInput.value = plateNum
+            openLink(e, 'Exit')
+        })
+        exitBtn.classList.add("btn", "btn-danger")
         const span = document.createElement("span")
         span.innerHTML = plateNum
         const innerspan = document.createElement("span")
@@ -131,11 +252,12 @@ document.addEventListener("DOMContentLoaded", () => {
         li.appendChild(span)
         li.appendChild(btn);
 
+        li.appendChild(exitBtn)
         ticketDis.appendChild(li)
         ticketDis.appendChild(document.createElement("br"))
         function ticketDetail(e) {
             var a = e.currentTarget.parentNode.querySelector(".span").innerHTML;
-            var objectStore = DB.transaction("Tickets", "readonly").objectStore('Tickets');
+            var objectStore = DBTicket.transaction("Tickets", "readonly").objectStore('Tickets');
 
             objectStore.openCursor().onsuccess = async function (event) {
                 var cursor = event.target.result;
@@ -186,15 +308,42 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     }
+    function adjustIncome(plate, priced){
+        // Update account database
+        let transactionAccount = DBAccount.transaction(["account"], "readwrite");
+        let accountUpdate = transactionAccount.objectStore("account");
+        let accountAdd = accountUpdate.get(companyKeyEmail);
+        
+        // Added data to the account database
+        accountAdd.onsuccess = function() {
+            let time = new Date();                                            
+            let accountData = {
+                date: `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
+                company_email: companyKeyEmail,
+                user_email: plate,
+                amount: priced
+            }
 
+            let updateAccount = accountUpdate.add(accountData);
+            updateAccount.onsuccess = function() {
+                console.log("done account added");
+            }
+        }
+
+        accountAdd.onerror = function() {
+            console.log("An error occured");
+        };
+    }
 
     function exitUser() {
-        var objectStore = DB.transaction("Tickets", "readwrite").objectStore('Tickets');
+        var objectStore = DBTicket.transaction("Tickets", "readwrite").objectStore('Tickets');
+
         price()
         objectStore.openCursor().onsuccess = function (event) {
             var cursor = event.target.result;
             if (cursor) {
-                if (cursor.value.plate_Number === exitPlateInput.value) {
+                let entered = exitPlateInput.value
+                if (cursor.value.plate_Number === entered && cursor.value.active == 'true') {
                     const updateData = cursor.value;
 
                     updateData.active = "false";
@@ -202,14 +351,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     updateData.price = price(cursor.value.StartTime, cursor.value.endTime) + " Br";
                     const request = cursor.update(updateData);
                     request.onsuccess = function () {
+                        exitPlateInput.value = ""
                         alterModal("#extModal", cursor.value.plate_Number, cursor.value.StartTime, cursor.value.endTime, cursor.value.price)
                         $('#exitModal').modal('show');
+                        adjustCompanyDB(+1)
+                        adjustIncome(entered, updateData.price)
+                    }
+                    
+                    request.onerror = (e) => {
+                        console.log(e)
                     }
 
-
-                    //displayTickets(cursor.value.plate_Number)
-                    //console.log(cursor.value.plate_Number)
-                    cursor.continue();
                 } else {
 
                     cursor.continue();
@@ -257,8 +409,6 @@ function alterModal(a, b, c, d = "--:--", f = "$$.$$") {
     ticketDetails.appendChild(document.createTextNode("Starting Time :" + " " + c))
     ticketDetails.appendChild(document.createElement("br"))
     ticketDetails.appendChild(document.createTextNode("ending Time :" + " " + d))
-    ticketDetails.appendChild(document.createElement("br"))
-    ticketDetails.appendChild(document.createTextNode("Spot : " + " " + "5"))
     ticketDetails.appendChild(document.createElement("br"))
     ticketDetails.appendChild(document.createTextNode("Price : " + " " + f))
     ticketDetails.appendChild(document.createElement("br"))

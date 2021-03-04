@@ -105,32 +105,26 @@ li .active {
     font-weight: bold;
 }
 
-#parking-officer #header {
+#parking-officer #header, #account #header {
     padding-bottom: 1%;
     border-bottom: 2px solid;
     text-align: center;
 }
 
-#parking-officer .list-inline {
+#parking-officer .list-inline, #account .list-inline {
     border-bottom: 1px solid;
     padding-bottom: 1%;
     margin-bottom: 0px;
     text-align: center;
 }
 
-#parking-officer .list-item {
+#parking-officer .list-item, #account .list-item {
     padding: 1% 0%;
     margin: 0;
 }
-
-#parking-officer .list-item li {
+#parking-officer .list-item li, #account .list-item li {
     border-right: 5px solid rgb(8, 104, 13);
 }
-
-#parking-officer .list-item li:nth-child(1) {
-    border-right: 5px solid red;
-}
-
 #pop-up {
     position: fixed;
     top: -1%;
@@ -340,9 +334,6 @@ li .active {
         border-right: 2px solid yellow;
         padding: 0px, 10px;
         text-align: left;
-    }
-    #parking-officer .list-item li:nth-child(1) {
-        border-right: 2px solid red;
     }
     #pop-up {
         position: fixed;

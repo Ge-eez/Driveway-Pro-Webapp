@@ -83,8 +83,8 @@ let ticketDB = () => {
             let objectStore = db.createObjectStore("Tickets", { keyPath: 'id', autoIncrement: true })
     
             objectStore.createIndex('active', 'active', { unique: false });
-            objectStore.createIndex('plate_Number', 'plate_Number', { unique: true });
-            objectStore.createIndex('StartTime', 'StartTime', { unique: false });
+            objectStore.createIndex('plate_Number', 'plate_Number', { unique: false });
+            objectStore.createIndex('StartTime', 'StartTime', { unique: true });
             objectStore.createIndex('endTime', 'endTime', { unique: false });
             objectStore.createIndex('price', 'price', { unique: false });
     
